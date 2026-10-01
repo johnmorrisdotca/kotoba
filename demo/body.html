@@ -1,6 +1,6 @@
       <section class="setup" aria-labelledby="setup-title">
         <h2 id="setup-title" class="fam-sr" data-say="pageSetup"></h2>
-        <div class="fam-row">
+        <div class="fam-row" data-help-en="Which language the secret word is in: English, French, German, or Japanese kana. Choosing one loads its words and starts a new word." data-help-ja="秘密の単語の言語です（英語、フランス語、ドイツ語、日本語のかな）。選ぶとその言語の単語を読み込み、新しい単語を始めます。">
           <span class="fam-label" id="lang-label" data-say="pageLanguage"></span>
           <div class="fam-seg" id="languages" role="group" aria-labelledby="lang-label" data-testid="languages">
             <button type="button" data-lang-id="en" aria-pressed="true" lang="en">English</button>
@@ -9,7 +9,7 @@
             <button type="button" data-lang-id="ja" aria-pressed="false" lang="ja">かな</button>
           </div>
         </div>
-        <div class="fam-row">
+        <div class="fam-row" data-help-en="Length is how many letters (or kana) the word has. Easy words picks only from a shorter list of everyday words. New word starts another word." data-help-ja="「長さ」は単語の文字数（かなの数）です。「やさしい単語」は、日常的な短いリストの単語だけから選びます。「新しい単語」で別の単語を始めます。">
           <span class="fam-label" id="size-label" data-say="pageLength"></span>
           <div class="fam-seg" id="sizes" role="group" aria-labelledby="size-label" data-testid="sizes"></div>
           <button type="button" class="fam-button" id="easy" aria-pressed="false" data-testid="easy" data-say="pageEasy"></button>
