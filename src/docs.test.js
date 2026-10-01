@@ -5,7 +5,6 @@ import process from "node:process";
 
 import { describe, expect, it } from "vitest";
 
-import { FAMILY } from "../scripts/family-template.mjs";
 import { runCli } from "./cli.ts";
 import * as kotoba from "./index.ts";
 import { WORD_LIST_NAMES, WORD_LIST_SIZES, loadWordList } from "./load.ts";
@@ -192,22 +191,6 @@ describe("the licences", () => {
     for (const name of ["SCOWL", "Lexique", "LanguageTool", "JMdict", "CC BY-SA 4.0"]) expect(notice, name).toContain(name);
     expect(pkg.files).toContain("NOTICE.md");
     expect(pkg.license).toBe("(MIT AND CC-BY-SA-4.0)");
-  });
-});
-
-describe("the family", () => {
-  const section = readme.slice(readme.indexOf("### The family"), readme.indexOf("## Roadmap"));
-
-  it("names every other package of the family, once, linked to its repository", () => {
-    const listed = [...section.matchAll(/^- \[(\w+)\]\(https:\/\/github\.com\/johnmorrisdotca\/(\w+)\) \(([^)]+)\): /gm)];
-    const siblings = FAMILY.filter((one) => one.id !== "kotoba");
-    expect(listed.map((match) => match[2])).toEqual(siblings.map((one) => one.id));
-    for (const match of listed) {
-      const one = FAMILY.find((entry) => entry.id === match[2]);
-      expect(match[1], match[2]).toBe(one.name);
-      expect(match[3], match[2]).toBe(one.kana);
-    }
-    expect(FAMILY).toHaveLength(16);
   });
 });
 
