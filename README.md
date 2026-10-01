@@ -9,6 +9,8 @@ English, French, German and Japanese (kana) dictionaries for five-letter and oth
   <img alt="No dependencies" src="https://img.shields.io/badge/dependencies-0-2f5d4a">
 </p>
 
+<p align="center"><a href="https://johnmorrisdotca.github.io/kotoba/"><strong>Play a word game →</strong></a> · <a href="https://johnmorrisdotca.github.io/kotoba/api.html">API reference</a></p>
+
 ## In 30 seconds
 
 ```sh
@@ -69,7 +71,7 @@ size)` reads a kana list.
 
 ## API
 
-The [API reference](https://github.com/johnmorrisdotca/kotoba/blob/main/docs/api.md) lists every export of every entry point, each word list included, with its signature and its doc comment. It is made from the source by `pnpm docs:api`, and a test fails when it falls behind the code.
+The [API reference](https://johnmorrisdotca.github.io/kotoba/api.html) (also kept in the repository as [`docs/api.md`](https://github.com/johnmorrisdotca/kotoba/blob/main/docs/api.md)) lists every export of every entry point, each word list included, with its signature and its doc comment. It is made from the source by `pnpm docs:api`, and a test fails when it falls behind the code.
 
 ## Architecture
 
@@ -105,7 +107,9 @@ src/
 Tests sit beside the code they test (`*.test.ts`), and
 `src/wordLists.coverage.test.ts` holds the lists to their rules. `scripts/`
 builds the lists from their sources, checks the package as npm packs it and
-makes the API reference, `docs/api.md`.
+makes the API reference, `docs/api.md`, and builds the demo (`pnpm site`) and
+tests it in a real browser (`pnpm test:demo`); `demo/` is the page published on
+GitHub Pages.
 
 ## The name
 
@@ -149,7 +153,6 @@ kana. Using it somewhere? [Tell us](https://github.com/johnmorrisdotca/kotoba/is
 
 ## Roadmap
 
-- A demo site in the family's look: a five-letter game in every language
 - The game modes of Gomoji (head start, twins, four at once, backwards, the
   dodger) as rules here, beside the marking
 - More languages, each from a real dictionary of that language

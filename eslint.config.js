@@ -5,7 +5,7 @@ export default tseslint.config(
   { ignores: ["dist/", "site/", "node_modules/", "test-results/", "playwright-report/"] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
-  { files: ["e2e/**/*.mjs", "playwright.config.mjs"], languageOptions: { globals: { console: "readonly", URL: "readonly", document: "readonly", window: "readonly", location: "readonly" } } },
+  { files: ["e2e/**/*.mjs", "playwright.config.mjs"], languageOptions: { globals: { console: "readonly", URL: "readonly", document: "readonly", window: "readonly", location: "readonly", getComputedStyle: "readonly" } } },
   { files: ["scripts/**/*.mjs"], languageOptions: { globals: { console: "readonly", URL: "readonly", document: "readonly", process: "readonly", Buffer: "readonly" } } },
-  { files: ["demo/**/*.js"], languageOptions: { globals: { document: "readonly", window: "readonly", location: "readonly", history: "readonly", navigator: "readonly", URLSearchParams: "readonly", Intl: "readonly", setInterval: "readonly", setTimeout: "readonly", familyLanguage: "readonly" } } },
+  { files: ["demo/**/*.js"], languageOptions: { globals: { document: "readonly", window: "readonly", location: "readonly", history: "readonly", navigator: "readonly", URLSearchParams: "readonly", Intl: "readonly", setInterval: "readonly", setTimeout: "readonly", HTMLElement: "readonly", RegExp: "readonly", familyLanguage: "readonly" } } },
 );

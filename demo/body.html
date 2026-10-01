@@ -1,0 +1,30 @@
+      <section class="setup" aria-labelledby="setup-title">
+        <h2 id="setup-title" class="fam-sr" data-say="pageSetup"></h2>
+        <div class="fam-row">
+          <span class="fam-label" id="lang-label" data-say="pageLanguage"></span>
+          <div class="fam-seg" id="languages" role="group" aria-labelledby="lang-label" data-testid="languages">
+            <button type="button" data-lang-id="en" aria-pressed="true" lang="en">English</button>
+            <button type="button" data-lang-id="fr" aria-pressed="false" lang="fr">Français</button>
+            <button type="button" data-lang-id="de" aria-pressed="false" lang="de">Deutsch</button>
+            <button type="button" data-lang-id="ja" aria-pressed="false" lang="ja">かな</button>
+          </div>
+        </div>
+        <div class="fam-row">
+          <span class="fam-label" id="size-label" data-say="pageLength"></span>
+          <div class="fam-seg" id="sizes" role="group" aria-labelledby="size-label" data-testid="sizes"></div>
+          <button type="button" class="fam-button" id="easy" aria-pressed="false" data-testid="easy" data-say="pageEasy"></button>
+          <button type="button" class="fam-button" data-primary="true" id="new" data-testid="new" data-say="pageNew"></button>
+        </div>
+      </section>
+
+      <section class="fam-felt game" aria-label="Game" data-testid="game">
+        <p class="status" id="status" role="status" aria-live="polite" data-testid="status"></p>
+        <div class="grid" id="grid" data-testid="grid"></div>
+        <div class="keys" id="keys" data-testid="keys"></div>
+        <p class="legend" id="legend" data-testid="legend"></p>
+      </section>
+      __UNREVIEWED__
+      <section class="credits" aria-labelledby="credits-title">
+        <h2 id="credits-title" data-say="pageCredits"></h2>
+        <p class="fam-muted" id="credit" data-testid="credit"></p>
+      </section>

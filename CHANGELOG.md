@@ -6,6 +6,18 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- **A playable demo on GitHub Pages**, in the family's look and in English and
+  Japanese (the Japanese not yet read by a native reader): the word game on
+  the package's own lists in English, French, German and kana, at three
+  lengths each, with the keyboard of each language, romaji typed into kana with
+  keys for small and marked kana, every mark shown by shape as well as colour,
+  the score, the family's cloth patches, and an API reference page in the same
+  frame. Each list is fetched only when it is played. It is tested in a real
+  browser on a phone and a desk (`pnpm test:demo`). The package itself is
+  unchanged.
+
 ## [1.0.0] - 2026-09-30
 
 ### Added
