@@ -109,6 +109,7 @@
     "typecheck": "tsc -p tsconfig.check.json",
     "test": "vitest run",
     "test:package": "pnpm build && node scripts/check-package.mjs",
+    "docs:api": "node scripts/api-write.mjs",
     "check": "pnpm lint && pnpm typecheck && pnpm test",
     "prepublishOnly": "pnpm check && pnpm build"
   },

@@ -67,6 +67,46 @@ size)` reads a kana list.
 | `GomojiLanguage`, `LetterMark`, `WordData`, `WordLists`, `Packed`, `KanaWords`, … | The types |
 | `VERSION` | This package's version |
 
+## API
+
+The [API reference](https://github.com/johnmorrisdotca/kotoba/blob/main/docs/api.md) lists every export of every entry point, each word list included, with its signature and its doc comment. It is made from the source by `pnpm docs:api`, and a test fails when it falls behind the code.
+
+## Architecture
+
+The marking rules, the scores and the keyboards are plain functions with no
+DOM and no dependency. Each word list is an entry point of its own, so a page
+loads only the list it plays, and `lists.ts` reads one once it is loaded. The
+Japanese side (`kana/`) has the same shape as the English: marks, a score, and
+a way to type kana from a keyboard with no Japanese input.
+
+```text
+src/
+├── index.ts         the main entry: the marking rules, scoring, keyboards, kana helpers and a reader for the lists
+├── keyboardRows.ts  the physical keyboard drawn under a grid, by language: QWERTY, AZERTY and QWERTZ
+├── lists.ts         reading a word list once it is loaded; each list is its own entry point
+├── marks.ts         marking a guess: the rule every five-letter word game shares
+├── version.ts       the package's version
+├── wordScore.ts     what a word scores, won or lost
+├── kana/  the Japanese side of the games
+│   ├── kanaMarks.ts  how a kana guess is coloured, including a kana of the wrong size or mark
+│   ├── kanaScore.ts  what a kana word scores, on the same scale as English
+│   └── romaji.ts     romaji typed into kana, with no input-method library
+└── lists/  the word lists, each its own entry point so a page loads only what it plays
+    ├── kana-3.data.ts       the three-kana words
+    ├── kana-4.data.ts       the four-kana words
+    ├── kana-5.data.ts       the five-kana words
+    ├── pop-answers.data.ts  the pop-culture answers
+    ├── pop-guesses.data.ts  the pop-culture guesses accepted at three and seven letters
+    ├── words-de.data.ts     the German words
+    ├── words-en.data.ts     the English words
+    └── words-fr.data.ts     the French words
+```
+
+Tests sit beside the code they test (`*.test.ts`), and
+`src/wordLists.coverage.test.ts` holds the lists to their rules. `scripts/`
+builds the lists from their sources, checks the package as npm packs it and
+makes the API reference, `docs/api.md`.
+
 ## The name
 
 *Kotoba* is 言葉 (ことば), "words" in Japanese.
