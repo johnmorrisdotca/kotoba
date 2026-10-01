@@ -1,0 +1,123 @@
+{
+  "name": "@johnmorrisdotca/kotoba",
+  "version": "1.0.0",
+  "description": "Word lists and word-game rules for JavaScript and TypeScript: English, French, German and Japanese (kana) dictionaries for five-letter and other word games, each list its own import, with guess marking, scoring, kana marks, romaji input and keyboard rows. Zero dependencies.",
+  "keywords": [
+    "word-list",
+    "wordlist",
+    "dictionary",
+    "word-game",
+    "wordle",
+    "wordle-clone",
+    "five-letter-words",
+    "5-letter-words",
+    "word-puzzle",
+    "english-words",
+    "french-words",
+    "german-words",
+    "japanese-words",
+    "kana",
+    "hiragana",
+    "romaji",
+    "jmdict",
+    "scowl",
+    "lexique",
+    "guess-marking",
+    "word-score",
+    "keyboard",
+    "typescript",
+    "javascript",
+    "zero-dependencies",
+    "browser",
+    "node",
+    "itsutsu"
+  ],
+  "homepage": "https://github.com/johnmorrisdotca/kotoba#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/johnmorrisdotca/kotoba.git"
+  },
+  "bugs": {
+    "url": "https://github.com/johnmorrisdotca/kotoba/issues"
+  },
+  "author": "John Morris",
+  "license": "(MIT AND CC-BY-SA-4.0)",
+  "type": "module",
+  "sideEffects": false,
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./words-en": {
+      "types": "./dist/lists/words-en.data.d.ts",
+      "import": "./dist/lists/words-en.data.js",
+      "default": "./dist/lists/words-en.data.js"
+    },
+    "./words-fr": {
+      "types": "./dist/lists/words-fr.data.d.ts",
+      "import": "./dist/lists/words-fr.data.js",
+      "default": "./dist/lists/words-fr.data.js"
+    },
+    "./words-de": {
+      "types": "./dist/lists/words-de.data.d.ts",
+      "import": "./dist/lists/words-de.data.js",
+      "default": "./dist/lists/words-de.data.js"
+    },
+    "./pop-answers": {
+      "types": "./dist/lists/pop-answers.data.d.ts",
+      "import": "./dist/lists/pop-answers.data.js",
+      "default": "./dist/lists/pop-answers.data.js"
+    },
+    "./pop-guesses": {
+      "types": "./dist/lists/pop-guesses.data.d.ts",
+      "import": "./dist/lists/pop-guesses.data.js",
+      "default": "./dist/lists/pop-guesses.data.js"
+    },
+    "./kana-3": {
+      "types": "./dist/lists/kana-3.data.d.ts",
+      "import": "./dist/lists/kana-3.data.js",
+      "default": "./dist/lists/kana-3.data.js"
+    },
+    "./kana-4": {
+      "types": "./dist/lists/kana-4.data.d.ts",
+      "import": "./dist/lists/kana-4.data.js",
+      "default": "./dist/lists/kana-4.data.js"
+    },
+    "./kana-5": {
+      "types": "./dist/lists/kana-5.data.d.ts",
+      "import": "./dist/lists/kana-5.data.js",
+      "default": "./dist/lists/kana-5.data.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "lint": "eslint .",
+    "typecheck": "tsc -p tsconfig.check.json",
+    "test": "vitest run",
+    "test:package": "pnpm build && node scripts/check-package.mjs",
+    "check": "pnpm lint && pnpm typecheck && pnpm test",
+    "prepublishOnly": "pnpm check && pnpm build"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.0.0",
+    "eslint": "^9.0.0",
+    "typescript": "^5.9.0",
+    "typescript-eslint": "^8.0.0",
+    "vitest": "^5.0.0"
+  },
+  "packageManager": "pnpm@10.11.0"
+}

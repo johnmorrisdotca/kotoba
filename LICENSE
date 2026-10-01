@@ -1,0 +1,40 @@
+MIT License
+
+Copyright (c) 2026 John Morris
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+THE WORD LISTS. The code above is MIT. The word lists in src/lists/ (and
+dist/lists/) are data under their sources' own terms, which travel with them,
+each written out at the top of its file:
+
+- words-en, pop-guesses: derived from SCOWL (http://wordlist.aspell.net/),
+  Copyright 2000-2018 by Kevin Atkinson and others, under SCOWL's permissive
+  notice, reproduced in each file.
+- words-fr, words-de: derived from Lexique 3.83, LanguageTool's
+  german-pos-dict, hermitdave's FrequencyWords and Wiktionary (via kaikki.org),
+  under the Creative Commons Attribution-ShareAlike 4.0 licence
+  (https://creativecommons.org/licenses/by-sa/4.0/), and these lists with them.
+- kana-3, kana-4, kana-5: derived from JMdict, the property of the Electronic
+  Dictionary Research and Development Group, under Creative Commons
+  Attribution-ShareAlike 4.0 and the Group's conditions
+  (https://www.edrdg.org/edrdg/licence.html), and these lists with them.
+- pop-answers: the package's own list, under MIT.
