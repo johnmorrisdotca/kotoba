@@ -98,6 +98,7 @@
     "dist",
     "README.md",
     "LICENSE",
+    "NOTICE.md",
     "CHANGELOG.md"
   ],
   "engines": {

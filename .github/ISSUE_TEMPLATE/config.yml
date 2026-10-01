@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: What every export does
+    url: https://johnmorrisdotca.github.io/kotoba/api.html
+    about: The API reference, made from the source, lists every export with its signature.
