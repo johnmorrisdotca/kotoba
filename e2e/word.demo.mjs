@@ -56,10 +56,10 @@ async function sound(page, errors) {
   expect(errors, "the page complained").toEqual([]);
 }
 
-const status = (page) => page.locator('[data-testid="status"]');
-const cells = (page, row) => page.locator('[data-testid="grid"] .row').nth(row).locator(".cell");
+const status = (page) => page.locator('[data-kt="status"]');
+const cells = (page, row) => page.locator('[data-kt="grid"] .kt-row').nth(row).locator(".kt-cell");
 const hidden = (page) => page.evaluate(() => window.kotobaState.hidden);
-const key = (page, letter) => page.locator(`[data-testid="keys"] .key[data-letter="${letter}"]`);
+const key = (page, letter) => page.locator(`[data-kt="keys"] .kt-key[data-letter="${letter}"]`);
 
 async function typeWord(page, word) {
   for (const letter of word) await tap(page, key(page, letter));
@@ -68,10 +68,10 @@ async function typeWord(page, word) {
 test("opens on English, five letters, six empty rows, and a keyboard", async ({ page }) => {
   const errors = await open(page);
   await expect(page.locator("h1")).toHaveText("Kotoba言葉");
-  await expect(page.locator('[data-testid="grid"] .row')).toHaveCount(6);
+  await expect(page.locator('[data-kt="grid"] .kt-row')).toHaveCount(6);
   await expect(cells(page, 0)).toHaveCount(5);
   await expect(status(page)).toContainText("Guess the 5-letter word");
-  await expect(page.locator('[data-testid="keys"] .key[data-letter]')).toHaveCount(26);
+  await expect(page.locator('[data-kt="keys"] .kt-key[data-letter]')).toHaveCount(26);
   await expect(page.locator("footer .family a[aria-current='page']")).toHaveText("Kotoba");
   expect(await page.evaluate(() => getComputedStyle(document.body).backgroundColor)).toMatch(/^rgb\((244, 239, 228|20, 22, 20)\)$/);
   await sound(page, errors);
@@ -83,7 +83,7 @@ test("typing the hidden word wins, with a score, and the row is all green", asyn
   expect(word).toMatch(/^[a-z]{5}$/);
   await typeWord(page, word);
   await expect(cells(page, 0).first()).toHaveText(word[0].toUpperCase());
-  await tap(page, '[data-testid="keys"] [data-act="enter"]');
+  await tap(page, '[data-kt="keys"] [data-act="enter"]');
   await expect(status(page)).toContainText("Found it in 1!");
   await expect(status(page)).toContainText("points");
   await expect(cells(page, 0).locator("xpath=.")).toHaveCount(5);
@@ -94,14 +94,14 @@ test("typing the hidden word wins, with a score, and the row is all green", asyn
 test("a guess that is not a word is refused, and one that is short is told so", async ({ page }) => {
   await open(page, "?lang=en&seed=3");
   await typeWord(page, "qqqqq");
-  await tap(page, '[data-testid="keys"] [data-act="enter"]');
+  await tap(page, '[data-kt="keys"] [data-act="enter"]');
   await expect(status(page)).toHaveText("That is not in the word list.");
-  await tap(page, '[data-testid="keys"] [data-act="back"]');
-  await tap(page, '[data-testid="keys"] [data-act="back"]');
-  await tap(page, '[data-testid="keys"] [data-act="back"]');
-  await tap(page, '[data-testid="keys"] [data-act="back"]');
-  await tap(page, '[data-testid="keys"] [data-act="back"]');
-  await tap(page, '[data-testid="keys"] [data-act="enter"]');
+  await tap(page, '[data-kt="keys"] [data-act="back"]');
+  await tap(page, '[data-kt="keys"] [data-act="back"]');
+  await tap(page, '[data-kt="keys"] [data-act="back"]');
+  await tap(page, '[data-kt="keys"] [data-act="back"]');
+  await tap(page, '[data-kt="keys"] [data-act="back"]');
+  await tap(page, '[data-kt="keys"] [data-act="enter"]');
   await expect(status(page)).toHaveText("Not enough letters.");
 });
 
@@ -117,7 +117,7 @@ test("a wrong word is marked by the package's own rule, and six wrong words lose
   });
   for (let row = 0; row < 6; row += 1) {
     await typeWord(page, tries[row]);
-    await tap(page, '[data-testid="keys"] [data-act="enter"]');
+    await tap(page, '[data-kt="keys"] [data-act="enter"]');
     const expected = await page.evaluate(async ([guess, secret]) => {
       const { markGuess } = await import("/dist/index.js");
       return markGuess(guess, secret);
@@ -140,12 +140,12 @@ test("the keyboard of the device types too, and Delete takes a letter back", asy
 test("French has its own keyboard, German keeps ä ö ü, and the word is in that language's alphabet", async ({ page }) => {
   const errors = await open(page, "?lang=en");
   await tap(page, '[data-testid="languages"] [data-lang-id="fr"]');
-  await expect(page.locator('[data-testid="keys"] .key-row').first().locator(".key").first()).toHaveText("A");
-  await expect(page.locator('[data-testid="keys"] .key-row').first().locator(".key").nth(1)).toHaveText("Z");
-  await expect.poll(() => page.evaluate(() => window.kotobaState.lists !== null)).toBe(true);
+  await expect(page.locator('[data-kt="keys"] .kt-key-row').first().locator(".kt-key").first()).toHaveText("A");
+  await expect(page.locator('[data-kt="keys"] .kt-key-row').first().locator(".kt-key").nth(1)).toHaveText("Z");
+  await expect.poll(() => page.evaluate(() => window.kotobaState.play.game?.language)).toBe("fr");
   await tap(page, '[data-testid="languages"] [data-lang-id="de"]');
-  await expect(page.locator('[data-testid="keys"] .key[data-letter="ü"]')).toHaveCount(1);
-  await expect.poll(() => page.evaluate(() => window.kotobaState.lists !== null && window.kotobaState.lang === "de")).toBe(true);
+  await expect(page.locator('[data-kt="keys"] .kt-key[data-letter="ü"]')).toHaveCount(1);
+  await expect.poll(() => page.evaluate(() => window.kotobaState.play.game?.language)).toBe("de");
   expect(await hidden(page)).toMatch(/^[a-zäöüß]{5}$/);
   await sound(page, errors);
 });
@@ -164,24 +164,25 @@ test("kana: romaji becomes kana as it is typed, small and marked forms are keys,
   const errors = await open(page, "?lang=en&seed=3");
   await tap(page, '[data-testid="languages"] [data-lang-id="ja"]');
   await expect(cells(page, 0)).toHaveCount(4);
-  await expect.poll(() => page.evaluate(() => window.kotobaState.lists !== null && window.kotobaState.lang === "ja")).toBe(true);
+  await expect.poll(() => page.evaluate(() => window.kotobaState.play.game?.language)).toBe("ja");
   await expect(status(page)).toContainText("4-kana");
   await typeWord(page, "ka");
   await expect(cells(page, 0).first()).toHaveText("か");
   await typeWord(page, "shi");
   await expect(cells(page, 0).nth(1)).toHaveText("し");
-  await tap(page, '[data-testid="keys"] [data-act="mark"]');
+  await tap(page, '[data-kt="keys"] [data-act="mark"]');
   await expect(cells(page, 0).nth(1)).toHaveText("じ");
-  await tap(page, '[data-testid="keys"] [data-letter="k"]');
+  await tap(page, '[data-kt="keys"] [data-letter="k"]');
   await expect(cells(page, 0).nth(2)).toHaveAttribute("data-pending", "k");
-  await tap(page, '[data-testid="keys"] [data-act="back"]');
-  await tap(page, '[data-testid="keys"] [data-act="back"]');
-  await tap(page, '[data-testid="keys"] [data-act="back"]');
+  await tap(page, '[data-kt="keys"] [data-act="back"]');
+  await tap(page, '[data-kt="keys"] [data-act="back"]');
+  await tap(page, '[data-kt="keys"] [data-act="back"]');
   await expect(cells(page, 0).first()).toHaveText("");
-  // Typing the hidden word's kana straight into the state, then Enter, wins.
-  await page.evaluate(() => {
-    window.kotobaState.kana = [...window.kotobaState.hidden];
-  });
+  // A round whose word is known, typed in romaji and sent with Enter, wins.
+  await page.evaluate(() => window.kotobaState.play.newGame({ words: "ja", size: 3, hidden: "さくら" }));
+  await expect(cells(page, 0)).toHaveCount(3);
+  await typeWord(page, "sakura");
+  await expect(cells(page, 0).nth(2)).toHaveText("ら");
   await page.keyboard.press("Enter");
   await expect(status(page)).toContainText("Found it in 1!");
   await sound(page, errors);
@@ -190,18 +191,81 @@ test("kana: romaji becomes kana as it is typed, small and marked forms are keys,
 test("a kana guess is marked by the package's own rule", async ({ page }) => {
   await open(page, "?lang=en&seed=3");
   await tap(page, '[data-testid="languages"] [data-lang-id="ja"]');
-  await expect.poll(() => page.evaluate(() => window.kotobaState.lists !== null && window.kotobaState.lang === "ja")).toBe(true);
-  const { guess, expected } = await page.evaluate(async () => {
-    const { markKanaGuess } = await import("/dist/index.js");
-    const state = window.kotobaState;
-    const other = state.lists.answers.find((word) => word !== state.hidden);
-    state.kana = [...other];
-    return { guess: other, expected: markKanaGuess([...other], [...state.hidden]).map((one) => one.mark) };
-  });
+  await expect.poll(() => page.evaluate(() => window.kotobaState.play.game?.language)).toBe("ja");
+  await page.evaluate(() => window.kotobaState.play.newGame({ words: "ja", size: 3, hidden: "さくら" }));
+  await expect(cells(page, 0)).toHaveCount(3);
+  await typeWord(page, "ikura");
   await page.evaluate(() => document.activeElement?.blur());
   await page.keyboard.press("Enter");
+  const expected = await page.evaluate(async () => {
+    const { markKanaGuess } = await import("/dist/index.js");
+    return markKanaGuess([..."いくら"], [..."さくら"]).map((one) => one.mark);
+  });
+  expect(expected).toEqual(["miss", "hit", "hit"]);
   for (let at = 0; at < expected.length; at += 1) await expect(cells(page, 0).nth(at)).toHaveAttribute("data-mark", expected[at]);
-  expect(guess.length).toBe(4);
+});
+
+test("the address names the game: the list, the length, easy words and the seed, and opening it plays the same word", async ({ page }) => {
+  const errors = await open(page, "?lang=en&words=fr&size=4&easy=1&seed=7");
+  await expect(page.locator('[data-testid="languages"] [aria-pressed="true"]')).toHaveAttribute("data-lang-id", "fr");
+  await expect(page.locator('[data-testid="sizes"] [aria-pressed="true"]')).toHaveAttribute("data-size", "4");
+  await expect(page.locator('[data-testid="easy"]')).toHaveAttribute("aria-pressed", "true");
+  await expect(cells(page, 0)).toHaveCount(4);
+  const word = await hidden(page);
+  expect(word).toMatch(/^[a-z]{4}$/);
+  expect(Object.fromEntries(new URL(page.url()).searchParams)).toMatchObject({ words: "fr", size: "4", easy: "1", seed: "7" });
+  // The first word is the seed's; a new word is another one, and the address follows it.
+  await tap(page, '[data-testid="new"]');
+  await expect.poll(() => new URL(page.url()).searchParams.get("seed")).not.toBe("7");
+  await page.goto(`http://kotoba.test/?lang=en&words=fr&size=4&easy=1&seed=7`);
+  await expect(page.locator("html")).toHaveAttribute("data-ready", "true");
+  expect(await hidden(page)).toBe(word);
+  await sound(page, errors);
+});
+
+test("Today's word is the day's word of the list, the same as the package gives, and New word leaves it", async ({ page }) => {
+  const errors = await open(page, "?lang=en&words=en&size=5&daily=1");
+  await expect(page.locator('[data-testid="daily"]')).toHaveAttribute("aria-pressed", "true");
+  const word = await hidden(page);
+  const expected = await page.evaluate(async () => {
+    const { dailyWord, dayKey } = await import("/dist/index.js");
+    const { loadWordList } = await import("/dist/load.js");
+    return dailyWord((await loadWordList("en", 5)).answers, dayKey(Date.now()), { salt: "en-5-answers" });
+  });
+  expect(word).toBe(expected);
+  await expect(page.locator('[data-testid="credit"]')).toContainText("same for everybody");
+  expect(new URL(page.url()).searchParams.get("daily")).toBe("1");
+  await tap(page, '[data-testid="new"]');
+  await expect(page.locator('[data-testid="daily"]')).toHaveAttribute("aria-pressed", "false");
+  expect(new URL(page.url()).searchParams.get("daily")).toBeNull();
+  await sound(page, errors);
+});
+
+test("Using it: the code and the command are the game's own, and the code puts the same game on a page", async ({ page }) => {
+  const errors = await open(page, "?lang=en&words=en&size=5&seed=3");
+  const code = page.locator('[data-testid="using-code"]');
+  await expect(code).toContainText('mountKotoba(document.getElementById("game"), { words: "en", size: 5, seed: 3, locale: "en" });');
+  await expect(page.locator('[data-testid="cli-code"]')).toHaveText("npx @johnmorrisdotca/kotoba lists --words en");
+  await expect(page.locator('[data-testid="counts"]')).toContainText("easy answers, inside");
+  // The code, run against the package this page was built from, mounts a game with the same hidden word.
+  const same = await page.evaluate(async () => {
+    const { mountKotoba } = await import("/dist/play.js");
+    const holder = document.createElement("div");
+    document.body.append(holder);
+    const source = document.querySelector('[data-testid="using-code"]').textContent.replace(/^import .*$/m, "").split("\n").filter((line) => !line.includes("newGame")).join("\n");
+    const run = new Function("mountKotoba", "document", `return (async () => { ${source.replace("await play.ready;", "await play.ready;")}\n return play; })();`);
+    const play = await run(mountKotoba, { getElementById: () => holder });
+    const mine = play.game.hidden;
+    play.destroy();
+    return { mine, shown: window.kotobaState.hidden, boards: document.querySelectorAll("[data-kotoba]").length };
+  });
+  expect(same.mine).toBe(same.shown);
+  expect(same.boards).toBe(1);
+  for (const id of ["copy-link", "copy-code"]) {
+    await tap(page, `[data-testid="${id}"]`);
+    await expect(page.locator(`[data-testid="${id}"]`)).toHaveText(/Copied|Copy it by hand/);
+  }
+  await sound(page, errors);
 });
 
 test("the cloth patches in the header change the felt behind the board", async ({ page }) => {
@@ -243,7 +307,7 @@ test("Help is off at first, and on it shows a line under each option row, in eit
   expect(await rows.count()).toBeGreaterThan(0);
   await expect(page.locator("[data-help-switch]")).toHaveAttribute("aria-pressed", "false");
   await expect(lines.first()).toBeHidden();
-  const surface = page.locator('[data-testid="grid"]').first();
+  const surface = page.locator('[data-kt="grid"]').first();
   const before = await surface.boundingBox();
   await page.locator("[data-help-switch]").click();
   await expect(page.locator("html")).toHaveAttribute("data-help", "on");

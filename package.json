@@ -1,7 +1,7 @@
 {
   "name": "@johnmorrisdotca/kotoba",
-  "version": "1.0.0",
-  "description": "Word lists and word-game rules for JavaScript and TypeScript: English, French, German and Japanese (kana) dictionaries for five-letter and other word games, each list its own import, with guess marking, scoring, kana marks, romaji input and keyboard rows. Zero dependencies.",
+  "version": "1.1.0",
+  "description": "Word lists and word-game rules for JavaScript and TypeScript: English, French, German and Japanese (kana) dictionaries for five-letter and other word games, each list its own import, with guess marking, scoring, kana marks, romaji input, keyboard rows, a word of the day, a word game you can put on any page, and a command line. Zero dependencies.",
   "keywords": [
     "word-list",
     "wordlist",
@@ -30,7 +30,23 @@
     "zero-dependencies",
     "browser",
     "node",
-    "itsutsu"
+    "itsutsu",
+    "cli",
+    "command-line",
+    "daily-word",
+    "word-of-the-day",
+    "word-of-the-day-game",
+    "wordle-engine",
+    "game-state",
+    "five-letter",
+    "word-lists",
+    "spelling",
+    "vocabulary",
+    "hangman",
+    "esm",
+    "json",
+    "i18n",
+    "accessible"
   ],
   "homepage": "https://github.com/johnmorrisdotca/kotoba#readme",
   "repository": {
@@ -92,25 +108,43 @@
       "types": "./dist/lists/kana-5.data.d.ts",
       "import": "./dist/lists/kana-5.data.js",
       "default": "./dist/lists/kana-5.data.js"
+    },
+    "./cli": {
+      "types": "./dist/cli.d.ts",
+      "import": "./dist/cli.js",
+      "default": "./dist/cli.js"
+    },
+    "./load": {
+      "types": "./dist/load.d.ts",
+      "import": "./dist/load.js",
+      "default": "./dist/load.js"
+    },
+    "./play": {
+      "types": "./dist/play.d.ts",
+      "import": "./dist/play.js",
+      "default": "./dist/play.js"
     }
   },
   "files": [
     "dist",
+    "bin",
     "README.md",
     "LICENSE",
     "NOTICE.md",
     "CHANGELOG.md"
   ],
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "lint": "eslint .",
     "typecheck": "tsc -p tsconfig.check.json",
     "test": "vitest run",
+    "test:cli": "pnpm build && node scripts/check-cli.mjs",
     "test:package": "pnpm build && node scripts/check-package.mjs",
     "docs:api": "node scripts/api-write.mjs",
+    "docs:make": "node scripts/docs.mjs",
     "check": "pnpm lint && pnpm typecheck && pnpm test",
     "prepublishOnly": "pnpm check && pnpm build",
     "site": "pnpm build && node scripts/site.mjs",
@@ -125,5 +159,8 @@
     "typescript-eslint": "^8.0.0",
     "vitest": "^5.0.0"
   },
-  "packageManager": "pnpm@10.11.0"
+  "packageManager": "pnpm@10.11.0",
+  "bin": {
+    "kotoba": "bin/kotoba.mjs"
+  }
 }

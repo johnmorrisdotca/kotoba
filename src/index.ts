@@ -10,4 +10,7 @@ export * from "./keyboardRows.ts";
 export * from "./kana/kanaMarks.ts";
 export * from "./kana/romaji.ts";
 export * from "./kana/kanaScore.ts";
+export * from "./daily.ts";
+export * from "./game.ts";
+export * from "./strings.ts";
 export { VERSION } from "./version.ts";

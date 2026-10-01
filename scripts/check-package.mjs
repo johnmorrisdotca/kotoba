@@ -102,12 +102,17 @@ for (const name of Object.keys(pkg.bin ?? {})) {
     console.error(`FAIL ${name} --version said ${version}`);
     process.exit(1);
   }
-  const shuffled = run(command, ["--seed", "42", "--shuffle", "a", "b", "c"], project, true).replace(/\r\n/g, "\n");
-  if (shuffled !== "c\na\nb\n") {
-    console.error(`FAIL ${name} shuffled ${JSON.stringify(shuffled)}`);
+  const checked = run(command, ["check", "crane"], project, true).replace(/\r\n/g, "\n");
+  if (!checked.startsWith("crane  English, 5 letters\n  may be guessed: yes\n")) {
+    console.error(`FAIL ${name} checked ${JSON.stringify(checked)}`);
     process.exit(1);
   }
-  console.log(`ok   ${name} --version and a seeded shuffle, as installed`);
+  const daily = run(command, ["daily", "--date", "2026-10-01"], project, true).replace(/\r\n/g, "\n");
+  if (daily !== "2026-10-01  elect\n") {
+    console.error(`FAIL ${name} gave the word of the day as ${JSON.stringify(daily)}`);
+    process.exit(1);
+  }
+  console.log(`ok   ${name} --version, a word checked and the word of a day, as installed`);
 }
 
 rmSync(scratch, { recursive: true, force: true });

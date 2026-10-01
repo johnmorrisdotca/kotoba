@@ -35,6 +35,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: The package as npm packs it installs and imports, by ESM and by require
         run: pnpm test:package
+      - name: The command line runs as a child process, with the exit codes
+        run: pnpm test:cli
   demo:
     runs-on: ubuntu-latest
     steps:

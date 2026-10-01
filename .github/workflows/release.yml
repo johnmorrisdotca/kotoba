@@ -30,6 +30,8 @@ jobs:
       - run: pnpm build
       - name: The package as npm packs it installs, imports and runs
         run: node scripts/check-package.mjs
+      - name: The command line runs as a child process
+        run: node scripts/check-cli.mjs
       - name: The tag is the version in package.json
         run: |
           VERSION="$(node -p "require('./package.json').version")"

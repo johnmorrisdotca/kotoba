@@ -1,42 +1,14 @@
 /* Kotoba's own: the set-up, the board, the keys, and the API reference. Everything shared is in family.css, loaded before this. */
-:root { --intro-room: 11.5rem; --intro-room-wide: 6.5rem; --hit: #2f7a4f; --near: #d9822b; --kin: #d9b83b; --miss: #5a5f5a; --cell: #fbf8ee; --cell-ink: #1b1b1b; }
+:root { --intro-room: 11.5rem; --intro-room-wide: 6.5rem; }
 
 .setup { display: grid; gap: 10px; margin-bottom: 14px; }
 .setup .fam-row { gap: 8px 14px; }
 .fam-seg button { min-width: 44px; }
 
-.game { display: grid; gap: 12px; padding: 14px; justify-items: center; }
-.status { margin: 0; min-height: 2.8em; font-weight: 700; text-align: center; }
-.legend { margin: 0; font-size: .8rem; opacity: .9; text-align: center; min-height: 3.4em; max-width: 46ch; }
-
-/* The board: six rows, each as many cells as the word has letters, in one steady box. */
-.grid { --size: 5; display: grid; gap: 6px; width: min(100%, calc(var(--size) * 60px)); }
-.row { display: grid; grid-template-columns: repeat(var(--size), minmax(0, 1fr)); gap: 6px; }
-.cell { position: relative; aspect-ratio: 1; display: grid; place-items: center; border-radius: 8px; background: var(--cell); color: var(--cell-ink); border: 2px solid rgba(0,0,0,.25); font-weight: 800; font-size: clamp(1.1rem, 6vw, 1.7rem); user-select: none; -webkit-user-select: none; }
-.cell[data-mark="empty"] { background: rgba(0,0,0,.18); border-color: rgba(255,255,255,.18); }
-.cell[data-mark="typed"] { border-color: var(--gold); }
-.cell[data-mark="hit"] { background: var(--hit); color: #fff; border-color: transparent; }
-.cell[data-mark="near"] { background: var(--near); color: #fff; border-color: transparent; }
-.cell[data-mark="kin"] { background: var(--kin); color: #1b1b1b; border-color: transparent; }
-.cell[data-mark="miss"] { background: var(--miss); color: #fff; border-color: transparent; }
-/* Not by colour alone: a corner mark for each. */
-.cell[data-mark="hit"]::after { content: "●"; }
-.cell[data-mark="near"]::after { content: "◐"; }
-.cell[data-mark="kin"]::after { content: "≈"; }
-.cell[data-mark="miss"]::after { content: "○"; }
-.cell[data-mark="hit"]::after, .cell[data-mark="near"]::after, .cell[data-mark="kin"]::after, .cell[data-mark="miss"]::after { position: absolute; top: 2px; right: 5px; font-size: .55rem; font-weight: 700; opacity: .8; }
-.cell[data-size="wrong"]::before { content: "↓"; position: absolute; left: 4px; bottom: 1px; font-size: .7rem; }
-.cell[data-tone="wrong"]::before { content: "↑"; position: absolute; left: 4px; bottom: 1px; font-size: .7rem; }
-.cell[data-pending]::before { content: attr(data-pending); position: absolute; left: 4px; bottom: 1px; font-size: .6rem; opacity: .7; }
-
-.keys { display: grid; gap: 6px; width: min(100%, 520px); }
-.key-row { display: flex; justify-content: center; gap: 4px; }
-.key { flex: 1 1 0; min-width: 0; max-width: 46px; min-height: 48px; padding: 0; border-radius: 8px; border: 1px solid rgba(0,0,0,.3); background: var(--cell); color: var(--cell-ink); font-weight: 700; font-size: .95rem; text-transform: uppercase; user-select: none; -webkit-user-select: none; }
-.key[data-wide="true"] { flex: 1.6 1 0; max-width: 78px; font-size: .75rem; text-transform: none; }
-.key[data-mark="hit"] { background: var(--hit); color: #fff; }
-.key[data-mark="near"] { background: var(--near); color: #fff; }
-.key[data-mark="miss"] { background: var(--miss); color: #fff; opacity: .7; }
-.key[data-act="small"], .key[data-act="mark"] { max-width: 78px; flex: 1.6 1 0; font-size: 1.1rem; text-transform: none; }
+.game { display: grid; padding: 14px; justify-items: center; }
+#board { width: 100%; display: grid; justify-items: center; }
+/* The game sits on the page's cloth. */
+.game .kt-root { padding: 0; }
 
 .credits p { max-width: 72ch; line-height: 1.55; }
 
@@ -55,3 +27,13 @@
 .api-entry p { margin: 0; line-height: 1.5; max-width: 72ch; overflow-wrap: anywhere; }
 .api-entry p.api-names { max-width: none; }
 .api-entry pre { white-space: pre-wrap; overflow-wrap: anywhere; }
+
+/* Using it: the code that puts the game above on a page. */
+.more { display: grid; gap: 10px; margin-top: 24px; min-width: 0; }
+.more > * { min-width: 0; max-width: 100%; }
+.more h2, .more h3 { margin: 0; }
+.more h3 { font-size: .95rem; }
+.more p { margin: 0; max-width: 72ch; line-height: 1.55; color: var(--muted); }
+.snippet { white-space: pre; }
+.more .fam-row { gap: 8px 14px; }
+.credits p + p { margin-top: 6px; }
