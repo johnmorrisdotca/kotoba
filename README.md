@@ -11,6 +11,11 @@ English, French, German and Japanese (kana) dictionaries for five-letter and oth
 
 <p align="center"><a href="https://johnmorrisdotca.github.io/kotoba/"><strong>Play a word game →</strong></a> · <a href="https://johnmorrisdotca.github.io/kotoba/api.html">API reference</a></p>
 
+<p align="center">
+  <img src="docs/desktop.jpg" alt="The demo with four guesses made in English, under its header with the language chooser and five cloth patches: the words and length to choose, a grid of five-letter guesses marked green for the right place and orange for elsewhere, and the keyboard coloured by what the guesses showed" width="620">
+  <img src="docs/phone.jpg" alt="The demo on a phone in dark mode, in Japanese kana: three four-kana guesses marked, and the keyboard with its small-kana and voicing keys" width="200">
+</p>
+
 ## In 30 seconds
 
 ```sh
