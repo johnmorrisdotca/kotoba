@@ -14,7 +14,7 @@ const frame = ({ title, description, links, body, scripts }) => `<!doctype html>
     ${familyHead({ id, title, description, ogTitle: "Kotoba 言葉: word lists and word games", ogDescription: "Guess the hidden word in English, French, German or Japanese kana, on the Kotoba word lists." })}
     <link rel="icon" href="${icon}" />
     <link rel="stylesheet" href="family.css" />
-    <link rel="stylesheet" href="site.css" />
+    <link rel="stylesheet" href="kotoba.css" />
   </head>
   <body>
     <main>
@@ -30,13 +30,13 @@ ${body}
 
 rmSync("site", { recursive: true, force: true });
 mkdirSync("site", { recursive: true });
-for (const file of ["family.css", "site.css", "page.js"]) cpSync(`demo/${file}`, `site/${file}`);
+for (const file of ["family.css", "kotoba.css", "page.js"]) cpSync(`demo/${file}`, `site/${file}`);
 cpSync("dist", "site/dist", { recursive: true });
 
 writeFileSync(
   "site/index.html",
   frame({
-    title: "Kotoba 言葉: a word game on the Kotoba word lists",
+    title: "Kotoba · a word game on the Kotoba word lists",
     description: "Guess the hidden word in six tries in English, French, German or Japanese kana, on the cleaned dictionaries of the Kotoba package, with its marking, romaji input and score. In English and Japanese. Free and open source.",
     links: [{ href: "api.html", say: "pageApi" }],
     body: readFileSync("demo/body.html", "utf8").replace("__UNREVIEWED__", familyUnreviewed({ id })).trimEnd(),
