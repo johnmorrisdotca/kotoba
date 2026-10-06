@@ -1,7 +1,7 @@
 {
   "name": "@johnmorrisdotca/kotoba",
-  "version": "1.1.0",
-  "description": "Word lists and word-game rules for JavaScript and TypeScript: English, French, German and Japanese (kana) dictionaries for five-letter and other word games, each list its own import, with guess marking, scoring, kana marks, romaji input, keyboard rows, a word of the day, a word game you can put on any page, and a command line. Zero dependencies.",
+  "version": "1.1.1",
+  "description": "Word lists and word-game rules for JavaScript and TypeScript: English, French, German and Japanese (kana) dictionaries, guess marking, scoring, romaji input, a word of the day, and a word game for any page. Zero dependencies.",
   "keywords": [
     "word-list",
     "wordlist",
@@ -48,7 +48,7 @@
     "i18n",
     "accessible"
   ],
-  "homepage": "https://github.com/johnmorrisdotca/kotoba#readme",
+  "homepage": "https://johnmorrisdotca.github.io/kotoba/",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/johnmorrisdotca/kotoba.git"

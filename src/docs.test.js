@@ -213,7 +213,7 @@ describe("package.json", () => {
     expect(pkg.keywords.length).toBeGreaterThan(30);
     expect(new Set(pkg.keywords).size).toBe(pkg.keywords.length);
     for (const word of pkg.keywords) expect(word).toBe(word.toLowerCase());
-    expect(pkg.description.length).toBeLessThanOrEqual(400);
+    expect(pkg.description.length).toBeLessThanOrEqual(250);
   });
 });
 
