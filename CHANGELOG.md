@@ -6,8 +6,15 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+## [1.1.2] - 2026-10-06
+
+Nothing that was exported has changed.
+
 ### Changed
 
+- The README takes the family's one layout, fully: a hero picture of the demo on a desk and on a phone in light and dark, a picture of each board (English, French, German, kana, and the other lengths), a full Examples section of fourteen examples whose output is what they print, an Accessibility section, and a short list of the calls to learn first. Its pictures are in `docs/images` (WebP, light and dark) and are retaken with `pnpm screenshots:readme` (it replaces `pnpm pictures` and the two JPEGs `docs/desktop.jpg` and `docs/phone.jpg`); they are not in the tarball, and `pnpm test:package` fails if one is.
+- `pnpm test:readme` type-checks and runs every TypeScript and JavaScript example in the README against the built package, as a CI job of its own, and `pnpm check` holds the README to the family's lint (sections in order, a language on every fence, pictures with alt text, widths and captions, no marketing words, at most 64,000 characters, because npm shows only the first 65,536).
+- "Where the words come from, and their licences" and "Where it is used" are one section, "Where the words come from, and where it is used", with "Used by" and "The family" under it, and the README has a Development section.
 - Repository only: the package and everything it exports are unchanged. `CONTRIBUTING.md` is the family's one text with a section of its own for Kotoba, held to the master in johnmorrisdotca/.github by `src/family.test.js`; `ci.yml` and `pages.yml` are the family's one text (`pnpm check`, the demo, and the package on Linux, macOS and Windows), and any jobs of the package's own after them.
 - The demo's page titles read `Kotoba · pitch`, like the rest of the family's.
 - The demo's own stylesheet is `demo/kotoba.css`, named for the package like the family's.

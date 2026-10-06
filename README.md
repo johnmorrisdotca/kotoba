@@ -8,14 +8,29 @@ English, French, German and Japanese (kana) dictionaries for five-letter and oth
   <a href="https://www.npmjs.com/package/@johnmorrisdotca/kotoba"><img alt="npm" src="https://img.shields.io/npm/v/@johnmorrisdotca/kotoba?color=2f5d4a"></a>
   <a href="./NOTICE.md"><img alt="Code MIT; word lists SCOWL, CC BY-SA 4.0" src="https://img.shields.io/badge/licence-MIT%20code%2C%20CC%20BY--SA%20lists-2f5d4a"></a>
   <img alt="No dependencies" src="https://img.shields.io/badge/dependencies-0-2f5d4a">
+  <img alt="TypeScript" src="https://img.shields.io/badge/types-TypeScript-3178c6">
 </p>
 
-<p align="center"><a href="https://johnmorrisdotca.github.io/kotoba/"><strong>Play a word game →</strong></a> · <a href="https://johnmorrisdotca.github.io/kotoba/api.html">API reference</a></p>
+<p align="center"><a href="https://johnmorrisdotca.github.io/kotoba/"><strong>Play a word game →</strong></a> · <a href="https://johnmorrisdotca.github.io/kotoba/api.html">API reference</a> · <a href="docs/api.md">API in the repository</a></p>
 
-<p align="center">
-  <img src="docs/desktop.jpg" alt="The demo with four guesses made in English, under its header with the language chooser, five cloth patches and the Help switch: the words and length to choose, a grid of five-letter guesses marked green for the right place and orange for elsewhere, and the keyboard coloured by what the guesses showed" width="620">
-  <img src="docs/phone.jpg" alt="The demo on a phone in dark mode, in Japanese kana: three four-kana guesses marked, and the keyboard with its small-kana and voicing keys" width="200">
-</p>
+<table align="center">
+<tr>
+<td align="center" valign="top">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/hero-desk-dark.webp">
+<img src="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/hero-desk-light.webp" alt="The demo on a desk, in English: the page's header with its language chooser and cloth swatches, the words and length to choose, a grid of five-letter guesses marked green where the letter is right, orange where it is elsewhere and grey where it is not in the word, and the keyboard coloured by what the guesses showed." width="720">
+</picture>
+<br><em>The demo on a desk, four guesses into a five-letter English word.</em>
+</td>
+<td align="center" valign="top">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/hero-phone-dark.webp">
+<img src="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/hero-phone-light.webp" alt="The demo on a phone, in Japanese kana: three four-kana guesses marked, each mark carrying a shape as well as a colour, and the keyboard with its small-kana and voicing keys under them." width="220">
+</picture>
+<br><em>On a phone, in kana, in the device's light or dark.</em>
+</td>
+</tr>
+</table>
 
 ## In 30 seconds
 
@@ -37,7 +52,7 @@ markGuess("crane", "react");        // ["near", "near", "hit", "miss", "near"]
 
 Or put the whole game on a page:
 
-```ts
+```ts no-run
 import { mountKotoba } from "@johnmorrisdotca/kotoba/play";
 
 mountKotoba(document.getElementById("game")!, { words: "en", size: 5, daily: true });   // today's word, the same for everybody
@@ -60,7 +75,105 @@ npx @johnmorrisdotca/kotoba check crane
 - **Teachers and people who like to check**: the command line looks a word up,
   lists a list, marks a guess and gives the word of the day.
 
+## Features
+
+- **Four dictionaries, cleaned.** English, French, German and Japanese kana,
+  each a real dictionary's words with names, brands, slurs and subtitle noise
+  left out, in an easy tier inside the answers inside the words that may be
+  guessed.
+- **Each list its own import**, so a page loads only the language and length it
+  plays.
+- **Guess marking** that counts a letter only as often as the word holds it, and
+  kana marks where a voiced or small kana counts as its family.
+- **Scoring** for a solved or lost game: letters placed, rows to spare, speed.
+- **A round as plain data** (`game.ts`): typing, erasing, sending a guess,
+  romaji into kana, the size and mark of a kana, and the score.
+- **A word of the day** (`dailyWord`), the same for everybody, every word once
+  before any comes round again.
+- **A board you can put on a page** (`/play`), with the keyboards of English,
+  French (AZERTY), German (QWERTZ, with ä ö ü) and kana typed in romaji; marks that never rely on colour alone; and CSS variables to theme it.
+- **A command line**: look a word up, list a list, mark a guess, give the word
+  of the day.
+- **English and Japanese words** for the game and the command line.
+
+### What's in it
+
+Each picture is the board the package draws (`mountKotoba`), taken from [the demo](https://johnmorrisdotca.github.io/kotoba/) with `pnpm screenshots:readme`, in light and dark. The hidden word is fixed by a seed, so the same pictures come again.
+
+<table>
+<tr>
+<td align="center" valign="top" width="33%">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/english-desk-dark.webp">
+<img src="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/english-desk-light.webp" alt="An English board of five-letter guesses: four rows marked green, orange and grey, each mark with its own shape in the corner of the cell, and the QWERTY keyboard below coloured by what the guesses showed." width="400">
+</picture>
+<br><em><strong>English.</strong> Four, five or six letters, on a QWERTY keyboard.</em>
+</td>
+<td align="center" valign="top" width="33%">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/french-desk-dark.webp">
+<img src="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/french-desk-light.webp" alt="A French board of five-letter guesses with three rows marked, and the AZERTY keyboard under it, its rows starting a, z, e, r, t, y." width="400">
+</picture>
+<br><em><strong>French.</strong> Four, five or six letters, on an AZERTY keyboard.</em>
+</td>
+<td align="center" valign="top" width="33%">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/german-desk-dark.webp">
+<img src="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/german-desk-light.webp" alt="A German board of five-letter guesses with three rows marked, and the QWERTZ keyboard under it, with ä, ö and ü keys of their own." width="400">
+</picture>
+<br><em><strong>German.</strong> Four, five or six letters, on a QWERTZ keyboard with ä ö ü.</em>
+</td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/kana-desk-dark.webp">
+<img src="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/kana-desk-light.webp" alt="A Japanese board of four-kana guesses, three rows marked, with a small circle, half circle or dot in each cell's corner for the mark, and a Latin keyboard that types romaji with keys for small kana and for the voicing marks." width="400">
+</picture>
+<br><em><strong>Kana.</strong> Three, four or five kana, typed in romaji.</em>
+</td>
+<td align="center" valign="top" width="33%">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/six-letters-desk-dark.webp">
+<img src="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/six-letters-desk-light.webp" alt="An English board of six-letter guesses, three rows marked; the grid is one cell wider than the five-letter board and the keyboard is unchanged." width="400">
+</picture>
+<br><em><strong>Six letters.</strong> The grid follows the length.</em>
+</td>
+<td align="center" valign="top" width="33%">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/four-letters-desk-dark.webp">
+<img src="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/four-letters-desk-light.webp" alt="An English board of four-letter guesses, two rows marked, narrower than the five-letter board." width="400">
+</picture>
+<br><em><strong>Four letters.</strong> The shortest English, French and German lists.</em>
+</td>
+</tr>
+</table>
+
 ## Use it in your project
+
+### Install
+
+```sh
+npm install @johnmorrisdotca/kotoba
+```
+
+```sh
+pnpm add @johnmorrisdotca/kotoba
+```
+
+```sh
+yarn add @johnmorrisdotca/kotoba
+```
+
+A page with no bundler takes the board from a CDN, as an ES module. Name the major version, so that a release that changes what you use is one you choose:
+
+```html
+<script type="module">
+  import { mountKotoba } from "https://cdn.jsdelivr.net/npm/@johnmorrisdotca/kotoba@1/dist/play.js";
+</script>
+```
+
+Node 22 or later is needed to develop it; the rules and lists run in every current browser, Node, Deno and Bun.
 
 Kotoba has two halves: the rules and lists, which are plain functions over plain
 data and work anywhere, and a board, `mountKotoba`, which draws a game into one
@@ -160,26 +273,238 @@ command line is built on it.
 - Lists that are machine output from real dictionaries, each its own file.
 - A word of the day with no state and no clock to keep.
 
-## Features
+The cookbook, with the output of each example, is under [Examples](#examples).
 
-- **Four dictionaries, cleaned.** English, French, German and Japanese kana,
-  each a real dictionary's words with names, brands, slurs and subtitle noise
-  left out, in an easy tier inside the answers inside the words that may be
-  guessed.
-- **Each list its own import**, so a page loads only the language and length it
-  plays.
-- **Guess marking** that counts a letter only as often as the word holds it, and
-  kana marks where a voiced or small kana counts as its family.
-- **Scoring** for a solved or lost game: letters placed, rows to spare, speed.
-- **A round as plain data** (`game.ts`): typing, erasing, sending a guess,
-  romaji into kana, the size and mark of a kana, and the score.
-- **A word of the day** (`dailyWord`), the same for everybody, every word once
-  before any comes round again.
-- **A board you can put on a page** (`/play`), with the keyboards of English,
-  French (AZERTY), German (QWERTZ, with ä ö ü) and kana typed in romaji; marks that never rely on colour alone; and CSS variables to theme it.
-- **A command line**: look a word up, list a list, mark a guess, give the word
-  of the day.
-- **English and Japanese words** for the game and the command line.
+## Examples
+
+Every TypeScript and JavaScript block here is type-checked against the built package and run by `pnpm test:readme`, so the output after `// →` is what the code prints. The word lists come from the package itself; nothing here uses a network.
+
+### A page with nothing else
+
+Save this as a file and open it. The board, the keyboard of the language and the legend of the marks are drawn into the one element; each list is fetched when it is played.
+
+```html
+<!doctype html>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>A word game</title>
+<div id="game"></div>
+<script type="module">
+  import { mountKotoba } from "https://cdn.jsdelivr.net/npm/@johnmorrisdotca/kotoba@1/dist/play.js";
+
+  const play = mountKotoba(document.getElementById("game"), { words: "en", size: 5, daily: true });
+  await play.ready;
+</script>
+```
+
+### Mark a guess
+
+`markGuess(guess, hidden)` marks each letter `hit` (right place), `near` (in the word elsewhere) or `miss`, and counts a letter only as often as the hidden word holds it. Two `e` in the guess against one `e` in the word earn one mark, not two:
+
+```ts
+import { markGuess } from "@johnmorrisdotca/kotoba";
+
+console.log(markGuess("crane", "react"));  // → [ 'near', 'near', 'hit', 'miss', 'near' ]
+console.log(markGuess("speed", "abide"));  // → [ 'miss', 'miss', 'near', 'miss', 'near' ]
+console.log(markGuess("abide", "speed"));  // → [ 'miss', 'miss', 'miss', 'near', 'near' ]
+```
+
+### Read a list, and ask whether a word is in it
+
+Each language is an entry point of its own, so a page loads only the list it plays. `readWordLists(data, size)` reads one length: `allowed` is every word that may be guessed, `answers` the words that may be hidden, `easy` the everyday ones among them.
+
+```ts
+import { readWordLists } from "@johnmorrisdotca/kotoba";
+import { FR_WORDS } from "@johnmorrisdotca/kotoba/words-fr";
+
+const five = readWordLists(FR_WORDS, 5)!;
+console.log(five.allowed.has("monde"), five.allowed.has("zzzzz"));   // → true false
+console.log(five.easy.length, five.answers.length, five.allowed.size);  // → 660 1319 4489
+```
+
+### Load a list by name
+
+`loadWordList(language, size)` reads one list by its name, for a script or a server that takes the language from a user. It returns `null` for a size there is no list of.
+
+```ts
+import { loadWordList, WORD_LIST_SIZES } from "@johnmorrisdotca/kotoba/load";
+
+console.log(WORD_LIST_SIZES.ja);                       // → [ 3, 4, 5 ]
+const german = await loadWordList("de", 6);
+console.log(german?.answers.length);                   // → 1702
+console.log(await loadWordList("en", 9));              // → null
+```
+
+### The word of the day
+
+The same word for everybody on the same day, with no state and no clock kept. A day is a calendar date in UTC unless a time zone is named, and the `salt` names the list:
+
+```ts
+import { dailyWord, dayKey } from "@johnmorrisdotca/kotoba";
+import { loadWordList } from "@johnmorrisdotca/kotoba/load";
+
+const five = (await loadWordList("en", 5))!;
+const salt = "en-5-answers";
+console.log(dailyWord(five.answers, "2026-10-01", { salt }));          // → elect
+const instant = new Date("2026-10-01T23:30:00Z");
+console.log(dayKey(instant, "Asia/Tokyo"), dayKey(instant));           // → 2026-10-02 2026-10-01
+console.log(dailyWord(five.answers, instant, { zone: "Asia/Tokyo", salt }) === dailyWord(five.answers, "2026-10-02", { salt }));  // → true
+```
+
+### Play a round as data
+
+A round is plain data, and every function takes one and returns the next, so it fits any framework's state, can be replayed from its guesses, or played by a program. Here a program plays a round to a win and reads the score:
+
+```ts
+import { guessMarks, keyMarks, startWordGame, submitWordGame, typeWordGame } from "@johnmorrisdotca/kotoba";
+import { loadWordList } from "@johnmorrisdotca/kotoba/load";
+
+const words = (await loadWordList("en", 5))!;
+let round = startWordGame("en", 5, "crane");
+for (const guess of ["slate", "react", "crane"]) {
+  for (const key of guess) round = typeWordGame(round, key);
+  round = submitWordGame(round, words).game;
+  console.log(guess, guessMarks(round, guess).map((place) => place.mark).join(" "));
+}
+// → slate miss miss hit miss hit
+// → react near near hit near miss
+// → crane hit hit hit hit hit
+console.log(round.status, round.score?.total);             // → won 665
+console.log(keyMarks(round).get("r"));                     // → hit
+```
+
+### A word that is not in the list is refused
+
+`submitWordGame` checks a guess against the list and says why it was not taken, leaving the round as it was:
+
+```ts
+import { startWordGame, submitWordGame, typeWordGame } from "@johnmorrisdotca/kotoba";
+import { loadWordList } from "@johnmorrisdotca/kotoba/load";
+
+const words = (await loadWordList("en", 5))!;
+let round = startWordGame("en", 5, "crane");
+for (const key of "zzzzz") round = typeWordGame(round, key);
+const sent = submitWordGame(round, words);
+console.log(sent.refused, sent.game.guesses.length);        // → not-a-word 0
+```
+
+### Kana: typing and marking
+
+Kana are typed in romaji, which `readRomaji` turns into kana as it can, and `finishRomaji` settles at Enter (a last `n` becomes ん). A kana guess is marked like a letter guess, with one more mark: `kin`, a kana of the same row of the kana table, and a flag when the size or the voicing is wrong:
+
+```ts
+import { finishRomaji, markKanaGuess, readRomaji } from "@johnmorrisdotca/kotoba";
+
+console.log(readRomaji("kyoutosh"));           // → { kana: [ 'き', 'ょ', 'う', 'と' ], rest: 'sh' }
+console.log(finishRomaji("sakuran"));          // → [ 'さ', 'く', 'ら', 'ん' ]
+console.log(markKanaGuess([..."ざくら"], [..."さかな"]).map((place) => `${place.mark}${place.wrongMark ? " (voicing)" : ""}`));
+// → [ 'hit (voicing)', 'kin', 'miss' ]
+```
+
+### A hidden word and guesses in a link
+
+A puzzle written down as text, and read back with the language's alphabet checked: `null` is anything that is not that many letters of it.
+
+```ts
+import { decodeGuesses, decodeHidden, encodeHidden } from "@johnmorrisdotca/kotoba";
+
+console.log(encodeHidden("crane"));                  // → CRANE
+console.log(decodeHidden("CRANE", 5));               // → crane
+console.log(decodeHidden("CRAN1", 5));               // → null
+console.log(decodeGuesses("slatereact", 5));         // → [ 'slate', 'react' ]
+```
+
+### Draw your own keyboard
+
+`KEYBOARD_ROWS` holds the rows of the physical keyboard of each language, and `keyMarks` the best mark each letter has earned, for colouring it:
+
+```ts
+import { KEYBOARD_ROWS } from "@johnmorrisdotca/kotoba";
+
+console.log(KEYBOARD_ROWS.fr.join(" / "));          // → azertyuiop / qsdfghjklm / wxcvbn
+console.log(KEYBOARD_ROWS.de.join(" / "));          // → qwertzuiopü / asdfghjklöä / yxcvbnm
+```
+
+### Use the command line
+
+Look a word up, mark a guess, list a list, or ask for the word of the day:
+
+```sh
+npx @johnmorrisdotca/kotoba check ひらがな
+```
+
+```text
+ひらがな  かな, 4 kana
+  may be guessed: yes
+  may be the hidden word: no
+  an easy word: no
+```
+
+```sh
+npx @johnmorrisdotca/kotoba list --words fr --size 4 --tier easy --json
+```
+
+```text
+{
+  "format": 1,
+    "words": "fr",
+  "size": 4,
+  "tier": "easy",
+  "count": 307,
+  "list": [
+    "abbe",
+    "abri",
+    …
+```
+
+The listing is trimmed with `…`. `--json` is a versioned format, for a script to read.
+
+### The command line from code
+
+`runCli` is the command line as a function of its arguments: it gives back what to print and the exit code, so a test or a server can use it without a child process:
+
+```ts
+import { runCli } from "@johnmorrisdotca/kotoba/cli";
+
+const marked = await runCli(["mark", "crane", "react"]);
+console.log(marked.code);                            // → 0
+console.log(marked.out);
+// → c r a n e
+// → ◐ ◐ ● ○ ◐
+// → ● right place, ◐ elsewhere in the word, ○ not in the word
+console.log((await runCli(["check", "qqqqq"])).code);   // → 1
+```
+
+### The board in a page that is already there
+
+The board keeps its own state and gives it back as plain data; a page can start another round, change the game's own words at once, and read the round as it ends:
+
+```ts no-run
+import { mountKotoba } from "@johnmorrisdotca/kotoba/play";
+
+const play = mountKotoba(document.getElementById("game")!, {
+  words: "ja",
+  size: 4,
+  locale: "ja",
+  onFinish: (round) => console.log(round.status, round.score?.total),
+});
+await play.ready;
+await play.newGame({ words: "fr", size: 5, easy: true });   // another list, easy words only
+play.setLocale("en");                                      // the game's own words, at once
+play.destroy();                                            // off the page, and the keyboard let go
+```
+
+### A look of your own
+
+Every colour is a CSS variable on `.kt-root`, so a stylesheet or the `theme` option can sit the board on the page's own background:
+
+```ts no-run
+import { mountKotoba } from "@johnmorrisdotca/kotoba/play";
+
+mountKotoba(document.getElementById("game")!, {
+  theme: { "--kt-board": "transparent", "--kt-ink": "#222", "--kt-hit": "#1a7f37", "--kt-near": "#b45309" },
+});
+```
 
 ## The lists
 
@@ -254,6 +579,9 @@ run out (`"lost"`), and is then scored.
 
 ```ts
 import { dailyWord, dayKey } from "@johnmorrisdotca/kotoba";
+import { loadWordList } from "@johnmorrisdotca/kotoba/load";
+
+const five = (await loadWordList("en", 5))!;
 
 dailyWord(five.answers, "2026-10-01", { salt: "en-5-answers" });   // "elect"
 dailyWord(five.answers, new Date(), { zone: "Asia/Tokyo", salt: "en-5-answers" });   // today's word at Tokyo's midnight
@@ -282,7 +610,7 @@ language under it and the legend of the marks into one element, and plays by tou
 or by the device's keyboard. It is the rules above with a face on them. Setting up
 (which language, how long, easy words) is yours: call `play.newGame({ … })`.
 
-```ts
+```ts no-check
 const play = mountKotoba(element, { words: "ja", size: 4, locale: "ja", onFinish: (round) => save(round.score) });
 await play.ready;        // the list is fetched, and the round dealt
 play.game;               // the round, as plain data, or null while a list loads
@@ -323,7 +651,7 @@ still sends.
 npm install -g @johnmorrisdotca/kotoba    # then `kotoba`, or use npx with nothing installed
 ```
 
-```
+```text
 Usage: kotoba <command> [options]
 
 Word lists and the rules of word games: English, French, German and Japanese kana.
@@ -354,7 +682,7 @@ Exit codes: 0 done, 1 what was asked for is not so or could not be done (a word 
 the list), 2 the command was wrong.
 ```
 
-```sh
+```text
 $ kotoba check crane
 crane  English, 5 letters
   may be guessed: yes
@@ -394,6 +722,18 @@ The [API reference](https://johnmorrisdotca.github.io/kotoba/api.html) (also kep
 | `@johnmorrisdotca/kotoba/cli` | `runCli`, `cliLanguage` |
 | The lists | see [The lists](#the-lists) |
 
+### The calls to learn first
+
+| Call | What it does |
+| --- | --- |
+| `markGuess(guess, hidden)` | The marks of a guess: `hit`, `near` or `miss`, a letter counted as often as the word holds it |
+| `readWordLists(data, size)`, `loadWordList(language, size)` | One list, read from an entry point's data or loaded by its name |
+| `startWordGame(language, size, hidden)` and `typeWordGame`, `submitWordGame`, `eraseWordGame` | A round of a game as plain data, and the moves on it |
+| `dailyWord(answers, day, { salt })` | The word of a day, the same for everybody |
+| `wordScore`, `kanaScore` | Points for a finished round |
+| `mountKotoba(element, options)` | The board, on a page |
+| `runCli(args)` | The command line as a function |
+
 ## Theming
 
 Every colour of the board is a CSS variable on `.kt-root`. Set them in your
@@ -418,7 +758,7 @@ The board looks the same in light and in dark: it carries its own background.
 To sit on a page's own background, set `--kt-board` to `transparent` and `--kt-ink`
 to the page's text colour:
 
-```js
+```js no-check
 mountKotoba(element, { theme: { "--kt-board": "transparent", "--kt-ink": "#222", "--kt-hit": "#1a7f37" } });
 ```
 
@@ -432,6 +772,18 @@ mountKotoba(element, { theme: { "--kt-board": "transparent", "--kt-ink": "#222",
 | Days a daily word is dealt | every calendar day from 0000-01-01 to 9999-12-31 | |
 | The word of a day and the list | one pack the length of the list; a changed list is another pack | |
 | The kana lists | made again from JMdict every month | |
+
+## Accessibility
+
+A word game is played by sight and by keyboard, so the board carries each of them in words and in shapes.
+
+- **A mark is never told by colour alone.** Each cell carries a shape in its corner: ● right place, ◐ elsewhere in the word, ≈ the same row of the kana table, ○ not in the word, and an arrow when a kana's size (↓) or its mark (↑) is wrong. A person who cannot tell green from orange reads the shape.
+- **A screen reader hears every place.** Each row is labelled with its number and each cell with its letter and what it earned (right place, elsewhere, not in the word), built from the same words as the legend, in English or Japanese by `locale`. The status line (`aria-live="polite"`) says what a guess did, and why a word was not taken.
+- **The keyboard is a keyboard.** The device's own keys type, Backspace erases and Enter sends. The keys on the screen never take the focus, so a person using a physical keyboard is never moved off the page by tapping one.
+- **Touch targets are large.** Each key on the screen is at least 48 pixels high, and the demo's browser test checks that everything to press on its page is at least 44 pixels in each direction, at phone width, with touch.
+- **Motion.** The board has no animation, so a request for reduced motion changes nothing and nothing needs to be turned off.
+- **Colour and contrast.** The board carries its own background and so looks the same in light and dark; the colours are the variables under [Theming](#theming). The defaults have not been measured against a contrast standard, and a page that changes them keeps the shapes, which do not depend on them.
+- **Known to fall short.** The Japanese words of the board have not been read by a native reader ([Languages](#languages)), and a kana board's romaji typing is unfamiliar to anyone who types kana another way.
 
 ## Browser and runtime support
 
@@ -460,6 +812,14 @@ for fixing one. A new language for the words is another matter: it needs a real
 dictionary of that language whose licence lets its words be shipped, and a
 [suggestion](https://github.com/johnmorrisdotca/kotoba/issues/new?template=suggest-a-word-list.md)
 is the place to start.
+
+## Roadmap
+
+- The game modes of Gomoji (head start, twins, four at once, backwards, the
+  dodger) as rules here, beside the marking
+- More languages, each from a real dictionary of that language
+- A web component for the board, and a React hook
+- The Pop list on the command line
 
 ## Architecture
 
@@ -513,7 +873,7 @@ GitHub Pages.
 
 *Kotoba* is 言葉 (ことば), "words" in Japanese.
 
-## Where the words come from, and their licences
+## Where the words come from, and where it is used
 
 The code is MIT. The lists are data under their sources' terms, set out in full in
 [NOTICE.md](./NOTICE.md) (shipped in the package) and at the top of each list file:
@@ -533,7 +893,7 @@ count only ranks. The lists are made by the scripts in `scripts/`, never by hand
 A project that uses a French, German or Japanese list passes on its share-alike
 terms for that list: see [NOTICE.md](./NOTICE.md).
 
-## Where it is used
+### Used by
 
 Kotoba holds the dictionaries of Gomoji, the five-letter word puzzle of
 [itsutsu.com](https://itsutsu.com), in English, French, German, pop culture and
@@ -573,25 +933,23 @@ Kotoba is one of twenty-four packages, each made for the same site, each at
 **This package is Kotoba.** The demos of all twenty-four share one header and footer, so each links the rest.
 <!-- family:end -->
 
-## Roadmap
+## Development
 
-- The game modes of Gomoji (head start, twins, four at once, backwards, the
-  dodger) as rules here, beside the marking
-- More languages, each from a real dictionary of that language
-- A web component for the board, and a React hook
-- The Pop list on the command line
+```sh
+pnpm install --frozen-lockfile
+pnpm check             # lint, types and tests, including the checks on the lists' words and on this README
+pnpm test:cli          # the command line, run as a child process
+pnpm test:package      # pack it as npm does, install it, import every entry and run the command
+pnpm test:demo         # the demo in real browsers, by taps
+pnpm test:readme       # every TypeScript and JavaScript example in this README, type-checked and run
+pnpm screenshots:readme  # retake the README's pictures into docs/images (builds the demo first)
+```
+
+The lists are machine output: change a script in `scripts/` and run it again, never edit a list by hand. The pictures are taken on the maintainer's Mac and are retaken only when the look changes; they are in `docs/images` and are not in the package that npm installs.
 
 ## Contributing
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md). In short:
-
-```sh
-pnpm install
-pnpm check         # lint, types and tests (including the checks on the lists' words)
-pnpm test:cli      # the command line, run as a child process
-pnpm test:package  # pack it as npm does, install it, import every entry and run the command
-pnpm test:demo     # the demo in real browsers, by taps
-```
+See [CONTRIBUTING.md](./CONTRIBUTING.md). In short: run `pnpm check` before you push (see [Development](#development)).
 
 The lists are machine output: change a script in `scripts/` and run it again,
 never edit a list by hand. Please follow the [code of conduct](./CODE_OF_CONDUCT.md).
@@ -599,6 +957,8 @@ never edit a list by hand. Please follow the [code of conduct](./CODE_OF_CONDUCT
 ## Changes
 
 See [CHANGELOG.md](./CHANGELOG.md).
+
+The latest release is 1.1.2: the README takes the family's full layout, with pictures of every board and examples that are run.
 
 ## Licence
 

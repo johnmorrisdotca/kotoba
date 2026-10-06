@@ -1,6 +1,6 @@
 {
   "name": "@johnmorrisdotca/kotoba",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "description": "Word lists and word-game rules for JavaScript and TypeScript: English, French, German and Japanese (kana) dictionaries, guess marking, scoring, romaji input, a word of the day, and a word game for any page. Zero dependencies.",
   "keywords": [
     "word-list",
@@ -149,8 +149,9 @@
     "check": "pnpm lint && pnpm typecheck && pnpm test",
     "prepublishOnly": "pnpm check && pnpm build",
     "site": "pnpm build && node scripts/site.mjs",
-    "pictures": "pnpm site && node scripts/readme-pictures.mjs",
-    "test:demo": "pnpm site && playwright test"
+    "test:demo": "pnpm site && playwright test",
+    "screenshots:readme": "pnpm site && node scripts/readme-pictures.mjs",
+    "test:readme": "pnpm build && node scripts/check-readme-examples.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^9.0.0",

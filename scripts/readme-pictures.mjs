@@ -1,23 +1,11 @@
-// Takes the pictures the README shows, from the built demo in `site/`: `pnpm pictures` (builds the demo, then runs this).
-// The page is served to a browser without a port, never fetched from the live site, and the same each run:
-// the hidden word comes from a seed (`?seed=`), the guesses are chosen by a fixed rule from the package's own lists,
-// and motion is reduced.
-// Output: docs/desktop.jpg (1280 wide, light, English) and docs/phone.jpg (390 by 844, dark, Japanese kana).
-import { existsSync, readFileSync } from "node:fs";
-import { dirname, join } from "node:path";
-import { fileURLToPath } from "node:url";
+// Takes the pictures the README shows, from the built demo in `site/`: `pnpm screenshots:readme` (builds the demo, then runs this).
+// The family's standard is in johnmorrisdotca/.github (README-STANDARD.md); the shared part is readme-pictures-lib.mjs.
+// The page is served to a browser without a port, never fetched from the live site, and is the same each run: the hidden word
+// comes from a seed (`?seed=`), the guesses are chosen by a fixed rule from the package's own lists, and motion is reduced.
+// Output: docs/images/<subject>-<desk|phone>-<light|dark>.webp.
+import { takePictures } from "./readme-pictures-lib.mjs";
 
-import { chromium } from "@playwright/test";
-
-const root = join(dirname(fileURLToPath(import.meta.url)), "..");
-const site = join(root, "site");
-const docs = join(root, "docs");
-const host = "http://kotoba.test";
-const TYPES = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".json": "application/json", ".svg": "image/svg+xml" };
-const QUALITY = 76;
-
-if (!existsSync(join(site, "index.html"))) throw new Error("site/ is not built: run `pnpm pictures` (it builds the demo first)");
-const browser = await chromium.launch();
+const GAME = '[data-testid="game"]';
 
 /** The plain hiragana as romaji, so that a kana word can be typed on the keys the page has. Anything else is null. */
 const ROMAJI = Object.fromEntries(
@@ -58,30 +46,44 @@ async function guess(page, rows, kana) {
   }
 }
 
-async function shot({ width, height, colorScheme, lang, words, rows, path, scrollTo }) {
-  const context = await browser.newContext({ viewport: { width, height }, colorScheme, reducedMotion: "reduce", locale: "en-US", deviceScaleFactor: 2 });
-  const page = await context.newPage();
-  await page.route(`${host}/**`, (route) => {
-    const { pathname } = new URL(route.request().url());
-    const file = join(site, pathname === "/" ? "index.html" : pathname);
-    if (!existsSync(file)) return route.fulfill({ status: 404, body: "" });
-    return route.fulfill({ body: readFileSync(file), contentType: TYPES[file.slice(file.lastIndexOf("."))] ?? "application/octet-stream" });
-  });
-  await page.addInitScript(() => {
-    window.kotobaTest = true;
-  });
-  await page.goto(`${host}/?lang=${lang}&words=${words}&seed=2026`);
-  await page.waitForFunction(() => window.kotobaState?.play.game !== null && window.kotobaState?.hidden);
-  await guess(page, rows, words === "ja");
-  if (scrollTo) await page.locator(scrollTo).evaluate((element) => window.scrollTo(0, element.getBoundingClientRect().top + window.scrollY - 16));
-  else await page.evaluate(() => window.scrollTo(0, 0));
-  await page.mouse.move(0, 0);
-  await page.screenshot({ path, type: "jpeg", quality: QUALITY });
-  await context.close();
-}
 
-// From the top of the page, so the header, the language chooser and the cloth patches show: English, five letters, four guesses in.
-await shot({ width: 1280, height: 900, colorScheme: "light", lang: "en", words: "en", rows: 4, path: join(docs, "desktop.jpg") });
-// Four kana in Japanese, scrolled to the board.
-await shot({ width: 390, height: 844, colorScheme: "dark", lang: "ja", words: "ja", rows: 3, path: join(docs, "phone.jpg"), scrollTo: '[data-testid="game"]' });
-await browser.close();
+/** Open the demo with a test hook, wait for the round to be dealt, and make the guesses. */
+const play = (rows, kana = false) => async (page) => {
+  await page.waitForFunction(() => window.kotobaState?.play.game !== null && window.kotobaState?.hidden);
+  await guess(page, rows, kana);
+};
+const init = () => { window.kotobaTest = true; };
+const address = (words, size, lang = "en") => `/?lang=${lang}&words=${words}&size=${size}&seed=2026`;
+
+/** One board, cropped to the board. */
+const board = (subject, words, size, rows, kana = false) => ({ subject, views: ["desk"], scale: 1, url: address(words, size, kana ? "ja" : "en"), init, ready: `${GAME} .kt-row`, target: GAME, prepare: play(rows, kana) });
+
+await takePictures({
+  shots: [
+    // The page from the top, on a desk: English, five letters, four guesses in. On a phone, in Japanese kana, scrolled to the board.
+    {
+      subject: "hero",
+      views: ["desk", "phone"],
+      height: 900,
+      init,
+      url: address("en", 5),
+      ready: `${GAME} .kt-row`,
+      async prepare(page, { view }) {
+        if (view === "phone") {
+          await page.goto(`http://kotoba.test${address("ja", 4, "ja")}`);
+          await play(3, true)(page);
+          await page.locator(GAME).evaluate((element) => window.scrollTo(0, element.getBoundingClientRect().top + window.scrollY - 16));
+        } else {
+          await play(4)(page);
+          await page.evaluate(() => window.scrollTo(0, 0));
+        }
+      },
+    },
+    board("english", "en", 5, 4),
+    board("french", "fr", 5, 3),
+    board("german", "de", 5, 3),
+    board("kana", "ja", 4, 3, true),
+    board("six-letters", "en", 6, 3),
+    board("four-letters", "en", 4, 2),
+  ],
+});

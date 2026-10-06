@@ -149,7 +149,7 @@ describe("the README on the board", () => {
 
 describe("the README's command line", () => {
   it("shows the help the package prints, word for word", () => {
-    const from = readme.indexOf("```\nUsage: kotoba") + 4;
+    const from = readme.indexOf("```text\nUsage: kotoba") + 8;
     expect(readme.slice(from, readme.indexOf("```", from))).toBe(KOTOBA_STRINGS.en.cliUsage);
   });
 
