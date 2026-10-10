@@ -1,5 +1,10 @@
 # Changelog
 
+## Unreleased
+
+- Add a reflected word-game element, shared embed builder and validated iframe route with UTC daily play. Keep mounted game rules and callbacks; embed keyboards listen on the focused game and native events bubble across shadow roots.
+
+
 All notable changes to this project are written here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and the project uses
 [Semantic Versioning](https://semver.org/).

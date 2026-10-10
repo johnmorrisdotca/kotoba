@@ -632,6 +632,7 @@ play.destroy();          // off the page, and the keyboard let go
 | `strings` | words of your own, over the locale's: any name of `KOTOBA_STRINGS` | |
 | `theme` | CSS variables set on the game | |
 | `keyboard` | take the device's keyboard as the keys on the screen | `true` |
+| `keyboardTarget` | optional focused host for keyboard input; otherwise the document | |
 | `onFinish` | called once when a round ends, with the round | |
 | `onChange` | called after every change, and with null while a list loads | |
 | `load` | where a list comes from | `loadWordList` |
@@ -718,6 +719,8 @@ The [API reference](https://johnmorrisdotca.github.io/kotoba/api.html) (also kep
 | --- | --- |
 | `@johnmorrisdotca/kotoba` | The rules: marking, scoring, keyboard rows, kana marks, romaji, the round (`game`), the word of the day, the words, and readers for the lists. `VERSION` |
 | `@johnmorrisdotca/kotoba/play` | `mountKotoba`, `KOTOBA_PLAY_CSS`, `KOTOBA_PLAY_VARIABLES` |
+| `@johnmorrisdotca/kotoba/element` | `KotobaGame`, `defineGame`, host options and coverage keys |
+| `@johnmorrisdotca/kotoba/element/define` | Registers the default tag; reexports the element entry |
 | `@johnmorrisdotca/kotoba/load` | `loadWordList`, `WORD_LIST_NAMES`, `WORD_LIST_SIZES` |
 | `@johnmorrisdotca/kotoba/cli` | `runCli`, `cliLanguage` |
 | The lists | see [The lists](#the-lists) |
@@ -833,6 +836,9 @@ the same loader (`load.ts`).
 
 ```text
 src/
+├── element.ts                   # reflected word-game element
+├── element-define.ts            # default tag registration
+├── embed-day.ts                 # UTC embed date validation
 ├── index.ts         the main entry: the marking rules, scoring, keyboards, kana helpers, a round, the word of the day, the words and a reader for the lists
 ├── cli.ts           the command line, as a function of its arguments
 ├── daily.ts         a word a day: days as dates, and a pack of the list dealt by day
@@ -945,14 +951,14 @@ Kotoba is one of twenty-eight packages, each made for the same site, each at
 
 **Geography & data**
 
-- [address-plus](https://github.com/johnmorrisdotca/address-plus) (アドレスプラス): parse and format addresses in the United States, Canada and Japan. [Demo](https://johnmorrisdotca.github.io/address-plus/).
+- [address-plus](https://github.com/johnmorrisdotca/address-plus) (アドレスプラス): parse and format addresses in the United States, Canada, Japan, Australia and the United Kingdom. [Demo](https://johnmorrisdotca.github.io/address-plus/).
 - [Chizu](https://github.com/johnmorrisdotca/chizu) (地図): maps of the world and of countries' regions, in English and Japanese, with a quiz and callouts. [Demo](https://johnmorrisdotca.github.io/chizu/).
 - [Hata](https://github.com/johnmorrisdotca/hata) (旗): country and regional flags as SVG, at their true proportions and keyed by ISO code. [Demo](https://johnmorrisdotca.github.io/hata/).
 - [Kuni](https://github.com/johnmorrisdotca/kuni) (国): countries and their regions, with ISO codes and names in English and Japanese. [Demo](https://johnmorrisdotca.github.io/kuni/).
 
 **Developer tools**
 
-- [REST in Pieces](https://github.com/spxis/rest-in-pieces) (レスト・イン・ピーシズ): seeded test data and REST APIs for frontend development, with latency and error drills. [Demo](https://spxis.github.io/rest-in-pieces/).
+- [REST in Pieces](https://github.com/spxis/rest-in-pieces) (レスト・イン・ピーシーズ): seeded test data and REST APIs for frontend development, with latency and error drills. [Demo](https://spxis.github.io/rest-in-pieces/).
 
 
 **This package is Kotoba.** The demos of all twenty-eight share one header and footer, so each links the rest.
@@ -991,3 +997,18 @@ The code is [MIT](./LICENSE) © John Morris. The word lists are other people's w
 under their own terms: SCOWL's permissive notice for English, and Creative Commons
 Attribution-ShareAlike 4.0 for French, German and Japanese. [NOTICE.md](./NOTICE.md)
 says which list is which and what that asks of a project that uses it.
+
+
+### Embed builder
+
+[Build a word game](https://johnmorrisdotca.github.io/kotoba/builder.html), preview it and copy element, iframe, module, React 19, Vue, Svelte, Angular, HTML or URL code. Choices stay in the URL; the embed reads no browser storage. `<kotoba-game words="en" letters="5" daily="2026-10-09" size="medium">` plays the existing UTC daily word. `letters` selects word length; `size` always selects the display width (small 320px, medium 480px, large 640px). See [the embed guide](docs/embeds.md).
+
+For Svelte, import the registration in the browser; the custom element keeps the same attributes.
+
+```svelte
+<script>
+  import { onMount } from "svelte";
+  onMount(() => { void import("@johnmorrisdotca/kotoba/element/define"); });
+</script>
+<kotoba-game words="en" letters="5" size="small"></kotoba-game>
+```

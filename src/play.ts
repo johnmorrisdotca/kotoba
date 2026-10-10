@@ -47,6 +47,8 @@ export type KotobaPlayOptions = {
   theme?: Record<string, string>;
   /** Take the device's keyboard (letters, Enter, Backspace) as the keys on the screen. Unless said, yes. */
   keyboard?: boolean;
+  /** Listen on this host instead of the document; embedded games use their own focused board. */
+  keyboardTarget?: HTMLElement;
   /** Called once when a round ends, with the round: its guesses and its score. */
   onFinish?: (game: WordGame) => void;
   /** Called after every change of the round, and with null while a list is loading. */
@@ -180,7 +182,7 @@ export function mountKotoba(container: HTMLElement, options: KotobaPlayOptions =
   root.append(status, grid, keys, legend);
   container.append(root);
 
-  const changed = () => options.onChange?.(game);
+  const changed = () => { options.onChange?.(game); container.dispatchEvent(new CustomEvent("kotoba-change", { bubbles: true, composed: true, detail: game === null ? null : JSON.parse(JSON.stringify(game)) })); };
 
   /** The round after a key, a message cleared; drawn. */
   function update(next: WordGame, because: Message = null) {
@@ -212,6 +214,7 @@ export function mountKotoba(container: HTMLElement, options: KotobaPlayOptions =
     if (!told) {
       told = true;
       options.onFinish?.(done);
+      container.dispatchEvent(new CustomEvent("kotoba-finish", { bubbles: true, composed: true, detail: JSON.parse(JSON.stringify(done)) }));
     }
   }
 
@@ -296,6 +299,7 @@ export function mountKotoba(container: HTMLElement, options: KotobaPlayOptions =
   function onKey(event: KeyboardEvent) {
     if (event.ctrlKey || event.metaKey || event.altKey || game === null) return;
     const target = event.target;
+    if ((target as Element | null)?.closest?.("input, textarea, select, [contenteditable=true]")) return;
     // Enter on a control that has the focus presses that control, so a control outside the game keeps its Enter.
     if (event.key === "Enter" && (target as Element | null)?.closest?.("button, select, input, textarea")) return;
     if (event.key === "Enter") {
@@ -310,7 +314,8 @@ export function mountKotoba(container: HTMLElement, options: KotobaPlayOptions =
       if (wordGameKeys(game.language).includes(letter)) type(letter);
     }
   }
-  if (options.keyboard !== false) doc.addEventListener("keydown", onKey);
+  const keyboardTarget = options.keyboardTarget ?? doc;
+  if (options.keyboard !== false) keyboardTarget.addEventListener("keydown", onKey as EventListener);
 
   /** The word a round hides: the one given, or the day's, or a seed's, or a draw's, from the easy answers or the answers. */
   function pick(loaded: LoadedWordList, next: KotobaNewGame): string {
@@ -362,7 +367,7 @@ export function mountKotoba(container: HTMLElement, options: KotobaPlayOptions =
     },
     destroy() {
       destroyed = true;
-      doc.removeEventListener("keydown", onKey);
+      keyboardTarget.removeEventListener("keydown", onKey as EventListener);
       root.remove();
     },
   };

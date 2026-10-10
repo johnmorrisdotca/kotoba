@@ -59,7 +59,9 @@
   "author": "John Morris",
   "license": "(MIT AND CC-BY-SA-4.0)",
   "type": "module",
-  "sideEffects": false,
+  "sideEffects": [
+    "./dist/element-define.js"
+  ],
   "main": "./dist/index.js",
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
@@ -123,6 +125,16 @@
       "types": "./dist/play.d.ts",
       "import": "./dist/play.js",
       "default": "./dist/play.js"
+    },
+    "./element": {
+      "types": "./dist/element.d.ts",
+      "import": "./dist/element.js",
+      "default": "./dist/element.js"
+    },
+    "./element/define": {
+      "types": "./dist/element-define.d.ts",
+      "import": "./dist/element-define.js",
+      "default": "./dist/element-define.js"
     }
   },
   "files": [

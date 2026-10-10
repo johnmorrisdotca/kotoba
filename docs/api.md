@@ -1,6 +1,6 @@
 # API reference
 
-Every export of every entry point of `@johnmorrisdotca/kotoba`, with its signature and its doc comment. This file is made from the source by `pnpm docs:api`, and a test fails when it falls behind: 12 entry points, 92 exports.
+Every export of every entry point of `@johnmorrisdotca/kotoba`, with its signature and its doc comment. This file is made from the source by `pnpm docs:api`, and a test fails when it falls behind: 14 entry points, 100 exports.
 
 ## `@johnmorrisdotca/kotoba`
 
@@ -1135,3 +1135,91 @@ mountKotoba(container: HTMLElement, options?: KotobaPlayOptions): KotobaPlay
 ```
 
 Put a word game into `container`, and deal the first round.
+
+## `@johnmorrisdotca/kotoba/element`
+
+[`defineGame`](#element-defineGame) · [`KOTOBA_EMBED_OPTION_KEYS`](#element-KOTOBA_EMBED_OPTION_KEYS) · [`KotobaElementOptions`](#element-KotobaElementOptions) · [`KotobaGame`](#element-KotobaGame)
+
+<a id="element-defineGame"></a>
+
+### function `defineGame`
+
+```ts
+defineGame(tagName?: string, registry?: CustomElementRegistry | undefined): void
+```
+
+Defines the default game or a subclass under a custom tag. Safe on a server.
+
+<a id="element-KOTOBA_EMBED_OPTION_KEYS"></a>
+
+### const `KOTOBA_EMBED_OPTION_KEYS`
+
+```ts
+KOTOBA_EMBED_OPTION_KEYS: string[]
+```
+
+Real mounted options, checked alongside builder coverage.
+
+<a id="element-KotobaElementOptions"></a>
+
+### type `KotobaElementOptions`
+
+```ts
+type KotobaElementOptions = KotobaPlayOptions;
+```
+
+Host data, appearance overrides, loading and callbacks; attributes override round choices.
+
+<a id="element-KotobaGame"></a>
+
+### const `KotobaGame`
+
+```ts
+KotobaGame: typeof KotobaGame
+```
+
+A word game with scoped keyboard handling, reflected choices and UTC daily play.
+
+## `@johnmorrisdotca/kotoba/element/define`
+
+[`defineGame`](#element/define-defineGame) · [`KOTOBA_EMBED_OPTION_KEYS`](#element/define-KOTOBA_EMBED_OPTION_KEYS) · [`KotobaElementOptions`](#element/define-KotobaElementOptions) · [`KotobaGame`](#element/define-KotobaGame)
+
+<a id="element/define-defineGame"></a>
+
+### function `defineGame`
+
+```ts
+defineGame(tagName?: string, registry?: CustomElementRegistry | undefined): void
+```
+
+Defines the default game or a subclass under a custom tag. Safe on a server.
+
+<a id="element/define-KOTOBA_EMBED_OPTION_KEYS"></a>
+
+### const `KOTOBA_EMBED_OPTION_KEYS`
+
+```ts
+KOTOBA_EMBED_OPTION_KEYS: string[]
+```
+
+Real mounted options, checked alongside builder coverage.
+
+<a id="element/define-KotobaElementOptions"></a>
+
+### type `KotobaElementOptions`
+
+```ts
+type KotobaElementOptions = KotobaPlayOptions;
+```
+
+Host data, appearance overrides, loading and callbacks; attributes override round choices.
+
+<a id="element/define-KotobaGame"></a>
+
+### const `KotobaGame`
+
+```ts
+KotobaGame: typeof KotobaGame
+```
+
+A word game with scoped keyboard handling, reflected choices and UTC daily play.

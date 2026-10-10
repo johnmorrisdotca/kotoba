@@ -1,0 +1,11 @@
+# Word game embeds
+
+The builder covers every element attribute and explains each host-only mounted option. Choose word list en/fr/de/ja, letters (4–6 Latin letters or 3–5 kana), rows (1–12 guesses), easy, seed, daily, keyboard, lang, size, width, theme and label. Copied code uses the installed package's major version; choices including cleared defaults stay in the URL.
+
+Every attribute has a reflected property; native lang already reflects its attribute. game remains a structured getter for the current round, player gives the native play handle and ready promise, and newGame(next) delegates to it. options accepts the full mount options, including custom hidden word, strings, CSS variables, loader, clock and callbacks. Attributes override round options. Callback, language and display changes preserve play; changes to host loading/copy/appearance construction options remount. defineGame(tagName?, registry?) is server-safe and idempotent and registers a subclass for a custom tag.
+
+Daily uses the existing dailyWord algorithm and bundled lists. UTC dates are validated; today is resolved when mounted, with no rollover timer. Hidden host words take precedence over daily, then seed. Daily answers depend on the pinned list version. The element's keyboard listens only on its focused host, so two embeds and external inputs remain independent. The SDK retains document-wide keyboard handling by default and adds optional keyboardTarget; editable fields are ignored.
+
+Native kotoba-change and kotoba-finish carry a JSON-safe copy of the round (including the answer; use trusted host code). kotoba-load gives words, letters, rows and day; kotoba-error gives a plain message. All events bubble and cross shadow roots. Host callbacks retain their original arguments. Frames forward { type, detail }; hosts should verify the sender origin and frame.
+
+The frame validates word lists, supported lengths, bounded rows/seeds/widths, booleans and UTC dates and ignores invalid values. It has noindex, a device colour-scheme, transparent margins and no document scrolling. It reads no storage or external services; code imports use jsDelivr. Themes and shadow-root styles are scoped to the element; widths and spoken labels restore their previous values when removed.
