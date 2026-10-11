@@ -275,6 +275,20 @@ command line is built on it.
 
 The cookbook, with the output of each example, is under [Examples](#examples).
 
+### Embed builder
+
+[Build a word game](https://johnmorrisdotca.github.io/kotoba/builder.html), preview it and copy element, iframe, module, React 19, Vue, Svelte, Angular, HTML or URL code. Choices stay in the URL; the embed reads no browser storage. `<kotoba-game words="en" letters="5" daily="2026-10-09" size="medium">` plays the existing UTC daily word. `letters` selects word length; `size` always selects the display width (small 320px, medium 480px, large 640px). See [the embed guide](docs/embeds.md).
+
+For Svelte, import the registration in the browser; the custom element keeps the same attributes.
+
+```svelte
+<script>
+  import { onMount } from "svelte";
+  onMount(() => { void import("@johnmorrisdotca/kotoba/element/define"); });
+</script>
+<kotoba-game words="en" letters="5" size="small"></kotoba-game>
+```
+
 ## Examples
 
 Every TypeScript and JavaScript block here is type-checked against the built package and run by `pnpm test:readme`, so the output after `// →` is what the code prints. The word lists come from the package itself; nothing here uses a network.
@@ -951,7 +965,7 @@ Kotoba is one of twenty-eight packages, each made for the same site, each at
 
 **Geography & data**
 
-- [address-plus](https://github.com/johnmorrisdotca/address-plus) (アドレスプラス): parse and format addresses in the United States, Canada, Japan, Australia and the United Kingdom. [Demo](https://johnmorrisdotca.github.io/address-plus/).
+- [address-plus](https://github.com/johnmorrisdotca/address-plus) (アドレスプラス): parse and format addresses in the United States, Canada, Japan, Australia, France, Germany and the United Kingdom. [Demo](https://johnmorrisdotca.github.io/address-plus/).
 - [Chizu](https://github.com/johnmorrisdotca/chizu) (地図): maps of the world and of countries' regions, in English and Japanese, with a quiz and callouts. [Demo](https://johnmorrisdotca.github.io/chizu/).
 - [Hata](https://github.com/johnmorrisdotca/hata) (旗): country and regional flags as SVG, at their true proportions and keyed by ISO code. [Demo](https://johnmorrisdotca.github.io/hata/).
 - [Kuni](https://github.com/johnmorrisdotca/kuni) (国): countries and their regions, with ISO codes and names in English and Japanese. [Demo](https://johnmorrisdotca.github.io/kuni/).
@@ -997,18 +1011,3 @@ The code is [MIT](./LICENSE) © John Morris. The word lists are other people's w
 under their own terms: SCOWL's permissive notice for English, and Creative Commons
 Attribution-ShareAlike 4.0 for French, German and Japanese. [NOTICE.md](./NOTICE.md)
 says which list is which and what that asks of a project that uses it.
-
-
-### Embed builder
-
-[Build a word game](https://johnmorrisdotca.github.io/kotoba/builder.html), preview it and copy element, iframe, module, React 19, Vue, Svelte, Angular, HTML or URL code. Choices stay in the URL; the embed reads no browser storage. `<kotoba-game words="en" letters="5" daily="2026-10-09" size="medium">` plays the existing UTC daily word. `letters` selects word length; `size` always selects the display width (small 320px, medium 480px, large 640px). See [the embed guide](docs/embeds.md).
-
-For Svelte, import the registration in the browser; the custom element keeps the same attributes.
-
-```svelte
-<script>
-  import { onMount } from "svelte";
-  onMount(() => { void import("@johnmorrisdotca/kotoba/element/define"); });
-</script>
-<kotoba-game words="en" letters="5" size="small"></kotoba-game>
-```

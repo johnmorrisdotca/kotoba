@@ -5,11 +5,30 @@ import type { WordGame } from "./game.ts";
 import type { Language } from "./strings.ts";
 const ElementBase = typeof HTMLElement === "undefined" ? class {} as typeof HTMLElement : HTMLElement;
 const isOn = (value: string | null, fallback = true): boolean => value === null ? fallback : !["off", "false", "no", "0"].includes(value.trim().toLowerCase());
-/** Real mounted options, checked alongside builder coverage. */
+/** Real mounted options, checked alongside builder coverage.
+ * @example
+ * ```ts
+ * import { KOTOBA_EMBED_OPTION_KEYS } from "@johnmorrisdotca/kotoba/element";
+ * console.log(typeof KOTOBA_EMBED_OPTION_KEYS); // object
+ * ```
+ */
 export const KOTOBA_EMBED_OPTION_KEYS = Object.keys({ words: true, size: true, easy: true, rows: true, seed: true, daily: true, hidden: true, locale: true, strings: true, theme: true, keyboard: true, keyboardTarget: true, onFinish: true, onChange: true, load: true, now: true } satisfies Record<keyof KotobaPlayOptions, boolean>);
-/** Host data, appearance overrides, loading and callbacks; attributes override round choices. */
+/** Host data, appearance overrides, loading and callbacks; attributes override round choices.
+ * @example
+ * ```ts
+ * import type { KotobaElementOptions } from "@johnmorrisdotca/kotoba/element";
+ * const options: KotobaElementOptions = {};
+ * console.log(Object.keys(options).length); // 0
+ * ```
+ */
 export type KotobaElementOptions = KotobaPlayOptions;
-/** A word game with scoped keyboard handling, reflected choices and UTC daily play. */
+/** A word game with scoped keyboard handling, reflected choices and UTC daily play.
+ * @example
+ * ```ts
+ * import { KotobaGame } from "@johnmorrisdotca/kotoba/element";
+ * console.log(KotobaGame.observedAttributes.includes("lang")); // true
+ * ```
+ */
 export class KotobaGame extends ElementBase {
   static observedAttributes = ["words", "letters", "rows", "easy", "seed", "daily", "keyboard", "lang", "size", "width", "theme", "label"];
   #mount: KotobaPlay | null = null;
@@ -108,7 +127,17 @@ export class KotobaGame extends ElementBase {
     } catch (error) { ++this.#revision; this.#problem(error); }
   }
 }
-/** Defines the default game or a subclass under a custom tag. Safe on a server. */
+/** Defines the default game or a subclass under a custom tag. Safe on a server.
+ * @param tagName - The custom tag name; omitted to use the package default.
+ * @param registry - The custom-element registry; omitted outside a browser.
+ * @returns Nothing; existing definitions and server imports remain safe.
+ * @example
+ * ```ts
+ * import { defineGame } from "@johnmorrisdotca/kotoba/element";
+ * defineGame();
+ * console.log(typeof defineGame); // function
+ * ```
+ */
 export function defineGame(tagName = "kotoba-game", registry: CustomElementRegistry | undefined = typeof customElements === "undefined" ? undefined : customElements): void {
   if (registry !== undefined && registry.get(tagName) === undefined) registry.define(tagName, tagName === "kotoba-game" ? KotobaGame : class extends KotobaGame {});
 }

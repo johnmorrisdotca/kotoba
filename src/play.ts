@@ -23,7 +23,14 @@ import { KOTOBA_STRINGS, kotobaSay, type KotobaStrings, type Language } from "./
  * Setting up (which language, how long, easy words) is yours: call `newGame`.
  */
 
-/** What a round is dealt from, and how the game looks and behaves. Every field may be left out. */
+/** What a round is dealt from, and how the game looks and behaves. Every field may be left out.
+ * @example
+ * ```ts
+ * import type { KotobaPlayOptions } from "@johnmorrisdotca/kotoba/play";
+ * const optionsFor = (host: HTMLElement): KotobaPlayOptions => ({ keyboardTarget: host });
+ * console.log(typeof optionsFor); // function
+ * ```
+ */
 export type KotobaPlayOptions = {
   /** The list: English, French, German or Japanese kana. Unless said, English. */
   words?: WordListName;
@@ -137,7 +144,17 @@ function stream(seed: number): () => number {
 /** What the status line says, kept as a name and its values so that a change of language says it again. */
 type Message = { key: keyof KotobaStrings; values?: Record<string, string | number> } | null;
 
-/** Put a word game into `container`, and deal the first round. */
+/** Put a word game into `container`, and deal the first round.
+ * @param container - The HTMLElement that owns the native interface.
+ * @param options - Native settings and callbacks for this mounted interface.
+ * @returns The native mounted handle, including controls and destroy() cleanup.
+ * @example
+ * ```ts
+ * import { mountKotoba } from "@johnmorrisdotca/kotoba/play";
+ * const show = (host: HTMLElement, options: Parameters<typeof mountKotoba>[1]) => mountKotoba(host, options);
+ * console.log(typeof show); // function
+ * ```
+ */
 export function mountKotoba(container: HTMLElement, options: KotobaPlayOptions = {}): KotobaPlay {
   const doc = container.ownerDocument;
   const load = options.load ?? loadWordList;
