@@ -1,4 +1,4 @@
-<h1 align="center">Kotoba <sub>言葉</sub></h1>
+<h1 align="center">Kotoba <sub>言葉</sub> — Word lists and word-game rules</h1>
 
 <p align="center"><strong>Word lists and word-game rules for JavaScript and TypeScript.</strong><br>
 English, French, German and Japanese (kana) dictionaries for five-letter and other word games, each list its own import so a page loads only what it plays; with guess marking, scoring, kana marks, romaji input and keyboard rows; a word of the day; a ready-made word game for any page; and a command line. No dependencies.</p>
@@ -9,16 +9,18 @@ English, French, German and Japanese (kana) dictionaries for five-letter and oth
   <a href="./NOTICE.md"><img alt="Code MIT; word lists SCOWL, CC BY-SA 4.0" src="https://img.shields.io/badge/licence-MIT%20code%2C%20CC%20BY--SA%20lists-2f5d4a"></a>
   <img alt="No dependencies" src="https://img.shields.io/badge/dependencies-0-2f5d4a">
   <img alt="TypeScript" src="https://img.shields.io/badge/types-TypeScript-3178c6">
+  <a href="https://johnmorrisdotca.github.io/kotoba/docs/api/main/index.html"><img alt="8.1 kB minified and gzipped" src="https://img.shields.io/badge/min%2Bgzip-8.1%20kB-2f5d4a"></a>
+  <a href="https://www.npmjs.com/package/@johnmorrisdotca/kotoba#provenance"><img alt="Published with npm provenance" src="https://img.shields.io/badge/npm-provenance-2f5d4a"></a>
 </p>
 
-<p align="center"><a href="https://johnmorrisdotca.github.io/kotoba/"><strong>Play a word game →</strong></a> · <a href="https://johnmorrisdotca.github.io/kotoba/api.html">API reference</a> · <a href="docs/api.md">API in the repository</a></p>
+<p align="center"><a href="https://johnmorrisdotca.github.io/kotoba/"><strong>Play a word game →</strong></a> · <a href="https://johnmorrisdotca.github.io/kotoba/docs/">Documentation</a> · <a href="https://johnmorrisdotca.github.io/kotoba/docs/guides/getting-started.html">Getting started</a> · <a href="https://johnmorrisdotca.github.io/kotoba/api.html">API reference</a> · <a href="docs/api.md">API in the repository</a></p>
 
 <table align="center">
 <tr>
 <td align="center" valign="top">
 <picture>
 <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/hero-desk-dark.webp">
-<img src="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/hero-desk-light.webp" alt="The demo on a desk, in English: the page's header with its language chooser and cloth swatches, the words and length to choose, a grid of five-letter guesses marked green where the letter is right, orange where it is elsewhere and grey where it is not in the word, and the keyboard coloured by what the guesses showed." width="720">
+<img src="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/hero-desk-light.webp" alt="The demo on a desk, in English: the page's header with its language chooser, Docs link and cloth swatches, the words and length to choose, a grid of five-letter guesses marked green where the letter is right, orange where it is elsewhere and grey where it is not in the word, and the keyboard coloured by what the guesses showed." width="720">
 </picture>
 <br><em>The demo on a desk, four guesses into a five-letter English word.</em>
 </td>
@@ -150,6 +152,17 @@ Each picture is the board the package draws (`mountKotoba`), taken from [the dem
 </table>
 
 ## Use it in your project
+
+### Install under another name
+
+```sh
+npm install word-list@npm:@johnmorrisdotca/kotoba
+```
+
+```ts no-check
+import { word-list } from "word-list";
+console.log(word-list(9).length);
+```
 
 ### Install
 
@@ -727,6 +740,8 @@ the same names, passed as `strings`.
 
 ## API
 
+The [documentation](https://johnmorrisdotca.github.io/kotoba/docs/) provides paired guides, local search and checked examples. The [API index](https://johnmorrisdotca.github.io/kotoba/api.html) keeps the export anchors.
+
 The [API reference](https://johnmorrisdotca.github.io/kotoba/api.html) (also kept in the repository as [`docs/api.md`](https://github.com/johnmorrisdotca/kotoba/blob/main/docs/api.md)) lists every export of every entry point, each word list included, with its signature and its doc comment. It is made from the source by `pnpm docs:api`, and a test fails when it falls behind the code.
 
 | Entry point | What it holds |
@@ -840,54 +855,7 @@ is the place to start.
 
 ## Architecture
 
-The marking rules, the scores, the keyboards and the rules of a round are plain
-functions with no DOM and no dependency. Each word list is an entry point of its
-own, so a page loads only the list it plays, and `lists.ts` reads one once it is
-loaded. The Japanese side (`kana/`) has the same shape as the English: marks, a
-score, and a way to type kana from a keyboard with no Japanese input. The board
-(`play.ts`) and the command line (`cli.ts`) are two faces on the same rules and
-the same loader (`load.ts`).
-
-```text
-src/
-├── element.ts                   # reflected word-game element
-├── element-define.ts            # default tag registration
-├── embed-day.ts                 # UTC embed date validation
-├── index.ts         the main entry: the marking rules, scoring, keyboards, kana helpers, a round, the word of the day, the words and a reader for the lists
-├── cli.ts           the command line, as a function of its arguments
-├── daily.ts         a word a day: days as dates, and a pack of the list dealt by day
-├── game.ts          a round of a word game, as plain data: typing, guesses, marks and the score
-├── keyboardRows.ts  the physical keyboard drawn under a grid, by language: QWERTY, AZERTY and QWERTZ
-├── lists.ts         reading a word list once it is loaded; each list is its own entry point
-├── load.ts          loading a list by its language and size, each as a module of its own
-├── marks.ts         marking a guess: the rule every five-letter word game shares
-├── play.ts          the board you can put on a page, and its stylesheet
-├── strings.ts       every word Kotoba says, in English and Japanese
-├── version.ts       the package's version
-├── wordScore.ts     what a word scores, won or lost
-├── kana/  the Japanese side of the games
-│   ├── kanaMarks.ts  how a kana guess is coloured, including a kana of the wrong size or mark
-│   ├── kanaScore.ts  what a kana word scores, on the same scale as English
-│   └── romaji.ts     romaji typed into kana, with no input-method library
-└── lists/  the word lists, each its own entry point so a page loads only what it plays
-    ├── kana-3.data.ts       the three-kana words
-    ├── kana-4.data.ts       the four-kana words
-    ├── kana-5.data.ts       the five-kana words
-    ├── pop-answers.data.ts  the pop-culture answers
-    ├── pop-guesses.data.ts  the pop-culture guesses accepted at three and seven letters
-    ├── words-de.data.ts     the German words
-    ├── words-en.data.ts     the English words
-    └── words-fr.data.ts     the French words
-```
-
-Tests sit beside the code they test (`*.test.ts`), `src/wordLists.coverage.test.ts`
-holds the lists to their rules, and `src/docs.test.js` holds this README's
-examples and tables to the code. `bin/` is the command line's few lines. `scripts/`
-builds the lists from their sources, checks the package as npm packs it
-(`pnpm test:package`), runs the command line as a child process (`pnpm test:cli`),
-makes the API reference, `docs/api.md`, and builds the demo (`pnpm site`) and
-tests it in a real browser (`pnpm test:demo`); `demo/` is the page published on
-GitHub Pages.
+The pure rules, packed dictionaries, lazy loaders and native rendering entries are explained in the [architecture guide](docs/guides/architecture.md), which preserves the complete file-by-file source tree.
 
 ## The name
 

@@ -211,6 +211,8 @@ Whether a round is played in kana.
 isSmall(kana: string): boolean
 ```
 
+Whether this kana is one of the supported small forms.
+
 <a id="main-KANA_COLUMN"></a>
 
 ### const `KANA_COLUMN`
@@ -308,6 +310,8 @@ green first, then orange from left to right from what green left over.
 type KanaMarked = { mark: KanaMark; wrongSize: boolean; wrongMark: boolean };
 ```
 
+One kana guess position with its native match and size/voicing differences.
+
 <a id="main-kanaScore"></a>
 
 ### function `kanaScore`
@@ -316,6 +320,8 @@ type KanaMarked = { mark: KanaMark; wrongSize: boolean; wrongMark: boolean };
 kanaScore(word: string, guesses: readonly string[], rows: number, elapsedMs: number): KanaScore
 ```
 
+Score kana guesses using exact, elsewhere and same-family matches plus found and speed bonuses.
+
 <a id="main-KanaScore"></a>
 
 ### type `KanaScore`
@@ -323,6 +329,8 @@ kanaScore(word: string, guesses: readonly string[], rows: number, elapsedMs: num
 ```ts
 type KanaScore = WordScore & { column: number };
 ```
+
+The word-score components with the additional same-kana-family column component.
 
 <a id="main-kanaTone"></a>
 
@@ -731,6 +739,8 @@ wordScore(hidden: string, guesses: readonly string[], rows: number, elapsedMs: n
 type WordScore = { placed: number; elsewhere: number; found: number; speed: number; total: number };
 ```
 
+The placed-letter, elsewhere-letter, found-word and speed components and their total.
+
 ## `@johnmorrisdotca/kotoba/words-en`
 
 [`EN_WORDS`](#words-en-EN_WORDS)
@@ -830,6 +840,8 @@ from English, and not vulgar or a slur (the script says how).
 ```ts
 POP_ANSWERS: Record<number, string>
 ```
+
+Pop-culture answer words, grouped by word length.
 
 <a id="pop-answers-POP_CATEGORIES"></a>
 

@@ -11,7 +11,7 @@ const icon = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewB
 const frame = ({ title, description, links, body, scripts }) => `<!doctype html>
 <html lang="en">
   <head>
-    ${familyHead({ id, title, description, ogTitle: "Kotoba 言葉: word lists and word games", ogDescription: "Guess the hidden word in English, French, German or Japanese kana, on the Kotoba word lists." })}
+    ${familyHead({ id, title, description, ogTitle: "Kotoba 言葉 — Word lists and word-game rules", ogDescription: "Guess the hidden word in English, French, German or Japanese kana, on the Kotoba word lists." })}
     <link rel="icon" href="${icon}" />
     <link rel="stylesheet" href="family.css" />
     <link rel="stylesheet" href="kotoba.css" />
@@ -36,9 +36,9 @@ cpSync("dist", "site/dist", { recursive: true });
 writeFileSync(
   "site/index.html",
   frame({
-    title: "Kotoba · a word game on the Kotoba word lists",
+    title: "Kotoba 言葉 — Word lists and word-game rules",
     description: "Guess the hidden word in six tries in English, French, German or Japanese kana, on the cleaned dictionaries of the Kotoba package, with its marking, romaji input and score. In English and Japanese. Free and open source.",
-    links: [{ href: "api.html", say: "pageApi" }],
+    links: [{ href: "docs/index.html", say: "pageDocs" }, { href: "api.html", say: "pageApi" }],
     body: readFileSync("demo/body.html", "utf8").replace("__UNREVIEWED__", familyUnreviewed({ id })).trimEnd(),
     scripts: `<script type="module" src="page.js"></script>`,
   }),
@@ -67,7 +67,7 @@ writeFileSync(
 console.log(`site/ is ready (${api.total} exports in api.html): serve it, or let the Pages workflow publish it.`);
 
 writeFileSync("site/family-embed-builder.js", `export const FAMILY_EMBED_BUILDER_WORDS = ${JSON.stringify(FAMILY_EMBED_BUILDER_WORDS)};\nexport ${familyEmbedBuilder.toString()};\n`);
-const builderParts = { builderHead: familyHead({ id, title: "Kotoba · build a word game embed", description: "Choose a word list and daily play, preview a word game and copy its embed code." }), builderHeader: familyHeader({ id, links: [{ href: "./", say: "toGallery" }] }), unreviewed: familyUnreviewed({ id }), footer: familyFooter({ id }), script: `<script>${FAMILY_SCRIPT}</script>` };
+const builderParts = { builderHead: familyHead({ id, title: "Kotoba · build a word game embed", description: "Choose a word list and daily play, preview a word game and copy its embed code." }), builderHeader: familyHeader({ id, links: [{ href: "./", say: "toGallery" }, { href: "docs/index.html", say: "pageDocs" }, { href: "api.html", say: "pageApi" }] }), unreviewed: familyUnreviewed({ id }), footer: familyFooter({ id }), script: `<script>${FAMILY_SCRIPT}</script>` };
 writeFileSync("site/builder.html", readFileSync("demo/builder.html", "utf8").replace(/<!-- family:([A-Za-z]+) -->/g, (_match, key) => builderParts[key]));
 cpSync("demo/embed", "site/embed", { recursive: true });
 for (const file of ["builder.js", "builder.css"]) cpSync(`demo/${file}`, `site/${file}`);

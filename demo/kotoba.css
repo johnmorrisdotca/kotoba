@@ -37,3 +37,6 @@
 .snippet { white-space: pre; }
 .more .fam-row { gap: 8px 14px; }
 .credits p + p { margin-top: 6px; }
+
+/* Keep navigation width stable across languages. */
+header nav a[data-say="pageDocs"] { inline-size: 8rem; justify-content: center; flex: none; }

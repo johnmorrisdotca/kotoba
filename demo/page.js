@@ -14,6 +14,7 @@ const PAGE = {
     pitch: "Guess the hidden word in six tries, in English, French, German or Japanese kana. Each guess is marked: right place, elsewhere in the word, or not in it. The lists, the marking and the score are the Kotoba package's.",
     name: "Kotoba is 言葉, “words”.",
     nameLink: "About the name",
+    pageDocs: "Docs",
     pageApi: "API reference",
     pageBack: "The game",
     pageApiIntro: "Every export of every entry point, each word list included, with its signature and its doc comment. Made from the source when the site is built, so it cannot fall behind the code.",
@@ -43,6 +44,7 @@ const PAGE = {
     pitch: "隠された単語を6回までに当てます。英語、フランス語、ドイツ語、日本語（かな）から選べます。毎回、場所が合っているか、単語のほかの場所にあるか、含まれないかが示されます。単語リスト、判定、得点は Kotoba パッケージのものです。",
     name: "「Kotoba」は「言葉」です。",
     nameLink: "名前について（英語）",
+    pageDocs: "ドキュメント",
     pageApi: "API リファレンス",
     pageBack: "ゲーム",
     pageApiIntro: "すべてのエントリポイントのすべてのエクスポートを、単語リストも含めて、シグネチャとドキュメントコメントつきで載せています。サイトをビルドするときにソースから作るので、コードとずれません。",
@@ -85,6 +87,7 @@ state.size = WORD_LIST_SIZES[state.words].includes(Number(asked.get("size"))) ? 
 const drawSeed = () => Math.floor(Math.random() * 4294967295);
 
 const language = familyLanguage({ id: "kotoba", words: WORDS, onChange: (lang) => {
+  docsLink();
   play.setLocale(lang);
   draw();
 } });
@@ -234,3 +237,6 @@ await play.ready;
 writeAddress();
 draw();
 document.documentElement.dataset.ready = "true";
+
+function docsLink() { document.querySelector('[data-say="pageDocs"]')?.setAttribute("href", language.lang === "ja" ? "docs/ja/index.html" : "docs/index.html"); }
+docsLink();

@@ -1,0 +1,70 @@
+{
+  "job": "Word lists and word-game rules",
+  "pitch": {
+    "en": "Load only the word lists you need, mark repeated letters correctly and play a daily or seeded word game.",
+    "ja": "必要な単語一覧だけを読み込み、重複する文字を正しく判定し、日替わりやシード付きの単語ゲームを遊べます。"
+  },
+  "name": {
+    "en": "Kotoba is the Japanese word for words.",
+    "ja": "「Kotoba」は「言葉」です。"
+  },
+  "icon": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='6' y='6' width='88' height='88' rx='16' fill='%232f7a4f'/%3E%3Cpath d='M30 66V34M30 50L52 34M30 50L52 66' stroke='%23fffdf8' stroke-width='9' stroke-linecap='round' fill='none'/%3E%3Ccircle cx='72' cy='66' r='7' fill='%23d9822b'/%3E%3C/svg%3E",
+  "entries": {
+    ".": {
+      "en": "Marking, scores and game rules",
+      "ja": "判定・得点・ゲームのルール"
+    },
+    "./cli": {
+      "en": "Command line",
+      "ja": "コマンドライン"
+    },
+    "./load": {
+      "en": "Load dictionaries",
+      "ja": "辞書の読み込み"
+    },
+    "./play": {
+      "en": "Playable game",
+      "ja": "遊べるゲーム"
+    },
+    "./element": {
+      "en": "Game element",
+      "ja": "ゲーム要素"
+    },
+    "./element/define": {
+      "en": "Register the game",
+      "ja": "ゲームの登録"
+    },
+    "./words-en": {
+      "en": "English words",
+      "ja": "英語の単語"
+    },
+    "./words-fr": {
+      "en": "French words",
+      "ja": "フランス語の単語"
+    },
+    "./words-de": {
+      "en": "German words",
+      "ja": "ドイツ語の単語"
+    },
+    "./pop-answers": {
+      "en": "Pop-culture answers",
+      "ja": "ポップカルチャーの答え"
+    },
+    "./pop-guesses": {
+      "en": "Pop-culture guesses",
+      "ja": "ポップカルチャーの回答"
+    },
+    "./kana-3": {
+      "en": "Three-kana words",
+      "ja": "3かなの単語"
+    },
+    "./kana-4": {
+      "en": "Four-kana words",
+      "ja": "4かなの単語"
+    },
+    "./kana-5": {
+      "en": "Five-kana words",
+      "ja": "5かなの単語"
+    }
+  }
+}
