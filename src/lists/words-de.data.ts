@@ -14,6 +14,12 @@
  * Wiktionary, a base form, a word of this language rather than one borrowed
  * from English, and not vulgar or a slur (the script says how).
  * Ä, Ö and Ü are kept as letters of their own; a word with ß is left out, the way French leaves out œ and æ.
+ *
+ * @example
+ * ```ts
+ * import { DE_WORDS } from "@johnmorrisdotca/kotoba/words-de";
+ * console.log(Object.keys(DE_WORDS));
+ * ```
  */
 export const DE_WORDS: Record<number, { easy: string; answers: string; allowed: string }> = {
   4: {

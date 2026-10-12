@@ -12,7 +12,16 @@ import { VERSION } from "./version.ts";
  * module the first time it is needed, so a command reads one list and no more.
  */
 
-/** What the command line is run in. All of it is optional. */
+/** What the command line is run in. All of it is optional.
+ *
+ * @example
+ * ```ts
+ * import type { CliSurroundings } from "@johnmorrisdotca/kotoba/cli";
+ *
+ * const value: CliSurroundings = {locale:"en-US"};
+ * console.log(value);
+ * ```
+ */
 export type CliSurroundings = {
   /** The environment, for the language: `LC_ALL`, `LC_MESSAGES` and `LANG`. */
   env?: Record<string, string | undefined>;
@@ -22,7 +31,17 @@ export type CliSurroundings = {
   now?: number;
 };
 
-/** What the command line came to. */
+/** What the command line came to.
+ *
+ * @example
+ * ```ts
+ * import type { CliResult } from "@johnmorrisdotca/kotoba/cli";
+ * import { runCli } from "@johnmorrisdotca/kotoba/cli";
+ *
+ * const value: CliResult = await runCli(["--version"]);
+ * console.log(value);
+ * ```
+ */
 export type CliResult = {
   /** 0 when all went well, 1 when what was asked for is not so or could not be done, 2 when the command itself was wrong. */
   code: 0 | 1 | 2;
@@ -32,13 +51,43 @@ export type CliResult = {
   err: string;
 };
 
-/** The lists the command line reads: the alphabet languages and Japanese kana. */
+/** The lists the command line reads: the alphabet languages and Japanese kana.
+ *
+ * @example
+ * ```ts
+ * import type { CliWords } from "@johnmorrisdotca/kotoba/cli";
+ *
+ * const value: CliWords = "fr";
+ * console.log(value);
+ * ```
+ */
 export type CliWords = WordListName;
 
-/** Which words of a list: the easy answers, every answer, or every word that may be guessed. */
+/** Which words of a list: the easy answers, every answer, or every word that may be guessed.
+ *
+ * @example
+ * ```ts
+ * import type { CliTier } from "@johnmorrisdotca/kotoba/cli";
+ *
+ * const value: CliTier = "answers";
+ * console.log(value);
+ * ```
+ */
 export type CliTier = "easy" | "answers" | "allowed";
 
-/** The language the command line speaks: `--lang`, or the environment's, or the system's; Japanese for `ja…`, English for anything else. */
+/** The language the command line speaks: `--lang`, or the environment's, or the system's; Japanese for `ja…`, English for anything else.
+ *
+ * @param flag - The explicit CLI language flag, if supplied.
+ * @param env - Language environment values such as LC_ALL, LC_MESSAGES and LANG.
+ * @param locale - The system locale used when no flag or environment language is supplied.
+ * @returns The language the command line speaks: `--lang`, or the environment's, or the system's; Japanese for `ja…`, English for anything else.
+ * @example
+ * ```ts
+ * import { cliLanguage } from "@johnmorrisdotca/kotoba/cli";
+ *
+ * console.log(cliLanguage(undefined,{LANG:"ja_JP.UTF-8"},"en-US"));
+ * ```
+ */
 export function cliLanguage(flag: string | undefined, env: Record<string, string | undefined> = {}, locale?: string): Language {
   const named = [flag, env.LC_ALL, env.LC_MESSAGES, env.LANG].find((value) => value !== undefined && value !== "" && value !== "C" && value !== "POSIX" && !value.startsWith("C."));
   return kotobaLanguage(named ?? locale);
@@ -82,7 +131,18 @@ const hasKana = (text: string) => /[぀-ヿ]/.test(text);
 /** The size of a list as a person says it: "5 letters", "4 kana". */
 const sizeSays = (t: KotobaStrings, words: CliWords, size: number) => kotobaSay(words === "ja" ? t.kana : t.letters, { n: size });
 
-/** Run the command line. See `kotoba --help` for what it takes. */
+/** Run the command line. See `kotoba --help` for what it takes.
+ *
+ * @param args - Command-line arguments without the executable name.
+ * @param around - Optional stdin, language environment and other CLI surroundings.
+ * @returns Output and error strings with exit code 0 for success, 1 for refused input or 2 for invalid command usage.
+ * @example
+ * ```ts
+ * import { runCli } from "@johnmorrisdotca/kotoba/cli";
+ *
+ * console.log((await runCli(["mark","apple","alley"])).code);
+ * ```
+ */
 export async function runCli(args: readonly string[], around: CliSurroundings = {}): Promise<CliResult> {
   const asked = sortArguments(args);
   const env = around.env ?? {};

@@ -19,6 +19,12 @@
  *   supporting documentation. Kevin Atkinson makes no representations
  *   about the suitability of this array for any purpose. It is provided
  *   "as is" without express or implied warranty.
+ *
+ * @example
+ * ```ts
+ * import { EN_WORDS } from "@johnmorrisdotca/kotoba/words-en";
+ * console.log(Object.keys(EN_WORDS));
+ * ```
  */
 export const EN_WORDS: Record<number, { easy: string; answers: string; allowed: string }> = {
   4: {

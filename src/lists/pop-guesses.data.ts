@@ -21,6 +21,12 @@
  *   supporting documentation. Kevin Atkinson makes no representations
  *   about the suitability of this array for any purpose. It is provided
  *   "as is" without express or implied warranty.
+ *
+ * @example
+ * ```ts
+ * import { POP_GUESSES } from "@johnmorrisdotca/kotoba/pop-guesses";
+ * console.log(Object.keys(POP_GUESSES));
+ * ```
  */
 export const POP_GUESSES: Record<number, string> = {
   3: `

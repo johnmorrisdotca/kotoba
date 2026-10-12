@@ -7,6 +7,12 @@ import type { GomojiLanguage } from "./marks.ts";
  * Ü carried as keys of their own — German's letters, not English's plus a
  * fold. All three are three rows, so `WordKeyboard`'s Enter and Backspace,
  * fixed to the last row, sit right whichever is drawn.
+ *
+ * @example
+ * ```ts
+ * import { KEYBOARD_ROWS } from "@johnmorrisdotca/kotoba";
+ * console.log(KEYBOARD_ROWS);
+ * ```
  */
 export const KEYBOARD_ROWS: Record<GomojiLanguage, readonly string[]> = {
   en: ["qwertyuiop", "asdfghjkl", "zxcvbnm"],

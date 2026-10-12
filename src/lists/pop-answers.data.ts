@@ -3,6 +3,12 @@
  * hand-kept `scripts/pop-corpus.txt`; never edited by hand. Each word is
  * written `word.n`, n being its category's place in `POP_CATEGORIES`: the
  * clue the puzzle shows.
+ *
+ * @example
+ * ```ts
+ * import { POP_CATEGORIES } from "@johnmorrisdotca/kotoba/pop-answers";
+ * console.log(POP_CATEGORIES);
+ * ```
  */
 export const POP_CATEGORIES: readonly string[] = [
   "Super Mario",
@@ -97,6 +103,15 @@ export const POP_CATEGORIES: readonly string[] = [
   "Tech word"
 ];
 
+/** Pop-culture answer words, grouped by word length.
+ *
+ *
+ * @example
+ * ```ts
+ * import { POP_ANSWERS } from "@johnmorrisdotca/kotoba/pop-answers";
+ * console.log(Object.keys(POP_ANSWERS));
+ * ```
+ */
 export const POP_ANSWERS: Record<number, string> = {
   3: `
 abu.62 ace.60 ada.88 afk.87 ali.61 ami.29 amy.4 app.89 ara.35 ash.2 bao.74 bat.84 bit.89 bmx.59 boo.0 brb.87 bts.56 bug.89 buu.27 cho.49 css.88 dab.81 eid.83 elf.21 emo.53 ent.50 eos.14 eve.44 ftw.87 geb.18 gif.87 hal.44 han.40 hel.17 hud.9 imp.21 jig.81 joy.62 kay.20 ken.5 kia.80 koi.22 lag.9 leo.36 lex.47 lob.60 lol.87 lua.88 mew.2 mmo.9 mod.9 noh.22 npc.9 nue.19 nut.18 nyx.14 odo.41 oni.19 orc.21 pan.14 par.60 pho.74 php.88 pin.11 poe.67 pop.53 pug.76 rap.53 rei.29 rex.62 rey.40 rio.71 ron.49 roo.63 rpg.9 ryu.5 sam.50 sax.54 set.18 sia.57 sif.17 ska.53 sql.88 tal.12 tap.81 taz.63 tea.75 tee.60 tet.83 tin.37 tyr.17 ufo.34 uno.13 yen.22 zen.22 zod.47

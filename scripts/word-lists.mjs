@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import {writeWordList} from "./word-list-docs.mjs";
 /**
  * WRITES THE GOMOJI LISTS from SCOWL, so the lists in the repository are
  * a machine's output that anybody can make again, never a hand-kept table.
@@ -27,7 +28,7 @@
  * adds later takes its words from a real dictionary of that language too, never
  * from a frequency count alone (`word-lists-fr-de.mjs` says why).
  */
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
 const FINAL = process.argv[2];
@@ -100,7 +101,7 @@ for (const length of LENGTHS) {
   console.log(`${length} letters: ${easyAnswers.length} easy answers, ${answers.length} answers, ${allowed.length} allowed`);
 }
 
-writeFileSync(
+writeWordList(
   OUT,
   `/**
  * THE ENGLISH WORDS FOR GOMOJI. Written by \`scripts/word-lists.mjs\` from

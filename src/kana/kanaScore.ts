@@ -18,11 +18,42 @@ import { kanaBase, markKanaGuess } from "./kanaMarks.ts";
  * at most 10 × (kana × guesses − 1), and a word found on its last row to more
  * than that (`kanaScore.test.ts`, at every size and count of guesses). Only a
  * word with no kana and no column found scores 0.
+ *
+ * @example
+ * ```ts
+ * import { KANA_COLUMN } from "@johnmorrisdotca/kotoba";
+ * console.log(KANA_COLUMN);
+ * ```
  */
 export const KANA_COLUMN = 1;
 
+/** The word-score components with the additional same-kana-family column component.
+ *
+ * @example
+ * ```ts
+ * import type { KanaScore } from "@johnmorrisdotca/kotoba";
+ * import { kanaScore } from "@johnmorrisdotca/kotoba";
+ *
+ * const value: KanaScore = kanaScore("はな",["はな"],6,20000);
+ * console.log(value);
+ * ```
+ */
 export type KanaScore = WordScore & { column: number };
 
+/** Score kana guesses using exact, elsewhere and same-family matches plus found and speed bonuses.
+ *
+ * @param word - The word or kana array specified by this signature.
+ * @param guesses - Submitted whole guesses in chronological order.
+ * @param rows - The number of guesses the game permits.
+ * @param elapsedMs - Elapsed milliseconds supplied by the host clock.
+ * @returns Score kana guesses using exact, elsewhere and same-family matches plus found and speed bonuses.
+ * @example
+ * ```ts
+ * import { kanaScore } from "@johnmorrisdotca/kotoba";
+ *
+ * console.log(kanaScore("はな",["ぱな","はな"],6,20000));
+ * ```
+ */
 export function kanaScore(word: string, guesses: readonly string[], rows: number, elapsedMs: number): KanaScore {
   const target = [...word];
   const played = guesses.map((guess) => [...guess]);

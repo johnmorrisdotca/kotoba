@@ -30,6 +30,12 @@ import { markGuess } from "./marks.ts";
  * place (10 × letters) and the bonus (10 × letters × guesses), which is more
  * (`wordScore.test.ts` holds it at every size and level). Everything but the time is read from the
  * guesses, which the server has checked, so the server works it out itself.
+ *
+ * @example
+ * ```ts
+ * import { WORD_SCORE } from "@johnmorrisdotca/kotoba";
+ * console.log(WORD_SCORE);
+ * ```
  */
 export const WORD_SCORE = {
   placed: 10,
@@ -40,14 +46,49 @@ export const WORD_SCORE = {
   speedStepMs: 6_000,
 } as const;
 
+/** The placed-letter, elsewhere-letter, found-word and speed components and their total.
+ *
+ * @example
+ * ```ts
+ * import type { WordScore } from "@johnmorrisdotca/kotoba";
+ * import { wordScore } from "@johnmorrisdotca/kotoba";
+ *
+ * const value: WordScore = wordScore("apple",["alley","apple"],6,20000);
+ * console.log(value);
+ * ```
+ */
 export type WordScore = { placed: number; elsewhere: number; found: number; speed: number; total: number };
 
-/** Finding the word: 10 for every place of every guess the board gives, so it grows with the board. */
+/** Finding the word: 10 for every place of every guess the board gives, so it grows with the board.
+ *
+ * @param size - The number of letters or kana in each word.
+ * @param rows - The number of guesses the game permits.
+ * @returns Finding the word: 10 for every place of every guess the board gives, so it grows with the board.
+ * @example
+ * ```ts
+ * import { foundBonus } from "@johnmorrisdotca/kotoba";
+ *
+ * console.log(foundBonus(5,6));
+ * ```
+ */
 export function foundBonus(size: number, rows: number): number {
   return WORD_SCORE.placed * size * rows;
 }
 
-/** `rows` is how many guesses the puzzle gives (`guessesFor`), which sets every weight. */
+/** `rows` is how many guesses the puzzle gives (`guessesFor`), which sets every weight.
+ *
+ * @param hidden - The hidden word in native lowercase letters or kana.
+ * @param guesses - Submitted whole guesses in chronological order.
+ * @param rows - The number of guesses the game permits.
+ * @param elapsedMs - Elapsed milliseconds supplied by the host clock.
+ * @returns `rows` is how many guesses the puzzle gives (`guessesFor`), which sets every weight.
+ * @example
+ * ```ts
+ * import { wordScore } from "@johnmorrisdotca/kotoba";
+ *
+ * console.log(wordScore("apple",["alley","apple"],6,20000));
+ * ```
+ */
 export function wordScore(hidden: string, guesses: readonly string[], rows: number, elapsedMs: number): WordScore {
   const size = hidden.length;
   const weight = (row: number) => rows - row;

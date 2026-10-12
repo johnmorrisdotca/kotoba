@@ -66,10 +66,35 @@ export type KotobaPlayOptions = {
   now?: () => number;
 };
 
-/** What `newGame` may change: the choices about the word, and nothing about the look. */
+/** What `newGame` may change: the choices about the word, and nothing about the look.
+ *
+ * @example
+ * ```ts
+ * import type { KotobaNewGame } from "@johnmorrisdotca/kotoba/play";
+ *
+ * const value: KotobaNewGame = {words:"en",size:5,seed:42};
+ * console.log(value);
+ * ```
+ */
 export type KotobaNewGame = Pick<KotobaPlayOptions, "words" | "size" | "easy" | "rows" | "seed" | "daily" | "hidden">;
 
-/** A mounted game. */
+/** A mounted game.
+ *
+ * @example
+ * ```ts no-run
+ * import { startWordGame } from "@johnmorrisdotca/kotoba";
+ * import type { KotobaPlay } from "@johnmorrisdotca/kotoba/play";
+ * import { mountKotoba } from "@johnmorrisdotca/kotoba/play";
+ *
+ * const game = startWordGame("en",5,"apple");
+ * const host = document.createElement("div");
+ * document.body.append(host);
+ * const play: KotobaPlay = mountKotoba(host,{words:"en",size:5,hidden:"apple",keyboard:false});
+ * await play.ready;
+ * console.log(play.game?.status);
+ * play.destroy();
+ * ```
+ */
 export type KotobaPlay = {
   /** The round being played, or null while a list is loading. */
   readonly game: WordGame | null;
@@ -83,7 +108,14 @@ export type KotobaPlay = {
   destroy(): void;
 };
 
-/** The variables the game's look is made of, with what they are unless set. The stylesheet the game adds to a page is `KOTOBA_PLAY_CSS`. */
+/** The variables the game's look is made of, with what they are unless set. The stylesheet the game adds to a page is `KOTOBA_PLAY_CSS`.
+ *
+ * @example
+ * ```ts
+ * import { KOTOBA_PLAY_VARIABLES } from "@johnmorrisdotca/kotoba/play";
+ * console.log(KOTOBA_PLAY_VARIABLES);
+ * ```
+ */
 export const KOTOBA_PLAY_VARIABLES = {
   "--kt-board": "#2f5d4a",
   "--kt-ink": "#f3efe4",
@@ -98,7 +130,14 @@ export const KOTOBA_PLAY_VARIABLES = {
   "--kt-cell-size": "60px",
 } as const;
 
-/** The game's stylesheet: added to the page once, as a `<style>` with the id `kotoba-play-style`. */
+/** The game's stylesheet: added to the page once, as a `<style>` with the id `kotoba-play-style`.
+ *
+ * @example
+ * ```ts
+ * import { KOTOBA_PLAY_CSS } from "@johnmorrisdotca/kotoba/play";
+ * console.log(KOTOBA_PLAY_CSS.length);
+ * ```
+ */
 export const KOTOBA_PLAY_CSS = `.kt-root { ${Object.entries(KOTOBA_PLAY_VARIABLES).map(([name, value]) => `${name}: ${value};`).join(" ")} box-sizing: border-box; display: grid; gap: 12px; padding: 14px; justify-items: center; background: var(--kt-board); color: var(--kt-ink); border-radius: var(--kt-radius); font-family: system-ui, sans-serif; }
 .kt-root *, .kt-root *::before, .kt-root *::after { box-sizing: border-box; }
 .kt-status { margin: 0; min-height: 2.8em; font-weight: 700; text-align: center; }

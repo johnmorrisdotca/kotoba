@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import {writeWordList} from "./word-list-docs.mjs";
 /**
  * WRITES THE KANA GOMOJI LISTS AND KUMIMOJI'S JAPANESE WORDS AND TILE MIX
  * from JMdict, so the lists in the repository are machine output anybody can
@@ -40,7 +41,7 @@
  * nothing between them, one file a length: a 3-kana puzzle loads about fifty
  * kilobytes, where all three lists written out as kana would be over a megabyte.
  */
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { gunzipSync } from "node:zlib";
 
 const SOURCE = process.argv[2];
@@ -158,7 +159,7 @@ const counts = LENGTHS.map((length) => `${length}: ${tiers[length].easy.size} ea
 /* One file a length, so a puzzle loads only the list of the length it is (`kanaWords.ts`). */
 for (const length of LENGTHS) {
   const tier = tiers[length];
-  writeFileSync(
+  writeWordList(
     OUT(length),
     `/**
  * THE ${length}-KANA WORDS FOR GOMOJI. Written by \`scripts/word-lists-ja.mjs\` from
@@ -244,7 +245,7 @@ const packedByLength = [...byTileLength.entries()]
   .map(([length, words]) => `    ${length}: ${JSON.stringify(packTileWords(words))},`)
   .join("\n");
 if (!existsSync(`${KUMIMOJI_REPO}/src`)) console.log(`No Kumimoji checkout at ${KUMIMOJI_REPO}: its Japanese list is left as it is.`);
-else writeFileSync(
+else writeWordList(
   TILE_WORDS_OUT,
   `/**
  * JAPANESE KUMIMOJI WORDS AND TILE MIX, written by scripts/word-lists-ja.mjs.

@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import {writeWordList} from "./word-list-docs.mjs";
 /**
  * WRITES THE FRENCH AND GERMAN GOMOJI LISTS, so the lists in the repository
  * are a machine's output that anybody can make again, never a hand-kept table.
@@ -92,7 +93,7 @@
  * GERMAN keeps Ä, Ö and Ü as letters of their own — QWERTZ has keys for them —
  * and a word carrying ß is left out, the way French leaves out œ and æ.
  */
-import { createReadStream, readFileSync, writeFileSync } from "node:fs";
+import { createReadStream, readFileSync } from "node:fs";
 import { createInterface } from "node:readline";
 
 const [frPath, dePath, frDictPath, deDictPath, frWiktPath, deWiktPath] = process.argv.slice(2);
@@ -380,7 +381,7 @@ async function buildLanguage(path, lang, dictionary, wiktPath, english, outPath,
     const held = atLength.filter(([word]) => dictionary.answerable(word) && borrowed(word)).length;
     console.log(`${label} ${length} letters: ${easy.length} easy answers, ${answers.length} answers, ${allowed.length} allowed (${held} shared with English held back)`);
   }
-  writeFileSync(
+  writeWordList(
     outPath,
     `/**
  * THE ${label.toUpperCase()} WORDS FOR GOMOJI. Written by \`scripts/word-lists-fr-de.mjs\`, read 2026-09-26, from

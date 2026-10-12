@@ -11,6 +11,12 @@
  * 900 easy answers, 2000 answers at medium and hard, 16444 words that may be guessed.
  * Each word is written one character a kana through `alphabet` and `codes`,
  * the words run together with nothing between them (`kanaWords.ts` reads them).
+ *
+ * @example
+ * ```ts
+ * import { JA_WORDS_3 } from "@johnmorrisdotca/kotoba/kana-3";
+ * console.log(Object.keys(JA_WORDS_3));
+ * ```
  */
 export const JA_WORDS_3 = {
   release: "2026-09-28",

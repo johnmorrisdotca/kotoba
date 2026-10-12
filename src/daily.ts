@@ -16,12 +16,31 @@
  * keep your own copy) for a word that stays put.
  */
 
-/** A day's name: four digits of year, two of month and two of day, such as `2026-10-01`. */
+/** A day's name: four digits of year, two of month and two of day, such as `2026-10-01`.
+ *
+ * @example
+ * ```ts
+ * import type { DayKey } from "@johnmorrisdotca/kotoba";
+ *
+ * const value: DayKey = "2026-10-12";
+ * console.log(value);
+ * ```
+ */
 export type DayKey = string;
 
 const DAY_MS = 86_400_000;
 
-/** Whether the text is a real calendar date written `YYYY-MM-DD`, from the year 0000 to 9999. */
+/** Whether the text is a real calendar date written `YYYY-MM-DD`, from the year 0000 to 9999.
+ *
+ * @param text - The date text to validate, or localized template specified by the signature.
+ * @returns Whether the text is a real calendar date written `YYYY-MM-DD`, from the year 0000 to 9999.
+ * @example
+ * ```ts
+ * import { isDayKey } from "@johnmorrisdotca/kotoba";
+ *
+ * console.log(isDayKey("2026-10-12"));
+ * ```
+ */
 export function isDayKey(text: unknown): text is DayKey {
   if (typeof text !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(text)) return false;
   const [year, month, day] = text.split("-").map(Number) as [number, number, number];
@@ -34,6 +53,16 @@ export function isDayKey(text: unknown): text is DayKey {
  * The calendar day a moment falls on, as `YYYY-MM-DD`: in UTC unless an IANA
  * time zone such as `Asia/Tokyo` is named. A name is passed on to `Intl`, which
  * throws a `RangeError` for a zone it does not know.
+ *
+ * @param moment - A Date or Unix milliseconds to interpret.
+ * @param zone - An optional IANA time zone; UTC when omitted.
+ * @returns The calendar day a moment falls on, as `YYYY-MM-DD`: in UTC unless an IANA time zone such as `Asia/Tokyo` is named. A name is passed on to `Intl`, which throws a `RangeError` for a zone it does not know.
+ * @example
+ * ```ts
+ * import { dayKey } from "@johnmorrisdotca/kotoba";
+ *
+ * console.log(dayKey(new Date("2026-10-12T12:00:00Z")));
+ * ```
  */
 export function dayKey(moment: Date | number = new Date(), zone?: string): DayKey {
   const date = typeof moment === "number" ? new Date(moment) : moment;
@@ -47,7 +76,17 @@ export function dayKey(moment: Date | number = new Date(), zone?: string): DayKe
   return `${part("year").padStart(4, "0")}-${part("month")}-${part("day")}`;
 }
 
-/** How many days after 1970-01-01 a day is, counting the calendar and nothing else: a day has no hours here. */
+/** How many days after 1970-01-01 a day is, counting the calendar and nothing else: a day has no hours here.
+ *
+ * @param day - A valid YYYY-MM-DD date or moment specified by the signature.
+ * @returns How many days after 1970-01-01 a day is, counting the calendar and nothing else: a day has no hours here.
+ * @example
+ * ```ts
+ * import { dayNumber } from "@johnmorrisdotca/kotoba";
+ *
+ * console.log(dayNumber("2026-10-12"));
+ * ```
+ */
 export function dayNumber(day: DayKey): number {
   if (!isDayKey(day)) throw new RangeError(`“${String(day)}” is not a day written YYYY-MM-DD`);
   const [year, month, date] = day.split("-").map(Number) as [number, number, number];
@@ -83,6 +122,17 @@ function stream(seed: number): () => number {
  * `count` days that starts at a multiple of `count` days after 1970-01-01,
  * every place comes up exactly once. `salt` names the list, so that two lists
  * of one length are not dealt in the same order.
+ *
+ * @param count - The positive number of words to choose among.
+ * @param day - A valid YYYY-MM-DD date or moment specified by the signature.
+ * @param salt - Stable text distinguishing this daily word stream.
+ * @returns Which of `count` words a day gets, from 0 to `count - 1`. Over any run of `count` days that starts at a multiple of `count` days after 1970-01-01, every place comes up exactly once. `salt` names the list, so that two lists of one length are not dealt in the same order.
+ * @example
+ * ```ts
+ * import { dailyIndex } from "@johnmorrisdotca/kotoba";
+ *
+ * console.log(dailyIndex(3,"2026-10-12","sample"));
+ * ```
  */
 export function dailyIndex(count: number, day: DayKey, salt = ""): number {
   if (!Number.isInteger(count) || count < 1) throw new RangeError("there are no words to pick from");
@@ -98,7 +148,16 @@ export function dailyIndex(count: number, day: DayKey, salt = ""): number {
   return pack[place] as number;
 }
 
-/** How a day's word is chosen. */
+/** How a day's word is chosen.
+ *
+ * @example
+ * ```ts
+ * import type { DailyOptions } from "@johnmorrisdotca/kotoba";
+ *
+ * const value: DailyOptions = {salt:"sample",zone:"UTC"};
+ * console.log(value);
+ * ```
+ */
 export type DailyOptions = {
   /** Names the list, so that two lists of one length are dealt in different orders. Unless said, empty. */
   salt?: string;
@@ -110,6 +169,17 @@ export type DailyOptions = {
  * The word of a day: the same for everybody who asks about the same day of the
  * same list. Give a `YYYY-MM-DD` day, or a `Date` (read as a day in UTC, or in
  * `zone`). Throws a `RangeError` for an empty list or a day that is not one.
+ *
+ * @param words - The ordered nonempty word pool or accepted-guess dictionary specified by the signature.
+ * @param day - A valid YYYY-MM-DD date or moment specified by the signature.
+ * @param options - Native game, mount or daily choices specified by the signature.
+ * @returns The word of a day: the same for everybody who asks about the same day of the same list. Give a `YYYY-MM-DD` day, or a `Date` (read as a day in UTC, or in `zone`). Throws a `RangeError` for an empty list or a day that is not one.
+ * @example
+ * ```ts
+ * import { dailyWord } from "@johnmorrisdotca/kotoba";
+ *
+ * console.log(dailyWord(["apple","berry","lemon"],"2026-10-12",{salt:"sample"}));
+ * ```
  */
 export function dailyWord(words: readonly string[], day: DayKey | Date | number = new Date(), options: DailyOptions = {}): string {
   const key = typeof day === "string" ? day : dayKey(day, options.zone);

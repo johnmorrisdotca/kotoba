@@ -13,6 +13,12 @@
  * Wiktionary, a base form, a word of this language rather than one borrowed
  * from English, and not vulgar or a slur (the script says how).
  * Accents are folded to their plain letter (é→E, ç→C…); a word with œ or æ has no plain spelling and is left out.
+ *
+ * @example
+ * ```ts
+ * import { FR_WORDS } from "@johnmorrisdotca/kotoba/words-fr";
+ * console.log(Object.keys(FR_WORDS));
+ * ```
  */
 export const FR_WORDS: Record<number, { easy: string; answers: string; allowed: string }> = {
   4: {

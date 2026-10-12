@@ -61,7 +61,17 @@ function mayFinish(start: string): boolean {
   return Object.keys(TABLE).some((key) => key.startsWith(start));
 }
 
-/** What has been typed, as kana, and what is still being typed. */
+/** What has been typed, as kana, and what is still being typed.
+ *
+ * @param typed - Romaji text to consume into kana and any unfinished suffix.
+ * @returns What has been typed, as kana, and what is still being typed.
+ * @example
+ * ```ts
+ * import { readRomaji } from "@johnmorrisdotca/kotoba";
+ *
+ * console.log(readRomaji("konnichiha"));
+ * ```
+ */
 export function readRomaji(typed: string): { kana: string[]; rest: string } {
   const text = typed.toLowerCase();
   const kana: string[] = [];
@@ -115,7 +125,17 @@ export function readRomaji(typed: string): { kana: string[]; rest: string } {
   return { kana, rest: "" };
 }
 
-/** At Enter: what was typed, with a last "n" read as ん and any other unfinished sound dropped. */
+/** At Enter: what was typed, with a last "n" read as ん and any other unfinished sound dropped.
+ *
+ * @param typed - Romaji text to consume into kana and any unfinished suffix.
+ * @returns At Enter: what was typed, with a last "n" read as ん and any other unfinished sound dropped.
+ * @example
+ * ```ts
+ * import { finishRomaji } from "@johnmorrisdotca/kotoba";
+ *
+ * console.log(finishRomaji("pan"));
+ * ```
+ */
 export function finishRomaji(typed: string): string[] {
   const { kana, rest } = readRomaji(typed);
   return rest === "n" ? [...kana, "ん"] : kana;

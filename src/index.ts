@@ -3,6 +3,7 @@
  * and Japanese. The lists themselves are entry points of their own, so a page
  * loads only what it plays: see the README.
  */
+
 export * from "./marks.ts";
 export * from "./lists.ts";
 export * from "./wordScore.ts";

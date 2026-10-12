@@ -8,19 +8,65 @@ import { KANA_SIZES, readWordLists, unpack } from "./lists.ts";
  * asked for.
  */
 
-/** The languages that have a list to load: English, French, German, and Japanese kana. */
+/** The languages that have a list to load: English, French, German, and Japanese kana.
+ *
+ * @example
+ * ```ts
+ * import type { WordListName } from "@johnmorrisdotca/kotoba/load";
+ *
+ * const value: WordListName = "ja";
+ * console.log(value);
+ * ```
+ */
 export type WordListName = "en" | "fr" | "de" | "ja";
 
-/** A list read into words: the easy answers inside the answers inside the words that may be guessed. A kana list also says which JMdict release it was made from. */
+/** A list read into words: the easy answers inside the answers inside the words that may be guessed. A kana list also says which JMdict release it was made from.
+ *
+ * @example
+ * ```ts
+ * import { readWordLists } from "@johnmorrisdotca/kotoba";
+ * import { EN_WORDS } from "@johnmorrisdotca/kotoba/words-en";
+ * import type { LoadedWordList } from "@johnmorrisdotca/kotoba/load";
+ *
+ * const wordLists = readWordLists(EN_WORDS,5)!;
+ * const value: LoadedWordList = wordLists;
+ * console.log(value);
+ * ```
+ */
 export type LoadedWordList = { easy: readonly string[]; answers: readonly string[]; allowed: ReadonlySet<string>; release?: string };
 
-/** The lists, in the order they are named. */
+/** The lists, in the order they are named.
+ *
+ * @example
+ * ```ts
+ * import { WORD_LIST_NAMES } from "@johnmorrisdotca/kotoba/load";
+ * console.log(WORD_LIST_NAMES);
+ * ```
+ */
 export const WORD_LIST_NAMES: readonly WordListName[] = ["en", "fr", "de", "ja"];
 
-/** The sizes each list comes in: four to six letters, or three to five kana. */
+/** The sizes each list comes in: four to six letters, or three to five kana.
+ *
+ * @example
+ * ```ts
+ * import { WORD_LIST_SIZES } from "@johnmorrisdotca/kotoba/load";
+ * console.log(WORD_LIST_SIZES);
+ * ```
+ */
 export const WORD_LIST_SIZES: Readonly<Record<WordListName, readonly number[]>> = { en: [4, 5, 6], fr: [4, 5, 6], de: [4, 5, 6], ja: KANA_SIZES };
 
-/** One list of one size read into words, or null for a size the language has no list of. */
+/** One list of one size read into words, or null for a size the language has no list of.
+ *
+ * @param name - The supported dictionary language identifier.
+ * @param size - The number of letters or kana in each word.
+ * @returns One list of one size read into words, or null for a size the language has no list of.
+ * @example
+ * ```ts
+ * import { loadWordList } from "@johnmorrisdotca/kotoba/load";
+ *
+ * console.log((await loadWordList("en",5))?.answers.length);
+ * ```
+ */
 export async function loadWordList(name: WordListName, size: number): Promise<LoadedWordList | null> {
   if (!WORD_LIST_SIZES[name]?.includes(size)) return null;
   if (name === "en") return readWordLists((await import("./lists/words-en.data.ts")).EN_WORDS, size);

@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import {writeWordList} from "./word-list-docs.mjs";
 /**
  * WRITES POP GOMOJI'S LISTS from its hand-kept corpus and from SCOWL.
  *
@@ -26,7 +27,7 @@
  *
  * Both files are written; neither is edited by hand.
  */
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import { join } from "node:path";
 
 const FINAL = process.argv[2];
@@ -102,7 +103,7 @@ for (const length of LENGTHS) {
 }
 console.log(`${found.size} answers in ${categories.length} categories; ${doubled} kept under an earlier category`);
 
-writeFileSync(
+writeWordList(
   ANSWERS_OUT,
   `/**
  * POP GOMOJI'S ANSWERS. Written by \`scripts/word-lists-pop.mjs\` from the
@@ -137,7 +138,7 @@ for (const length of OWN_GUESS_LENGTHS) {
   guessParts.push(`  ${length}: ${block(words)},`);
   console.log(`${length} letters: ${words.length} dictionary guesses`);
 }
-writeFileSync(
+writeWordList(
   GUESSES_OUT,
   `/**
  * POP GOMOJI'S DICTIONARY GUESSES AT THREE AND SEVEN LETTERS, the lengths

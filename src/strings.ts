@@ -6,10 +6,29 @@
  * in with `kotobaSay`; a table of your own must keep them.
  */
 
-/** The languages Kotoba speaks. This is the language of its words, not of the word lists: a list in French is played with English words or Japanese ones. */
+/** The languages Kotoba speaks. This is the language of its words, not of the word lists: a list in French is played with English words or Japanese ones.
+ *
+ * @example
+ * ```ts
+ * import type { Language } from "@johnmorrisdotca/kotoba";
+ *
+ * const value: Language = "ja";
+ * console.log(value);
+ * ```
+ */
 export type Language = "en" | "ja";
 
-/** The names of the strings. Each is one line or one block of text. */
+/** The names of the strings. Each is one line or one block of text.
+ *
+ * @example
+ * ```ts
+ * import type { KotobaStrings } from "@johnmorrisdotca/kotoba";
+ * import { KOTOBA_STRINGS } from "@johnmorrisdotca/kotoba";
+ *
+ * const value: KotobaStrings = KOTOBA_STRINGS.en;
+ * console.log(value);
+ * ```
+ */
 export type KotobaStrings = {
   /** The lists, by their names for themselves. */
   listEn: string;
@@ -68,7 +87,14 @@ export type KotobaStrings = {
   cliListsHead: string;
 };
 
-/** Every string, in both languages. The Japanese has not yet been read by a native reader. */
+/** Every string, in both languages. The Japanese has not yet been read by a native reader.
+ *
+ * @example
+ * ```ts
+ * import { KOTOBA_STRINGS } from "@johnmorrisdotca/kotoba";
+ * console.log(KOTOBA_STRINGS);
+ * ```
+ */
 export const KOTOBA_STRINGS: Record<Language, KotobaStrings> = {
   en: {
     listEn: "English",
@@ -235,12 +261,33 @@ check は、単語そのものからリスト（かななら ja）を、長さ�
   },
 };
 
-/** A string with its braces filled in from `values`; a brace with no value is left as it is. */
+/** A string with its braces filled in from `values`; a brace with no value is left as it is.
+ *
+ * @param text - The date text to validate, or localized template specified by the signature.
+ * @param values - Replacement strings or numbers for brace-delimited placeholders.
+ * @returns A string with its braces filled in from `values`; a brace with no value is left as it is.
+ * @example
+ * ```ts
+ * import { kotobaSay } from "@johnmorrisdotca/kotoba";
+ *
+ * console.log(kotobaSay("Row {n}",{n:2}));
+ * ```
+ */
 export function kotobaSay(text: string, values: Readonly<Record<string, string | number>> = {}): string {
   return text.replace(/\{(\w+)\}/g, (whole, name: string) => (name in values ? String(values[name]) : whole));
 }
 
-/** The language a person asked for, by `en` or `ja` or a tag that begins with one: English for anything else. */
+/** The language a person asked for, by `en` or `ja` or a tag that begins with one: English for anything else.
+ *
+ * @param tag - A language tag, or undefined to select English.
+ * @returns The language a person asked for, by `en` or `ja` or a tag that begins with one: English for anything else.
+ * @example
+ * ```ts
+ * import { kotobaLanguage } from "@johnmorrisdotca/kotoba";
+ *
+ * console.log(kotobaLanguage("ja-JP"));
+ * ```
+ */
 export function kotobaLanguage(tag: string | undefined): Language {
   return (tag ?? "en").toLowerCase().startsWith("ja") ? "ja" : "en";
 }
