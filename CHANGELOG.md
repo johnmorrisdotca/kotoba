@@ -6,6 +6,8 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+- Keep complete resource catalogues on the documentation entry index and the active resource beside core navigation; render valid default imports in HTML and Markdown.
+
 - Add the bilingual documentation site, checked public examples, paired guides, local search and machine-readable pages.
 
 - Add a reflected word-game element, shared embed builder and validated iframe route with UTC daily play. Keep mounted game rules and callbacks; embed keyboards listen on the focused game and native events bubble across shadow roots.
