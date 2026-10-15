@@ -20,4 +20,4 @@ The alphabet lists contain whitespace-separated strings by length. `readWordList
 
 Answer pools and allowed guesses have different jobs. Do not choose a hidden word from the entire allowed set unless that is your host's intended rule. Pop-culture answers and guesses have separate entries. The root rules import carries no dictionary; a bundler can split the lazy loader's reachable lists into chunks.
 
-Keep [NOTICE.md](../../NOTICE.md) and the list's own notices with data you distribute. The package documents SCOWL, French/German sources and JMdict, with MIT code and the data's own terms. This rollout changes comments only; it does not refresh corpus content or answer ordering.
+Keep [NOTICE.md](../../NOTICE.md) and the list's own notices with data you distribute. The package documents SCOWL, French/German sources and JMdict, with MIT code and the data's own terms.

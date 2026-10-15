@@ -3,59 +3,59 @@
   "entries": {
     ".": {
       "minified": 23214,
-      "gzip": 8119
+      "gzip": 8182
     },
     "./words-en": {
       "minified": 186499,
-      "gzip": 73751
+      "gzip": 74271
     },
     "./words-fr": {
       "minified": 132621,
-      "gzip": 51099
+      "gzip": 51080
     },
     "./words-de": {
       "minified": 157641,
-      "gzip": 58668
+      "gzip": 58753
     },
     "./pop-answers": {
       "minified": 17813,
-      "gzip": 9462
+      "gzip": 9428
     },
     "./pop-guesses": {
       "minified": 126294,
-      "gzip": 48938
+      "gzip": 49859
     },
     "./kana-3": {
       "minified": 58746,
-      "gzip": 40879
+      "gzip": 40618
     },
     "./kana-4": {
       "minified": 168498,
-      "gzip": 101156
+      "gzip": 113605
     },
     "./kana-5": {
       "minified": 192309,
-      "gzip": 114153
+      "gzip": 121048
     },
     "./cli": {
       "minified": 918513,
-      "gzip": 450153
+      "gzip": 469093
     },
     "./load": {
       "minified": 897742,
-      "gzip": 442367
+      "gzip": 461203
     },
     "./play": {
       "minified": 928424,
-      "gzip": 453421
+      "gzip": 472453
     },
     "./element": {
       "minified": 935577,
-      "gzip": 455730
+      "gzip": 474750
     },
     "./element/define": {
       "minified": 935582,
-      "gzip": 455731
+      "gzip": 474753
     }
   }
 }

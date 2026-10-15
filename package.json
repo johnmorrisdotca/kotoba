@@ -1,6 +1,6 @@
 {
   "name": "@johnmorrisdotca/kotoba",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "Kotoba 言葉 — Word lists and word-game rules: English, French, German and Japanese kana dictionaries, guess marking, scoring, romaji input, daily words and a native game for any page. TypeScript, zero dependencies.",
   "keywords": [
     "5-letter-words",
