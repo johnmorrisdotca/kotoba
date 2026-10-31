@@ -5,7 +5,10 @@ import process from "node:process";
 
 import { runCli } from "../dist/cli.js";
 
-const result = await runCli(process.argv.slice(2), { env: process.env, locale: Intl.DateTimeFormat().resolvedOptions().locale });
+const result = await runCli(process.argv.slice(2), {
+  env: process.env,
+  locale: Intl.DateTimeFormat().resolvedOptions().locale,
+});
 if (result.out !== "") process.stdout.write(result.out);
 if (result.err !== "") process.stderr.write(result.err);
 process.exitCode = result.code;

@@ -74,7 +74,13 @@ export function kanaScore(word: string, guesses: readonly string[], rows: number
     const places = target.flatMap((kana, at) => (kanaBase(kana) === base ? [at] : []));
     const unplaced = places.filter((at) => placedAt[at] === -1);
     const placedCount = places.length - unplaced.length;
-    const shown = played.map((guess, row) => guess.filter((kana, at) => kanaBase(kana) === base && (marks[row]![at]!.mark === "hit" || marks[row]![at]!.mark === "near")).length);
+    const shown = played.map(
+      (guess, row) =>
+        guess.filter(
+          (kana, at) =>
+            kanaBase(kana) === base && (marks[row]![at]!.mark === "hit" || marks[row]![at]!.mark === "near"),
+        ).length,
+    );
     unplaced.forEach((place, index) => {
       const row = shown.findIndex((count) => count >= placedCount + index + 1);
       if (row !== -1) {

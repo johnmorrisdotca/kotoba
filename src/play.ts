@@ -1,5 +1,17 @@
 import { dailyWord, dayKey } from "./daily.ts";
-import { WORD_GAME_ROWS, changeWordGame, eraseWordGame, guessMarks, keyMarks, startWordGame, submitWordGame, typeWordGame, wordGameKeys, type WordGame, type WordGameRefusal } from "./game.ts";
+import {
+  WORD_GAME_ROWS,
+  changeWordGame,
+  eraseWordGame,
+  guessMarks,
+  keyMarks,
+  startWordGame,
+  submitWordGame,
+  typeWordGame,
+  wordGameKeys,
+  type WordGame,
+  type WordGameRefusal,
+} from "./game.ts";
 import { KEYBOARD_ROWS } from "./keyboardRows.ts";
 import { loadWordList, type LoadedWordList, type WordListName } from "./load.ts";
 import { KOTOBA_STRINGS, kotobaSay, type KotobaStrings, type Language } from "./strings.ts";
@@ -138,7 +150,11 @@ export const KOTOBA_PLAY_VARIABLES = {
  * console.log(KOTOBA_PLAY_CSS.length);
  * ```
  */
-export const KOTOBA_PLAY_CSS = `.kt-root { ${Object.entries(KOTOBA_PLAY_VARIABLES).map(([name, value]) => `${name}: ${value};`).join(" ")} box-sizing: border-box; display: grid; gap: 12px; padding: 14px; justify-items: center; background: var(--kt-board); color: var(--kt-ink); border-radius: var(--kt-radius); font-family: system-ui, sans-serif; }
+export const KOTOBA_PLAY_CSS = `.kt-root { ${Object.entries(KOTOBA_PLAY_VARIABLES)
+  .map(([name, value]) => `${name}: ${value};`)
+  .join(
+    " ",
+  )} box-sizing: border-box; display: grid; gap: 12px; padding: 14px; justify-items: center; background: var(--kt-board); color: var(--kt-ink); border-radius: var(--kt-radius); font-family: system-ui, sans-serif; }
 .kt-root *, .kt-root *::before, .kt-root *::after { box-sizing: border-box; }
 .kt-status { margin: 0; min-height: 2.8em; font-weight: 700; text-align: center; }
 .kt-legend { margin: 0; font-size: .8rem; opacity: .9; text-align: center; min-height: 3.4em; max-width: 46ch; }
@@ -200,10 +216,16 @@ export function mountKotoba(container: HTMLElement, options: KotobaPlayOptions =
   const now = options.now ?? Date.now;
   let locale: Language = options.locale ?? "en";
   const own = options.strings ?? {};
-  const say = (key: keyof KotobaStrings, values: Record<string, string | number> = {}) => kotobaSay(own[key] ?? KOTOBA_STRINGS[locale][key], values);
+  const say = (key: keyof KotobaStrings, values: Record<string, string | number> = {}) =>
+    kotobaSay(own[key] ?? KOTOBA_STRINGS[locale][key], values);
 
   // The choices about the word: kept between rounds, changed by `newGame`.
-  const choice = { words: options.words ?? ("en" as WordListName), size: options.size ?? (options.words === "ja" ? 4 : 5), easy: options.easy === true, rows: options.rows ?? WORD_GAME_ROWS };
+  const choice = {
+    words: options.words ?? ("en" as WordListName),
+    size: options.size ?? (options.words === "ja" ? 4 : 5),
+    easy: options.easy === true,
+    rows: options.rows ?? WORD_GAME_ROWS,
+  };
   let list: LoadedWordList | null = null;
   let game: WordGame | null = null;
   let message: Message = null;
@@ -238,7 +260,16 @@ export function mountKotoba(container: HTMLElement, options: KotobaPlayOptions =
   root.append(status, grid, keys, legend);
   container.append(root);
 
-  const changed = () => { options.onChange?.(game); container.dispatchEvent(new CustomEvent("kotoba-change", { bubbles: true, composed: true, detail: game === null ? null : JSON.parse(JSON.stringify(game)) })); };
+  const changed = () => {
+    options.onChange?.(game);
+    container.dispatchEvent(
+      new CustomEvent("kotoba-change", {
+        bubbles: true,
+        composed: true,
+        detail: game === null ? null : JSON.parse(JSON.stringify(game)),
+      }),
+    );
+  };
 
   /** The round after a key, a message cleared; drawn. */
   function update(next: WordGame, because: Message = null) {
@@ -266,18 +297,32 @@ export function mountKotoba(container: HTMLElement, options: KotobaPlayOptions =
     if (sent.refused !== null) return update(sent.game, { key: refusals[sent.refused] });
     if (sent.game.status === "playing") return update(sent.game);
     const done = sent.game;
-    update(done, done.status === "won" ? { key: "won", values: { n: done.guesses.length, score: done.score?.total ?? 0 } } : { key: "lost", values: { word: done.hidden, score: done.score?.total ?? 0 } });
+    update(
+      done,
+      done.status === "won"
+        ? { key: "won", values: { n: done.guesses.length, score: done.score?.total ?? 0 } }
+        : { key: "lost", values: { word: done.hidden, score: done.score?.total ?? 0 } },
+    );
     if (!told) {
       told = true;
       options.onFinish?.(done);
-      container.dispatchEvent(new CustomEvent("kotoba-finish", { bubbles: true, composed: true, detail: JSON.parse(JSON.stringify(done)) }));
+      container.dispatchEvent(
+        new CustomEvent("kotoba-finish", { bubbles: true, composed: true, detail: JSON.parse(JSON.stringify(done)) }),
+      );
     }
   }
 
   function draw() {
     const round = game;
     const kana = (round?.language ?? choice.words) === "ja";
-    status.textContent = list === null || round === null ? say("loading") : message !== null ? say(message.key, message.values) : round.status !== "playing" ? "" : say(kana ? "readyKana" : "ready", { n: round.size });
+    status.textContent =
+      list === null || round === null
+        ? say("loading")
+        : message !== null
+          ? say(message.key, message.values)
+          : round.status !== "playing"
+            ? ""
+            : say(kana ? "readyKana" : "ready", { n: round.size });
 
     // The board: a row for every guess the round gives, the guesses marked, the row being typed, and empty places.
     const size = round?.size ?? choice.size;
@@ -337,14 +382,19 @@ export function mountKotoba(container: HTMLElement, options: KotobaPlayOptions =
       const line = doc.createElement("div");
       line.className = "kt-key-row";
       if (index === rowsOfKeys.length - 1) line.append(key(say("enter"), submit, { wide: "true", act: "enter" }));
-      for (const letter of letters) line.append(key(letter.toUpperCase(), () => type(letter), { letter, mark: marked.get(letter) ?? "" }));
+      for (const letter of letters)
+        line.append(key(letter.toUpperCase(), () => type(letter), { letter, mark: marked.get(letter) ?? "" }));
       if (index === rowsOfKeys.length - 1) line.append(key(say("back"), erase, { wide: "true", act: "back" }));
       return line;
     });
     if (kana) {
       const extra = doc.createElement("div");
       extra.className = "kt-key-row";
-      extra.append(key("-", () => type("-"), { letter: "-" }), key(say("small"), () => change("size"), { act: "small" }), key(say("mark"), () => change("mark"), { act: "mark" }));
+      extra.append(
+        key("-", () => type("-"), { letter: "-" }),
+        key(say("small"), () => change("size"), { act: "small" }),
+        key(say("mark"), () => change("mark"), { act: "mark" }),
+      );
       lines.push(extra);
     }
     keys.replaceChildren(...lines);

@@ -46,7 +46,13 @@ export function isDayKey(text: unknown): text is DayKey {
   const [year, month, day] = text.split("-").map(Number) as [number, number, number];
   const date = new Date(Date.UTC(2000, month - 1, day));
   date.setUTCFullYear(year);
-  return month >= 1 && month <= 12 && date.getUTCFullYear() === year && date.getUTCMonth() === month - 1 && date.getUTCDate() === day;
+  return (
+    month >= 1 &&
+    month <= 12 &&
+    date.getUTCFullYear() === year &&
+    date.getUTCMonth() === month - 1 &&
+    date.getUTCDate() === day
+  );
 }
 
 /**
@@ -71,7 +77,12 @@ export function dayKey(moment: Date | number = new Date(), zone?: string): DayKe
     const year = String(date.getUTCFullYear()).padStart(4, "0");
     return `${year}-${String(date.getUTCMonth() + 1).padStart(2, "0")}-${String(date.getUTCDate()).padStart(2, "0")}`;
   }
-  const parts = new Intl.DateTimeFormat("en-US", { timeZone: zone, year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(date);
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone: zone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(date);
   const part = (type: string) => parts.find((one) => one.type === type)?.value ?? "";
   return `${part("year").padStart(4, "0")}-${part("month")}-${part("day")}`;
 }
@@ -181,7 +192,11 @@ export type DailyOptions = {
  * console.log(dailyWord(["apple","berry","lemon"],"2026-10-12",{salt:"sample"}));
  * ```
  */
-export function dailyWord(words: readonly string[], day: DayKey | Date | number = new Date(), options: DailyOptions = {}): string {
+export function dailyWord(
+  words: readonly string[],
+  day: DayKey | Date | number = new Date(),
+  options: DailyOptions = {},
+): string {
   const key = typeof day === "string" ? day : dayKey(day, options.zone);
   return words[dailyIndex(words.length, key, options.salt ?? "")] as string;
 }

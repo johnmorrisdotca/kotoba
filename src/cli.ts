@@ -88,25 +88,58 @@ export type CliTier = "easy" | "answers" | "allowed";
  * console.log(cliLanguage(undefined,{LANG:"ja_JP.UTF-8"},"en-US"));
  * ```
  */
-export function cliLanguage(flag: string | undefined, env: Record<string, string | undefined> = {}, locale?: string): Language {
-  const named = [flag, env.LC_ALL, env.LC_MESSAGES, env.LANG].find((value) => value !== undefined && value !== "" && value !== "C" && value !== "POSIX" && !value.startsWith("C."));
+export function cliLanguage(
+  flag: string | undefined,
+  env: Record<string, string | undefined> = {},
+  locale?: string,
+): Language {
+  const named = [flag, env.LC_ALL, env.LC_MESSAGES, env.LANG].find(
+    (value) => value !== undefined && value !== "" && value !== "C" && value !== "POSIX" && !value.startsWith("C."),
+  );
   return kotobaLanguage(named ?? locale);
 }
 
-const FLAGS_WITH_VALUES: Record<string, string> = { "--words": "words", "--size": "size", "--tier": "tier", "--date": "date", "--zone": "zone", "--lang": "lang" };
-const FLAGS: Record<string, string> = { "-j": "json", "--json": "json", "-h": "help", "--help": "help", "-v": "version", "--version": "version" };
+const FLAGS_WITH_VALUES: Record<string, string> = {
+  "--words": "words",
+  "--size": "size",
+  "--tier": "tier",
+  "--date": "date",
+  "--zone": "zone",
+  "--lang": "lang",
+};
+const FLAGS: Record<string, string> = {
+  "-j": "json",
+  "--json": "json",
+  "-h": "help",
+  "--help": "help",
+  "-v": "version",
+  "--version": "version",
+};
 const COMMANDS = ["check", "list", "mark", "daily", "lists"] as const;
 const WORDS: readonly CliWords[] = WORD_LIST_NAMES;
-const NAMES: Record<CliWords, "listEn" | "listFr" | "listDe" | "listJa"> = { en: "listEn", fr: "listFr", de: "listDe", ja: "listJa" };
+const NAMES: Record<CliWords, "listEn" | "listFr" | "listDe" | "listJa"> = {
+  en: "listEn",
+  fr: "listFr",
+  de: "listDe",
+  ja: "listJa",
+};
 
-type Asked = { values: Record<string, string>; flags: Set<string>; words: string[]; wrong: { message: "cliUnknown" | "cliNeeds"; part: string } | null };
+type Asked = {
+  values: Record<string, string>;
+  flags: Set<string>;
+  words: string[];
+  wrong: { message: "cliUnknown" | "cliNeeds"; part: string } | null;
+};
 
 /** The arguments sorted into options and words. */
 function sortArguments(args: readonly string[]): Asked {
   const asked: Asked = { values: {}, flags: new Set(), words: [], wrong: null };
   for (let i = 0; i < args.length; i += 1) {
     const arg = args[i] as string;
-    const [name, inline] = arg.startsWith("--") && arg.includes("=") ? [arg.slice(0, arg.indexOf("=")), arg.slice(arg.indexOf("=") + 1)] : [arg, undefined];
+    const [name, inline] =
+      arg.startsWith("--") && arg.includes("=")
+        ? [arg.slice(0, arg.indexOf("=")), arg.slice(arg.indexOf("=") + 1)]
+        : [arg, undefined];
     if (arg === "--") {
       asked.words.push(...args.slice(i + 1));
       break;
@@ -129,7 +162,8 @@ function sortArguments(args: readonly string[]): Asked {
 const hasKana = (text: string) => /[぀-ヿ]/.test(text);
 
 /** The size of a list as a person says it: "5 letters", "4 kana". */
-const sizeSays = (t: KotobaStrings, words: CliWords, size: number) => kotobaSay(words === "ja" ? t.kana : t.letters, { n: size });
+const sizeSays = (t: KotobaStrings, words: CliWords, size: number) =>
+  kotobaSay(words === "ja" ? t.kana : t.letters, { n: size });
 
 /** Run the command line. See `kotoba --help` for what it takes.
  *
@@ -162,7 +196,8 @@ export async function runCli(args: readonly string[], around: CliSurroundings = 
   const given = asked.words.slice(1);
   const emit = (data: unknown): CliResult => ({ code: 0, out: `${JSON.stringify(data, null, 2)}\n`, err: "" });
 
-  if (asked.values.words !== undefined && !(WORDS as readonly string[]).includes(asked.values.words)) return wrong(t.cliWordsBad);
+  if (asked.values.words !== undefined && !(WORDS as readonly string[]).includes(asked.values.words))
+    return wrong(t.cliWordsBad);
   const chosen = asked.values.words as CliWords | undefined;
   const sizeFlag = asked.values.size;
   let askedSize: number | null = null;
@@ -170,15 +205,21 @@ export async function runCli(args: readonly string[], around: CliSurroundings = 
     askedSize = /^\d{1,2}$/.test(sizeFlag) ? Number(sizeFlag) : null;
     const fits = (words: CliWords) => askedSize !== null && WORD_LIST_SIZES[words].includes(askedSize);
     if (askedSize === null || (chosen !== undefined && !fits(chosen)) || (chosen === undefined && !WORDS.some(fits))) {
-      return wrong(kotobaSay(t.cliSizeBad, { sizes: chosen === undefined ? "4 – 6, ja 3 – 5" : `${WORD_LIST_SIZES[chosen].join(", ")}` }));
+      return wrong(
+        kotobaSay(t.cliSizeBad, {
+          sizes: chosen === undefined ? "4 – 6, ja 3 – 5" : `${WORD_LIST_SIZES[chosen].join(", ")}`,
+        }),
+      );
     }
   }
   const tier = asked.values.tier;
-  if (tier !== undefined && !["easy", "answers", "allowed"].includes(tier)) return wrong(kotobaSay(t.cliTierBad, { tiers: "easy, answers, allowed" }));
+  if (tier !== undefined && !["easy", "answers", "allowed"].includes(tier))
+    return wrong(kotobaSay(t.cliTierBad, { tiers: "easy, answers, allowed" }));
 
   /** The list a command reads: the words and size asked for, or the usual. */
   const resolve = async (words: CliWords, size: number) => ({ words, size, list: await loadWordList(words, size) });
-  const noList = (words: CliWords, size: number) => failed(kotobaSay(t.cliNoList, { size, words: t[NAMES[words]], sizes: WORD_LIST_SIZES[words].join(", ") }));
+  const noList = (words: CliWords, size: number) =>
+    failed(kotobaSay(t.cliNoList, { size, words: t[NAMES[words]], sizes: WORD_LIST_SIZES[words].join(", ") }));
 
   if (command === "lists") {
     const rows: { words: CliWords; size: number; easy: number; answers: number; allowed: number }[] = [];
@@ -191,9 +232,26 @@ export async function runCli(args: readonly string[], around: CliSurroundings = 
       }
     }
     if (json) return emit({ format: 1, generator: `kotoba ${VERSION}`, lists: rows });
-    const table = [t.cliListsHead.split(","), ...rows.map((row) => [t[NAMES[row.words]], String(row.size), String(row.easy), String(row.answers), String(row.allowed)])];
+    const table = [
+      t.cliListsHead.split(","),
+      ...rows.map((row) => [
+        t[NAMES[row.words]],
+        String(row.size),
+        String(row.easy),
+        String(row.answers),
+        String(row.allowed),
+      ]),
+    ];
     const widths = table[0]!.map((_, column) => Math.max(...table.map((row) => [...(row[column] as string)].length)));
-    const lines = table.map((row) => row.map((cell, column) => (column < 1 ? cell + " ".repeat(widths[column]! - [...cell].length) : " ".repeat(widths[column]! - [...cell].length) + cell)).join("  "));
+    const lines = table.map((row) =>
+      row
+        .map((cell, column) =>
+          column < 1
+            ? cell + " ".repeat(widths[column]! - [...cell].length)
+            : " ".repeat(widths[column]! - [...cell].length) + cell,
+        )
+        .join("  "),
+    );
     return { code: 0, out: `${lines.join("\n")}\n`, err: "" };
   }
 
@@ -224,16 +282,22 @@ export async function runCli(args: readonly string[], around: CliSurroundings = 
     const words: CliWords = hasKana(guess) || hasKana(hidden) ? "ja" : (chosen ?? "en");
     const alphabet = words === "ja" ? null : new RegExp(`^[${ALPHABETS[words]}]+$`, "i");
     for (const part of [guess, hidden]) {
-      if (alphabet !== null ? !alphabet.test(part) : !/^[぀-ゟー]+$/.test(part)) return wrong(kotobaSay(t.cliNotLetters, { part }));
+      if (alphabet !== null ? !alphabet.test(part) : !/^[぀-ゟー]+$/.test(part))
+        return wrong(kotobaSay(t.cliNotLetters, { part }));
     }
-    if ([...guess].length !== [...hidden].length) return wrong(kotobaSay(t.cliLengthsDiffer, { guess: [...guess].length, hidden: [...hidden].length }));
+    if ([...guess].length !== [...hidden].length)
+      return wrong(kotobaSay(t.cliLengthsDiffer, { guess: [...guess].length, hidden: [...hidden].length }));
     const marks = guessMarks({ language: words, hidden }, guess);
     if (json) return emit({ format: 1, guess, hidden, marks });
     const sign = { hit: "●", near: "◐", miss: "○", kin: "≈" };
     const name = { hit: t.markHit, near: t.markNear, miss: t.markMiss, kin: t.markKin };
     const says = marks.map((one) => `${sign[one.mark]}${one.wrongSize ? "↓" : ""}${one.wrongMark ? "↑" : ""}`);
     const used = (["hit", "near", "kin", "miss"] as const).filter((mark) => marks.some((one) => one.mark === mark));
-    const legend = [...used.map((mark) => `${sign[mark]} ${name[mark]}`), ...(marks.some((one) => one.wrongSize) ? [`↓ ${t.arrowSize}`] : []), ...(marks.some((one) => one.wrongMark) ? [`↑ ${t.arrowTone}`] : [])];
+    const legend = [
+      ...used.map((mark) => `${sign[mark]} ${name[mark]}`),
+      ...(marks.some((one) => one.wrongSize) ? [`↓ ${t.arrowSize}`] : []),
+      ...(marks.some((one) => one.wrongMark) ? [`↑ ${t.arrowTone}`] : []),
+    ];
     return { code: 0, out: `${[...guess].join(" ")}\n${says.join(" ")}\n${legend.join(", ")}\n`, err: "" };
   }
 
@@ -245,7 +309,16 @@ export async function runCli(args: readonly string[], around: CliSurroundings = 
   if (command === "list") {
     const which = (tier ?? "answers") as CliTier;
     const picked = which === "easy" ? list.easy : which === "answers" ? list.answers : [...list.allowed];
-    if (json) return emit({ format: 1, generator: `kotoba ${VERSION}`, words, size, tier: which, count: picked.length, list: picked });
+    if (json)
+      return emit({
+        format: 1,
+        generator: `kotoba ${VERSION}`,
+        words,
+        size,
+        tier: which,
+        count: picked.length,
+        list: picked,
+      });
     return { code: 0, out: picked.length === 0 ? "" : `${picked.join("\n")}\n`, err: "" };
   }
 
@@ -267,6 +340,7 @@ export async function runCli(args: readonly string[], around: CliSurroundings = 
   const salt = `${words}-${size}-${which}`;
   const index = dailyIndex(pool.length, day, salt);
   const word = pool[index] as string;
-  if (json) return emit({ format: 1, generator: `kotoba ${VERSION}`, day, words, size, tier: which, salt, index, word });
+  if (json)
+    return emit({ format: 1, generator: `kotoba ${VERSION}`, day, words, size, tier: which, salt, index, word });
   return { code: 0, out: `${kotobaSay(t.cliDaily, { day, word })}\n`, err: "" };
 }

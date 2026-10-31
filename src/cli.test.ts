@@ -16,31 +16,57 @@ describe("the command line", () => {
     expect((await runCli(["-h"])).out).toBe(KOTOBA_STRINGS.en.cliUsage);
     expect((await runCli(["--help", "--lang", "ja"])).out).toBe(KOTOBA_STRINGS.ja.cliUsage);
     expect((await runCli(["--help"], { env: { LANG: "ja_JP.UTF-8" } })).out).toBe(KOTOBA_STRINGS.ja.cliUsage);
-    expect((await runCli(["--help", "--lang", "en"], { env: { LANG: "ja_JP.UTF-8" } })).out).toBe(KOTOBA_STRINGS.en.cliUsage);
-    expect((await runCli(["--help"], { env: { LC_ALL: "en_US.UTF-8", LANG: "ja_JP.UTF-8" } })).out).toBe(KOTOBA_STRINGS.en.cliUsage);
+    expect((await runCli(["--help", "--lang", "en"], { env: { LANG: "ja_JP.UTF-8" } })).out).toBe(
+      KOTOBA_STRINGS.en.cliUsage,
+    );
+    expect((await runCli(["--help"], { env: { LC_ALL: "en_US.UTF-8", LANG: "ja_JP.UTF-8" } })).out).toBe(
+      KOTOBA_STRINGS.en.cliUsage,
+    );
     expect((await runCli(["--help"], { env: { LANG: "C" }, locale: "ja-JP" })).out).toBe(KOTOBA_STRINGS.ja.cliUsage);
   });
 
   it("checks a word against the list its letters belong to, and exits 1 for one that may not be guessed", async () => {
-    expect(await runCli(["check", "crane"])).toEqual({ code: 0, out: "crane  English, 5 letters\n  may be guessed: yes\n  may be the hidden word: yes\n  an easy word: no\n", err: "" });
+    expect(await runCli(["check", "crane"])).toEqual({
+      code: 0,
+      out: "crane  English, 5 letters\n  may be guessed: yes\n  may be the hidden word: yes\n  an easy word: no\n",
+      err: "",
+    });
     const refused = await runCli(["check", "XXXXX"]);
     expect(refused.code).toBe(1);
-    expect(refused.out).toBe("xxxxx  English, 5 letters\n  may be guessed: no\n  may be the hidden word: no\n  an easy word: no\n");
+    expect(refused.out).toBe(
+      "xxxxx  English, 5 letters\n  may be guessed: no\n  may be the hidden word: no\n  an easy word: no\n",
+    );
     const easy = await runCli(["check", "able"]);
     expect(easy.out).toContain("an easy word: yes");
     expect(easy.out.startsWith("able  English, 4 letters")).toBe(true);
-    expect((await runCli(["check", "さくら"])).out.startsWith("さくら  かな, 3 kana\n  may be guessed: yes")).toBe(true);
+    expect((await runCli(["check", "さくら"])).out.startsWith("さくら  かな, 3 kana\n  may be guessed: yes")).toBe(
+      true,
+    );
     expect((await runCli(["check", "bonjour", "--words", "fr"])).code).toBe(1);
     expect((await runCli(["check", "chien", "--words", "fr"])).out.startsWith("chien  Français, 5 letters")).toBe(true);
-    expect((await runCli(["check", "crane", "--lang", "ja"])).out).toBe("crane  English、5文字\n  推測できる: はい\n  隠された単語になりうる: はい\n  やさしい単語: いいえ\n");
+    expect((await runCli(["check", "crane", "--lang", "ja"])).out).toBe(
+      "crane  English、5文字\n  推測できる: はい\n  隠された単語になりうる: はい\n  やさしい単語: いいえ\n",
+    );
   });
 
   it("says why a word cannot be looked up: no list of that size", async () => {
-    expect(await runCli(["check", "cranes!!"])).toEqual({ code: 1, out: "", err: "kotoba: there is no list of 8 in English: 4, 5, 6\n" });
+    expect(await runCli(["check", "cranes!!"])).toEqual({
+      code: 1,
+      out: "",
+      err: "kotoba: there is no list of 8 in English: 4, 5, 6\n",
+    });
   });
 
   it("checks as JSON", async () => {
-    expect(JSON.parse((await runCli(["check", "crane", "--json"])).out)).toEqual({ format: 1, word: "crane", words: "en", size: 5, mayGuess: true, mayHide: true, easy: false });
+    expect(JSON.parse((await runCli(["check", "crane", "--json"])).out)).toEqual({
+      format: 1,
+      word: "crane",
+      words: "en",
+      size: 5,
+      mayGuess: true,
+      mayHide: true,
+      easy: false,
+    });
     expect((await runCli(["check", "zzzzz", "--json"])).code).toBe(1);
   });
 
@@ -49,7 +75,9 @@ describe("the command line", () => {
     const easy = await runCli(["list", "--size", "4", "--tier", "easy"]);
     expect(easy.out).toBe(`${english.easy.join("\n")}\n`);
     expect((await runCli(["list", "--size", "4"])).out).toBe(`${english.answers.join("\n")}\n`);
-    expect((await runCli(["list", "--size", "4", "--tier", "allowed"])).out.split("\n").filter(Boolean)).toHaveLength(english.allowed.size);
+    expect((await runCli(["list", "--size", "4", "--tier", "allowed"])).out.split("\n").filter(Boolean)).toHaveLength(
+      english.allowed.size,
+    );
     const kana = (await runCli(["list", "--words", "ja", "--tier", "easy"])).out.split("\n").filter(Boolean);
     expect(kana.every((word) => [...word].length === 4)).toBe(true);
     const json = JSON.parse((await runCli(["list", "--size", "4", "--tier", "easy", "--json"])).out);
@@ -58,7 +86,11 @@ describe("the command line", () => {
   });
 
   it("marks a guess against the hidden word, with a sign for each place and a legend", async () => {
-    expect(await runCli(["mark", "crane", "react"])).toEqual({ code: 0, out: "c r a n e\n◐ ◐ ● ○ ◐\n● right place, ◐ elsewhere in the word, ○ not in the word\n", err: "" });
+    expect(await runCli(["mark", "crane", "react"])).toEqual({
+      code: 0,
+      out: "c r a n e\n◐ ◐ ● ○ ◐\n● right place, ◐ elsewhere in the word, ○ not in the word\n",
+      err: "",
+    });
     expect((await runCli(["mark", "ばな", "はな"])).out).toBe("ば な\n●↑ ●\n● right place, ↑ wrong mark\n");
     expect((await runCli(["mark", "CRANE", "Crane"])).out.split("\n")[1]).toBe("● ● ● ● ●");
     const json = JSON.parse((await runCli(["mark", "crane", "react", "--json"])).out);
@@ -72,7 +104,14 @@ describe("the command line", () => {
     expect(ran).toEqual({ code: 0, out: "2026-10-01  elect\n", err: "" });
     expect(dailyWord(answers, "2026-10-01", { salt: "en-5-answers" })).toBe("elect");
     const json = JSON.parse((await runCli(["daily", "--date", "2026-10-01", "--json"])).out);
-    expect(json).toMatchObject({ day: "2026-10-01", words: "en", size: 5, tier: "answers", salt: "en-5-answers", word: "elect" });
+    expect(json).toMatchObject({
+      day: "2026-10-01",
+      words: "en",
+      size: 5,
+      tier: "answers",
+      salt: "en-5-answers",
+      word: "elect",
+    });
     expect(answers[json.index]).toBe("elect");
     const easy = JSON.parse((await runCli(["daily", "--date", "2026-10-01", "--tier", "easy", "--json"])).out);
     expect(readWordLists(EN_WORDS, 5)!.easy).toContain(easy.word);
@@ -92,7 +131,13 @@ describe("the command line", () => {
     expect(rows).toHaveLength(1 + Object.values(WORD_LIST_SIZES).reduce((sum, sizes) => sum + sizes.length, 0));
     expect(rows[0]).toMatch(/^List\s+Size\s+Easy\s+Answers\s+Allowed$/);
     const english = readWordLists(EN_WORDS, 5)!;
-    expect(rows.find((row) => /^English\s+5\s/.test(row))!.split(/\s+/)).toEqual(["English", "5", String(english.easy.length), String(english.answers.length), String(english.allowed.size)]);
+    expect(rows.find((row) => /^English\s+5\s/.test(row))!.split(/\s+/)).toEqual([
+      "English",
+      "5",
+      String(english.easy.length),
+      String(english.answers.length),
+      String(english.allowed.size),
+    ]);
     const json = JSON.parse((await runCli(["lists", "--words", "fr", "--json"])).out);
     expect(json.lists.map((row: { size: number }) => row.size)).toEqual([4, 5, 6]);
     expect(JSON.parse((await runCli(["lists", "--size", "3", "--json"])).out).lists).toHaveLength(1);
@@ -107,7 +152,11 @@ describe("the command line", () => {
 
   it("is exit code 2, with a pointer to the help, for a command that is wrong", async () => {
     const tried = (args: string[]) => runCli(args);
-    expect(await tried([])).toEqual({ code: 2, out: "", err: "kotoba: say what to do: check, list, mark, daily or lists\nTry `kotoba --help`.\n" });
+    expect(await tried([])).toEqual({
+      code: 2,
+      out: "",
+      err: "kotoba: say what to do: check, list, mark, daily or lists\nTry `kotoba --help`.\n",
+    });
     expect((await tried(["guess"])).err).toContain("“guess” is not a command");
     expect((await tried(["list", "--bogus"])).err).toContain("unknown option --bogus");
     expect((await tried(["list", "--size"])).err).toContain("--size needs a value");

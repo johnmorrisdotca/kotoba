@@ -46,7 +46,20 @@ export type KanaMarked = { mark: KanaMark; wrongSize: boolean; wrongMark: boolea
  */
 export const LONG_BAR = "ー";
 
-const SMALL_TO_LARGE: Record<string, string> = { ぁ: "あ", ぃ: "い", ぅ: "う", ぇ: "え", ぉ: "お", っ: "つ", ゃ: "や", ゅ: "ゆ", ょ: "よ", ゎ: "わ", ゕ: "か", ゖ: "け" };
+const SMALL_TO_LARGE: Record<string, string> = {
+  ぁ: "あ",
+  ぃ: "い",
+  ぅ: "う",
+  ぇ: "え",
+  ぉ: "お",
+  っ: "つ",
+  ゃ: "や",
+  ゅ: "ゆ",
+  ょ: "よ",
+  ゎ: "わ",
+  ゕ: "か",
+  ゖ: "け",
+};
 
 const VOICED = "がぎぐげござじずぜぞだぢづでどばびぶべぼ";
 const VOICED_BASE = "かきくけこさしすせそたちつてとはひふへほ";
@@ -54,7 +67,19 @@ const HALF_VOICED = "ぱぴぷぺぽ";
 const HALF_VOICED_BASE = "はひふへほ";
 
 /** The gojūon rows, by base kana: the family a kana belongs to. */
-const ROWS: readonly string[] = ["あいうえお", "かきくけこ", "さしすせそ", "たちつてと", "なにぬねの", "はひふへほ", "まみむめも", "やゆよ", "らりるれろ", "わを", "ん"];
+const ROWS: readonly string[] = [
+  "あいうえお",
+  "かきくけこ",
+  "さしすせそ",
+  "たちつてと",
+  "なにぬねの",
+  "はひふへほ",
+  "まみむめも",
+  "やゆよ",
+  "らりるれろ",
+  "わを",
+  "ん",
+];
 
 /** A kana without its size or its mark: ぱ → は, っ → つ, ゔ → う. ー and anything unknown are themselves.
  *
@@ -190,7 +215,18 @@ export function kanaFound(guess: readonly string[], word: readonly string[]): bo
 }
 
 /** The kana with a small form a player types: the vowels, つ, や, ゆ, よ and わ. */
-const LARGE_TO_SMALL: Record<string, string> = { あ: "ぁ", い: "ぃ", う: "ぅ", え: "ぇ", お: "ぉ", つ: "っ", や: "ゃ", ゆ: "ゅ", よ: "ょ", わ: "ゎ" };
+const LARGE_TO_SMALL: Record<string, string> = {
+  あ: "ぁ",
+  い: "ぃ",
+  う: "ぅ",
+  え: "ぇ",
+  お: "ぉ",
+  つ: "っ",
+  や: "ゃ",
+  ゆ: "ゅ",
+  よ: "ょ",
+  わ: "ゎ",
+};
 
 const SMALL_TO_TYPED = Object.fromEntries(Object.entries(LARGE_TO_SMALL).map(([large, small]) => [small, large]));
 

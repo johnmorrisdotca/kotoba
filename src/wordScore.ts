@@ -107,7 +107,9 @@ export function wordScore(hidden: string, guesses: readonly string[], rows: numb
   for (const letter of new Set(hidden)) {
     const inWord = [...hidden].filter((each) => each === letter).length;
     const placedCount = [...hidden].filter((each, at) => each === letter && placedAt[at] !== -1).length;
-    const shown = marks.map((row, index) => [...guesses[index]!].filter((each, at) => each === letter && row[at] !== "miss").length);
+    const shown = marks.map(
+      (row, index) => [...guesses[index]!].filter((each, at) => each === letter && row[at] !== "miss").length,
+    );
     for (let nth = placedCount + 1; nth <= inWord; nth += 1) {
       const row = shown.findIndex((count) => count >= nth);
       if (row !== -1) elsewhere += WORD_SCORE.elsewhere * weight(row);

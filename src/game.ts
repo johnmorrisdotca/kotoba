@@ -170,8 +170,24 @@ export const isKanaGame = (game: Pick<WordGame, "language">): boolean => game.la
  * console.log(startWordGame("en",5,"apple").status);
  * ```
  */
-export function startWordGame(language: WordGameLanguage, size: number, hidden: string, rows = WORD_GAME_ROWS): WordGame {
-  return { language, size, rows, hidden, guesses: [], typed: [], pending: "", status: "playing", startedAt: null, score: null };
+export function startWordGame(
+  language: WordGameLanguage,
+  size: number,
+  hidden: string,
+  rows = WORD_GAME_ROWS,
+): WordGame {
+  return {
+    language,
+    size,
+    rows,
+    hidden,
+    guesses: [],
+    typed: [],
+    pending: "",
+    status: "playing",
+    startedAt: null,
+    score: null,
+  };
 }
 
 /** The keys a round accepts, by the character each types: the letters of the language's keyboard, and for kana the letters of romaji and the long-vowel bar.
@@ -210,7 +226,12 @@ export function typeWordGame(game: WordGame, key: string, now = Date.now()): Wor
   if (isKanaGame(game)) {
     if (game.typed.length >= game.size) return game;
     const read = readRomaji(game.pending + key);
-    return { ...game, startedAt: started, typed: [...game.typed, ...read.kana].slice(0, game.size), pending: read.rest };
+    return {
+      ...game,
+      startedAt: started,
+      typed: [...game.typed, ...read.kana].slice(0, game.size),
+      pending: read.rest,
+    };
   }
   return game.typed.length < game.size ? { ...game, startedAt: started, typed: [...game.typed, key] } : game;
 }
@@ -268,7 +289,12 @@ export function changeWordGame(game: WordGame, change: "size" | "mark"): WordGam
  * ```
  */
 export function guessMarks(game: Pick<WordGame, "language" | "hidden">, guess: string): PlaceMark[] {
-  if (game.language === "ja") return markKanaGuess([...guess], [...game.hidden]).map((one) => ({ mark: one.mark, wrongSize: one.wrongSize, wrongMark: one.wrongMark }));
+  if (game.language === "ja")
+    return markKanaGuess([...guess], [...game.hidden]).map((one) => ({
+      mark: one.mark,
+      wrongSize: one.wrongSize,
+      wrongMark: one.wrongMark,
+    }));
   return markGuess(guess, game.hidden).map((mark) => ({ mark, wrongSize: false, wrongMark: false }));
 }
 
@@ -335,11 +361,19 @@ export function submitWordGame(game: WordGame, words: WordGameWords, now = Date.
   const settled = { ...game, typed, pending: "" };
   if (typed.length < game.size) return { game: settled, refused: "too-short" };
   const word = typed.join("");
-  if (!words.allowed.has(word) && !(words.answers ?? []).includes(word)) return { game: settled, refused: "not-a-word" };
+  if (!words.allowed.has(word) && !(words.answers ?? []).includes(word))
+    return { game: settled, refused: "not-a-word" };
   const guesses = [...game.guesses, word];
   const found = kana ? kanaFound(typed, [...game.hidden]) : word === game.hidden;
   const over = found || guesses.length >= game.rows;
   const elapsed = Math.max(0, now - (game.startedAt ?? now));
-  const score = over ? (kana ? kanaScore(game.hidden, guesses, game.rows, elapsed) : wordScore(game.hidden, guesses, game.rows, elapsed)) : null;
-  return { game: { ...settled, guesses, typed: [], status: over ? (found ? "won" : "lost") : "playing", score }, refused: null };
+  const score = over
+    ? kana
+      ? kanaScore(game.hidden, guesses, game.rows, elapsed)
+      : wordScore(game.hidden, guesses, game.rows, elapsed)
+    : null;
+  return {
+    game: { ...settled, guesses, typed: [], status: over ? (found ? "won" : "lost") : "playing", score },
+    refused: null,
+  };
 }

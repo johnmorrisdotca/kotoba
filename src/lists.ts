@@ -85,7 +85,14 @@ export const KANA_SIZES = [3, 4, 5] as const;
  * console.log(value);
  * ```
  */
-export type Packed = { release: string; alphabet: string; codes: string; easy: string; answers: string; allowed: string };
+export type Packed = {
+  release: string;
+  alphabet: string;
+  codes: string;
+  easy: string;
+  answers: string;
+  allowed: string;
+};
 
 /** A kana list, read.
  *
@@ -124,7 +131,17 @@ export function unpack(packed: Packed, size: number): KanaWords {
   const kanaOf = new Map([...packed.codes].map((code, at) => [code, packed.alphabet[at]!]));
   const words = (run: string) => {
     const chars = [...run];
-    return Array.from({ length: chars.length / size }, (_, at) => chars.slice(at * size, at * size + size).map((code) => kanaOf.get(code) ?? "").join(""));
+    return Array.from({ length: chars.length / size }, (_, at) =>
+      chars
+        .slice(at * size, at * size + size)
+        .map((code) => kanaOf.get(code) ?? "")
+        .join(""),
+    );
   };
-  return { release: packed.release, easy: words(packed.easy), answers: words(packed.answers), allowed: new Set(words(packed.allowed)) };
+  return {
+    release: packed.release,
+    easy: words(packed.easy),
+    answers: words(packed.answers),
+    allowed: new Set(words(packed.allowed)),
+  };
 }

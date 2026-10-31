@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import {writeWordList} from "./word-list-docs.mjs";
+import { writeWordList } from "./word-list-docs.mjs";
 /**
  * WRITES POP GOMOJI'S LISTS from its hand-kept corpus and from SCOWL.
  *
@@ -73,9 +73,13 @@ for (const [number, raw] of readFileSync(CORPUS, "utf8").split("\n").entries()) 
   if (categories.includes(category)) problems.push(`line ${number + 1}: the category "${category}" appears twice`);
   const index = categories.push(category) - 1;
   const seen = new Set();
-  for (const word of line.slice(colon + 1).split(/\s+/).filter(Boolean)) {
+  for (const word of line
+    .slice(colon + 1)
+    .split(/\s+/)
+    .filter(Boolean)) {
     if (!/^[a-z]+$/.test(word)) problems.push(`line ${number + 1}: "${word}" is not a to z only`);
-    else if (word.length < 3 || word.length > 7) problems.push(`line ${number + 1}: "${word}" is ${word.length} letters`);
+    else if (word.length < 3 || word.length > 7)
+      problems.push(`line ${number + 1}: "${word}" is ${word.length} letters`);
     else if (NEVER.has(word)) problems.push(`line ${number + 1}: "${word}" is never an answer here`);
     else if (seen.has(word)) problems.push(`line ${number + 1}: "${word}" twice in ${category}`);
     else if (found.has(word)) doubled += 1;
@@ -131,7 +135,10 @@ for (const spelling of ["english", "american"]) {
     }
   }
 }
-const copyright = readFileSync(join(FINAL, "..", "Copyright"), "latin1").split("\n").slice(0, 13).join("\n");
+const copyright = readFileSync(join(FINAL, "..", "Copyright"), "latin1")
+  .split("\n")
+  .slice(0, 13)
+  .join("\n");
 const guessParts = [];
 for (const length of OWN_GUESS_LENGTHS) {
   const words = [...wide].filter((word) => word.length === length).sort();

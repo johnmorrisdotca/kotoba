@@ -7,11 +7,18 @@ import { fileURLToPath } from "node:url";
 import { expect, test } from "@playwright/test";
 
 const site = join(dirname(fileURLToPath(import.meta.url)), "..", "site");
-const TYPES = { ".html": "text/html", ".js": "text/javascript", ".css": "text/css", ".json": "application/json", ".svg": "image/svg+xml" };
+const TYPES = {
+  ".html": "text/html",
+  ".js": "text/javascript",
+  ".css": "text/css",
+  ".json": "application/json",
+  ".svg": "image/svg+xml",
+};
 
 /** Open the demo (or another page of it), the computers moving at once, and collect anything the page complains of. */
 async function open(page, address = "?lang=en") {
-  if (!existsSync(join(site, "index.html"))) throw new Error("site/ is not built: run `pnpm site` first (`pnpm test:demo` does)");
+  if (!existsSync(join(site, "index.html")))
+    throw new Error("site/ is not built: run `pnpm site` first (`pnpm test:demo` does)");
   const errors = [];
   page.on("pageerror", (error) => errors.push(String(error)));
   page.on("console", (message) => message.type() === "error" && errors.push(message.text()));
@@ -19,7 +26,10 @@ async function open(page, address = "?lang=en") {
     const { pathname } = new URL(route.request().url());
     const file = join(site, pathname === "/" ? "index.html" : pathname);
     if (!existsSync(file)) return route.fulfill({ status: 404, body: "" });
-    return route.fulfill({ body: readFileSync(file), contentType: TYPES[file.slice(file.lastIndexOf("."))] ?? "application/octet-stream" });
+    return route.fulfill({
+      body: readFileSync(file),
+      contentType: TYPES[file.slice(file.lastIndexOf("."))] ?? "application/octet-stream",
+    });
   });
   await page.addInitScript(() => {
     window.kotobaTest = true;
@@ -46,7 +56,10 @@ async function sound(page, errors) {
     };
     const small = [...document.querySelectorAll("button:not(:disabled), input, select, nav a, footer .family a")]
       .filter(seen)
-      .map((el) => ({ what: `${el.id} ${el.className} ${el.textContent.trim().slice(0, 20)}`, box: el.getBoundingClientRect() }))
+      .map((el) => ({
+        what: `${el.id} ${el.className} ${el.textContent.trim().slice(0, 20)}`,
+        box: el.getBoundingClientRect(),
+      }))
       .filter(({ what, box }) => (what.includes("key") ? box.height < 43.5 : box.width < 43.5 || box.height < 43.5))
       .map(({ what, box }) => `${what} ${Math.round(box.width)}×${Math.round(box.height)}`);
     return { over: document.documentElement.scrollWidth - window.innerWidth, small };
@@ -73,7 +86,9 @@ test("opens on English, five letters, six empty rows, and a keyboard", async ({ 
   await expect(status(page)).toContainText("Guess the 5-letter word");
   await expect(page.locator('[data-kt="keys"] .kt-key[data-letter]')).toHaveCount(26);
   await expect(page.locator("footer .family a[aria-current='page']")).toHaveText("Kotoba");
-  expect(await page.evaluate(() => getComputedStyle(document.body).backgroundColor)).toMatch(/^rgb\((244, 239, 228|20, 22, 20)\)$/);
+  expect(await page.evaluate(() => getComputedStyle(document.body).backgroundColor)).toMatch(
+    /^rgb\((244, 239, 228|20, 22, 20)\)$/,
+  );
   await sound(page, errors);
 });
 
@@ -105,7 +120,9 @@ test("a guess that is not a word is refused, and one that is short is told so", 
   await expect(status(page)).toHaveText("Not enough letters.");
 });
 
-test("a wrong word is marked by the package's own rule, and six wrong words lose and show the word", async ({ page }) => {
+test("a wrong word is marked by the package's own rule, and six wrong words lose and show the word", async ({
+  page,
+}) => {
   const errors = await open(page, "?lang=en&seed=3");
   const word = await hidden(page);
   // Every row guesses a word from the list that is not the hidden one.
@@ -118,10 +135,13 @@ test("a wrong word is marked by the package's own rule, and six wrong words lose
   for (let row = 0; row < 6; row += 1) {
     await typeWord(page, tries[row]);
     await tap(page, '[data-kt="keys"] [data-act="enter"]');
-    const expected = await page.evaluate(async ([guess, secret]) => {
-      const { markGuess } = await import("/dist/index.js");
-      return markGuess(guess, secret);
-    }, [tries[row], word]);
+    const expected = await page.evaluate(
+      async ([guess, secret]) => {
+        const { markGuess } = await import("/dist/index.js");
+        return markGuess(guess, secret);
+      },
+      [tries[row], word],
+    );
     for (let at = 0; at < 5; at += 1) await expect(cells(page, row).nth(at)).toHaveAttribute("data-mark", expected[at]);
   }
   await expect(status(page)).toContainText(`The word was ${word}`);
@@ -137,7 +157,9 @@ test("the keyboard of the device types too, and Delete takes a letter back", asy
   await expect(cells(page, 0).nth(1)).toHaveText("");
 });
 
-test("French has its own keyboard, German keeps ä ö ü, and the word is in that language's alphabet", async ({ page }) => {
+test("French has its own keyboard, German keeps ä ö ü, and the word is in that language's alphabet", async ({
+  page,
+}) => {
   const errors = await open(page, "?lang=en");
   await tap(page, '[data-testid="languages"] [data-lang-id="fr"]');
   await expect(page.locator('[data-kt="keys"] .kt-key-row').first().locator(".kt-key").first()).toHaveText("A");
@@ -160,7 +182,9 @@ test("the length changes the board: four and six letters", async ({ page }) => {
   expect(await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth)).toBeLessThanOrEqual(0);
 });
 
-test("kana: romaji becomes kana as it is typed, small and marked forms are keys, and the word can be won", async ({ page }) => {
+test("kana: romaji becomes kana as it is typed, small and marked forms are keys, and the word can be won", async ({
+  page,
+}) => {
   const errors = await open(page, "?lang=en&seed=3");
   await tap(page, '[data-testid="languages"] [data-lang-id="ja"]');
   await expect(cells(page, 0)).toHaveCount(4);
@@ -202,10 +226,13 @@ test("a kana guess is marked by the package's own rule", async ({ page }) => {
     return markKanaGuess([..."いくら"], [..."さくら"]).map((one) => one.mark);
   });
   expect(expected).toEqual(["miss", "hit", "hit"]);
-  for (let at = 0; at < expected.length; at += 1) await expect(cells(page, 0).nth(at)).toHaveAttribute("data-mark", expected[at]);
+  for (let at = 0; at < expected.length; at += 1)
+    await expect(cells(page, 0).nth(at)).toHaveAttribute("data-mark", expected[at]);
 });
 
-test("the address names the game: the list, the length, easy words and the seed, and opening it plays the same word", async ({ page }) => {
+test("the address names the game: the list, the length, easy words and the seed, and opening it plays the same word", async ({
+  page,
+}) => {
   const errors = await open(page, "?lang=en&words=fr&size=4&easy=1&seed=7");
   await expect(page.locator('[data-testid="languages"] [aria-pressed="true"]')).toHaveAttribute("data-lang-id", "fr");
   await expect(page.locator('[data-testid="sizes"] [aria-pressed="true"]')).toHaveAttribute("data-size", "4");
@@ -213,7 +240,12 @@ test("the address names the game: the list, the length, easy words and the seed,
   await expect(cells(page, 0)).toHaveCount(4);
   const word = await hidden(page);
   expect(word).toMatch(/^[a-z]{4}$/);
-  expect(Object.fromEntries(new URL(page.url()).searchParams)).toMatchObject({ words: "fr", size: "4", easy: "1", seed: "7" });
+  expect(Object.fromEntries(new URL(page.url()).searchParams)).toMatchObject({
+    words: "fr",
+    size: "4",
+    easy: "1",
+    seed: "7",
+  });
   // The first word is the seed's; a new word is another one, and the address follows it.
   await tap(page, '[data-testid="new"]');
   await expect.poll(() => new URL(page.url()).searchParams.get("seed")).not.toBe("7");
@@ -223,7 +255,9 @@ test("the address names the game: the list, the length, easy words and the seed,
   await sound(page, errors);
 });
 
-test("Today's word is the day's word of the list, the same as the package gives, and New word leaves it", async ({ page }) => {
+test("Today's word is the day's word of the list, the same as the package gives, and New word leaves it", async ({
+  page,
+}) => {
   const errors = await open(page, "?lang=en&words=en&size=5&daily=1");
   await expect(page.locator('[data-testid="daily"]')).toHaveAttribute("aria-pressed", "true");
   const word = await hidden(page);
@@ -241,10 +275,14 @@ test("Today's word is the day's word of the list, the same as the package gives,
   await sound(page, errors);
 });
 
-test("Using it: the code and the command are the game's own, and the code puts the same game on a page", async ({ page }) => {
+test("Using it: the code and the command are the game's own, and the code puts the same game on a page", async ({
+  page,
+}) => {
   const errors = await open(page, "?lang=en&words=en&size=5&seed=3");
   const code = page.locator('[data-testid="using-code"]');
-  await expect(code).toContainText('mountKotoba(document.getElementById("game"), { words: "en", size: 5, seed: 3, locale: "en" });');
+  await expect(code).toContainText(
+    'mountKotoba(document.getElementById("game"), { words: "en", size: 5, seed: 3, locale: "en" });',
+  );
   await expect(page.locator('[data-testid="cli-code"]')).toHaveText("npx @johnmorrisdotca/kotoba lists --words en");
   await expect(page.locator('[data-testid="counts"]')).toContainText("easy answers, inside");
   // The code, run against the package this page was built from, mounts a game with the same hidden word.
@@ -252,8 +290,17 @@ test("Using it: the code and the command are the game's own, and the code puts t
     const { mountKotoba } = await import("/dist/play.js");
     const holder = document.createElement("div");
     document.body.append(holder);
-    const source = document.querySelector('[data-testid="using-code"]').textContent.replace(/^import .*$/m, "").split("\n").filter((line) => !line.includes("newGame")).join("\n");
-    const run = new Function("mountKotoba", "document", `return (async () => { ${source.replace("await play.ready;", "await play.ready;")}\n return play; })();`);
+    const source = document
+      .querySelector('[data-testid="using-code"]')
+      .textContent.replace(/^import .*$/m, "")
+      .split("\n")
+      .filter((line) => !line.includes("newGame"))
+      .join("\n");
+    const run = new Function(
+      "mountKotoba",
+      "document",
+      `return (async () => { ${source.replace("await play.ready;", "await play.ready;")}\n return play; })();`,
+    );
     const play = await run(mountKotoba, { getElementById: () => holder });
     const mine = play.game.hidden;
     play.destroy();
@@ -303,7 +350,9 @@ test("the API reference is in the family's frame and links back", async ({ page 
 
 // The Help switch in the family header (scripts/family-template.mjs): off, the page is as it was; on, every
 // option row says in one line what it does, in the page's language, and every control in it has hover words.
-test("Help is off at first, and on it shows a line under each option row, in either language, without resizing the play area", async ({ page }) => {
+test("Help is off at first, and on it shows a line under each option row, in either language, without resizing the play area", async ({
+  page,
+}) => {
   const errors = await open(page);
   const lines = page.locator(".fam-help");
   const rows = page.locator("[data-help-en]");
@@ -318,8 +367,16 @@ test("Help is off at first, and on it shows a line under each option row, in eit
     // A row in a tab that is not showing has its line, and shows it when the tab opens.
     if (await row.isVisible()) {
       const shown = await row.evaluate((el) => {
-        const line = el.classList.contains("fam-seg") || el.hasAttribute("data-help-after") ? el.nextElementSibling : el.querySelector(":scope > .fam-help");
-        return line !== null && line.classList.contains("fam-help") && window.getComputedStyle(line).display !== "none" && line.textContent.length > 10;
+        const line =
+          el.classList.contains("fam-seg") || el.hasAttribute("data-help-after")
+            ? el.nextElementSibling
+            : el.querySelector(":scope > .fam-help");
+        return (
+          line !== null &&
+          line.classList.contains("fam-help") &&
+          window.getComputedStyle(line).display !== "none" &&
+          line.textContent.length > 10
+        );
       });
       expect(shown).toBe(true);
     }
@@ -331,7 +388,9 @@ test("Help is off at first, and on it shows a line under each option row, in eit
   expect(Math.abs(after.width - before.width)).toBeLessThan(0.5);
   expect(Math.abs(after.height - before.height)).toBeLessThan(0.5);
   // Every button in an option row says what it does on hover.
-  const untitled = await page.evaluate(() => [...document.querySelectorAll("[data-help-en] button")].filter((b) => !b.title).map((b) => b.textContent.trim()));
+  const untitled = await page.evaluate(() =>
+    [...document.querySelectorAll("[data-help-en] button")].filter((b) => !b.title).map((b) => b.textContent.trim()),
+  );
   expect(untitled).toEqual([]);
   const english = await lines.first().textContent();
   await page.locator('[data-lang="ja"]').click();

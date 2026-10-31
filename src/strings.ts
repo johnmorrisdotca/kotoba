@@ -115,7 +115,8 @@ export const KOTOBA_STRINGS: Record<Language, KotobaStrings> = {
     small: "小",
     mark: "゛゜",
     legendLetters: "Green: right place. Orange: in the word, elsewhere. Grey: not in the word.",
-    legendKana: "Green: right place (an arrow if its size or mark is wrong). Orange: elsewhere. Yellow: the same row of the kana table. Grey: none of these.",
+    legendKana:
+      "Green: right place (an arrow if its size or mark is wrong). Orange: elsewhere. Yellow: the same row of the kana table. Grey: none of these.",
     markHit: "right place",
     markNear: "elsewhere in the word",
     markMiss: "not in the word",
@@ -197,7 +198,8 @@ the list), 2 the command was wrong.
     small: "小",
     mark: "゛゜",
     legendLetters: "緑: 場所が合っています。橙: 単語のほかの場所にあります。灰: 含まれません。",
-    legendKana: "緑: 場所が合っています（大きさや濁点が違うときは矢印つき）。橙: ほかの場所にあります。黄: 同じ行のかなです。灰: どれでもありません。",
+    legendKana:
+      "緑: 場所が合っています（大きさや濁点が違うときは矢印つき）。橙: ほかの場所にあります。黄: 同じ行のかなです。灰: どれでもありません。",
     markHit: "場所が合っている",
     markNear: "単語のほかの場所にある",
     markMiss: "含まれない",

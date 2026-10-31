@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import {writeWordList} from "./word-list-docs.mjs";
+import { writeWordList } from "./word-list-docs.mjs";
 /**
  * WRITES THE FRENCH AND GERMAN GOMOJI LISTS, so the lists in the repository
  * are a machine's output that anybody can make again, never a hand-kept table.
@@ -98,7 +98,9 @@ import { createInterface } from "node:readline";
 
 const [frPath, dePath, frDictPath, deDictPath, frWiktPath, deWiktPath] = process.argv.slice(2);
 if ([frPath, dePath, frDictPath, deDictPath, frWiktPath, deWiktPath].includes(undefined)) {
-  console.error("Usage: node scripts/word-lists-fr-de.mjs <fr_50k.txt> <de_50k.txt> <Lexique383.tsv> <german.txt> <fr.jsonl> <de.jsonl>");
+  console.error(
+    "Usage: node scripts/word-lists-fr-de.mjs <fr_50k.txt> <de_50k.txt> <Lexique383.tsv> <german.txt> <fr.jsonl> <de.jsonl>",
+  );
   process.exit(1);
 }
 const LENGTHS = [4, 5, 6];
@@ -160,7 +162,22 @@ const NOT_AN_ANSWER = {
   de: new Set(`${DE_NAMES} ${DE_VULGAR} ${DE_PEOPLES}`.split(/\s+/).filter(Boolean)),
 };
 
-const FOLD_FR = { é: "e", è: "e", ê: "e", ë: "e", à: "a", â: "a", î: "i", ï: "i", ô: "o", ö: "o", ù: "u", û: "u", ü: "u", ç: "c" };
+const FOLD_FR = {
+  é: "e",
+  è: "e",
+  ê: "e",
+  ë: "e",
+  à: "a",
+  â: "a",
+  î: "i",
+  ï: "i",
+  ô: "o",
+  ö: "o",
+  ù: "u",
+  û: "u",
+  ü: "u",
+  ç: "c",
+};
 
 function foldFrench(word) {
   return [...word].map((ch) => FOLD_FR[ch] ?? ch).join("");
@@ -170,7 +187,8 @@ function foldFrench(word) {
 function readEnglish(path) {
   const text = readFileSync(path, "utf8");
   const words = new Set();
-  for (const match of text.matchAll(/allowed: `([^`]*)`/g)) for (const word of match[1].split(/\s+/)) if (word !== "") words.add(word);
+  for (const match of text.matchAll(/allowed: `([^`]*)`/g))
+    for (const word of match[1].split(/\s+/)) if (word !== "") words.add(word);
   return words;
 }
 
@@ -196,7 +214,8 @@ function readLexique(path) {
     if (book > 0 || film === 0) words.add(spelled);
     used.set(spelled, (used.get(spelled) ?? 0) + film + book);
     // Read in books, and not an onomatopoeia ("ahem", "argh"): an answer somebody would call a French word.
-    if (ortho === cells[2] && book > 0 && cells[3] !== "ONO") usedAsBase.set(spelled, (usedAsBase.get(spelled) ?? 0) + film + book);
+    if (ortho === cells[2] && book > 0 && cells[3] !== "ONO")
+      usedAsBase.set(spelled, (usedAsBase.get(spelled) ?? 0) + film + book);
   }
   const answerable = (word) => {
     const base = usedAsBase.get(word);
@@ -247,7 +266,23 @@ function readGermanPos(path) {
 }
 
 /** Wiktionary's templates that name the language a word came from, in their second argument. */
-const SOURCE_TEMPLATES = new Set(["inh", "inh+", "bor", "bor+", "ubor", "lbor", "slbor", "obor", "der", "der+", "calque", "cal", "clq", "psm", "pseudo-loan"]);
+const SOURCE_TEMPLATES = new Set([
+  "inh",
+  "inh+",
+  "bor",
+  "bor+",
+  "ubor",
+  "lbor",
+  "slbor",
+  "obor",
+  "der",
+  "der+",
+  "calque",
+  "cal",
+  "clq",
+  "psm",
+  "pseudo-loan",
+]);
 /** Its newer templates, which name it inside their later arguments ("en:cool"). */
 const ETYMON_TEMPLATES = new Set(["ety", "etymon"]);
 
@@ -258,12 +293,17 @@ function sourcesOf(entry) {
     const args = template.args ?? {};
     if (SOURCE_TEMPLATES.has(template.name) && args["2"] !== undefined) languages.push(args["2"]);
     if (ETYMON_TEMPLATES.has(template.name)) {
-      for (const [key, value] of Object.entries(args)) if (Number(key) >= 3 && /^[a-z-]+:/.test(value)) languages.push(value.split(":")[0]);
+      for (const [key, value] of Object.entries(args))
+        if (Number(key) >= 3 && /^[a-z-]+:/.test(value)) languages.push(value.split(":")[0]);
     }
   }
   const text = (entry.etymology_text ?? "").trim();
   if (languages.length === 0 && text !== "") {
-    languages.push(/^(?:(?:unadapted |semi-learned )?borrow(?:ed|ing) from |from )?(?:american |british )?english\b/i.test(text) ? "en" : "?");
+    languages.push(
+      /^(?:(?:unadapted |semi-learned )?borrow(?:ed|ing) from |from )?(?:american |british )?english\b/i.test(text)
+        ? "en"
+        : "?",
+    );
   }
   return languages;
 }
@@ -282,7 +322,8 @@ async function readOrigins(path, langCode, candidates, fold) {
   const senses = new Map();
   const lines = createInterface({ input: createReadStream(path), crlfDelay: Infinity });
   for await (const line of lines) {
-    if (![...line.matchAll(/"word": "([^"]*)"/g)].some((match) => candidates.has(fold(match[1].toLowerCase())))) continue;
+    if (![...line.matchAll(/"word": "([^"]*)"/g)].some((match) => candidates.has(fold(match[1].toLowerCase()))))
+      continue;
     const entry = JSON.parse(line);
     const word = fold(entry.word.toLowerCase());
     if (entry.lang_code !== langCode || !candidates.has(word) || entry.pos === "name") continue;
@@ -300,7 +341,10 @@ async function readOrigins(path, langCode, candidates, fold) {
   const origins = new Map();
   for (const [word, count] of senses) {
     // A tie goes to English: German "Gate" is the airport's before it is a Hungarian pair of long johns.
-    origins.set(word, count.english === 0 && count.other === 0 ? "unknown" : count.english >= count.other ? "english" : "other");
+    origins.set(
+      word,
+      count.english === 0 && count.other === 0 ? "unknown" : count.english >= count.other ? "english" : "other",
+    );
   }
   return origins;
 }
@@ -352,7 +396,9 @@ async function buildLanguage(path, lang, dictionary, wiktPath, english, outPath,
   const byRank = readSource(path, lang);
   const wide = dictionary.words;
   // Only what could be hidden needs its origin read.
-  const candidates = new Set([...byRank.keys()].filter((word) => LENGTHS.includes(word.length) && wide.has(word) && dictionary.answerable(word)));
+  const candidates = new Set(
+    [...byRank.keys()].filter((word) => LENGTHS.includes(word.length) && wide.has(word) && dictionary.answerable(word)),
+  );
   const origins = await readOrigins(wiktPath, lang, candidates, lang === "fr" ? foldFrench : (word) => word);
   // Two dictionaries must agree: one the main dictionary has and Wiktionary does not is a brand or a name ("lego", "ajax", "Volvo", "Rhein").
   const inWiktionary = (word) => origins.has(word);
@@ -367,19 +413,28 @@ async function buildLanguage(path, lang, dictionary, wiktPath, english, outPath,
     const allowed = [...wide].filter((word) => word.length === length).sort();
     const answerRanked = atLength.filter(
       ([word]) =>
-        dictionary.answerable(word) && inWiktionary(word) && !borrowed(word) && !NOT_AN_ANSWER[lang].has(word) && !/(.)\1\1/.test(word),
+        dictionary.answerable(word) &&
+        inWiktionary(word) &&
+        !borrowed(word) &&
+        !NOT_AN_ANSWER[lang].has(word) &&
+        !/(.)\1\1/.test(word),
     );
     // A dictionary that counts its own words ranks them itself: the subtitles count "juan" and "jules" as the names they mostly are.
-    if (dictionary.commonness !== undefined) answerRanked.sort((a, b) => dictionary.commonness(b[0]) - dictionary.commonness(a[0]) || a[1] - b[1]);
+    if (dictionary.commonness !== undefined)
+      answerRanked.sort((a, b) => dictionary.commonness(b[0]) - dictionary.commonness(a[0]) || a[1] - b[1]);
     const answers = answerRanked.map(([word]) => word).sort();
     // Easy: the more frequent half of the answers.
     const easy = answerRanked
       .slice(0, Math.ceil(answerRanked.length / 2))
       .map(([word]) => word)
       .sort();
-    parts.push(`  ${length}: {\n    easy: ${block(easy)},\n    answers: ${block(answers)},\n    allowed: ${block(allowed)},\n  },`);
+    parts.push(
+      `  ${length}: {\n    easy: ${block(easy)},\n    answers: ${block(answers)},\n    allowed: ${block(allowed)},\n  },`,
+    );
     const held = atLength.filter(([word]) => dictionary.answerable(word) && borrowed(word)).length;
-    console.log(`${label} ${length} letters: ${easy.length} easy answers, ${answers.length} answers, ${allowed.length} allowed (${held} shared with English held back)`);
+    console.log(
+      `${label} ${length} letters: ${easy.length} easy answers, ${answers.length} answers, ${allowed.length} allowed (${held} shared with English held back)`,
+    );
   }
   writeWordList(
     outPath,
@@ -404,4 +459,12 @@ ${parts.join("\n")}
 
 const english = readEnglish("src/lists/words-en.data.ts");
 await buildLanguage(frPath, "fr", readLexique(frDictPath), frWiktPath, english, "src/lists/words-fr.data.ts", "French");
-await buildLanguage(dePath, "de", readGermanPos(deDictPath), deWiktPath, english, "src/lists/words-de.data.ts", "German");
+await buildLanguage(
+  dePath,
+  "de",
+  readGermanPos(deDictPath),
+  deWiktPath,
+  english,
+  "src/lists/words-de.data.ts",
+  "German",
+);

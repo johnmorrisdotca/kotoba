@@ -1,18 +1,41 @@
 import { describe, expect, it } from "vitest";
 
-import { WORD_GAME_ROWS, changeWordGame, eraseWordGame, guessMarks, keyMarks, startWordGame, submitWordGame, typeWordGame, wordGameKeys, type WordGame } from "./game.ts";
+import {
+  WORD_GAME_ROWS,
+  changeWordGame,
+  eraseWordGame,
+  guessMarks,
+  keyMarks,
+  startWordGame,
+  submitWordGame,
+  typeWordGame,
+  wordGameKeys,
+  type WordGame,
+} from "./game.ts";
 import { kanaScore } from "./kana/kanaScore.ts";
 import { wordScore } from "./wordScore.ts";
 
 const words = { allowed: new Set(["crane", "react", "slate", "stone", "bumpy", "caret"]), answers: ["crane", "react"] };
 
 /** Type a word one key at a time, at the time given. */
-const typed = (game: WordGame, text: string, now = 1000) => [...text].reduce((round, key) => typeWordGame(round, key, now), game);
+const typed = (game: WordGame, text: string, now = 1000) =>
+  [...text].reduce((round, key) => typeWordGame(round, key, now), game);
 
 describe("a round of letters", () => {
   it("starts empty, with six guesses unless said", () => {
     const game = startWordGame("en", 5, "crane");
-    expect(game).toEqual({ language: "en", size: 5, rows: WORD_GAME_ROWS, hidden: "crane", guesses: [], typed: [], pending: "", status: "playing", startedAt: null, score: null });
+    expect(game).toEqual({
+      language: "en",
+      size: 5,
+      rows: WORD_GAME_ROWS,
+      hidden: "crane",
+      guesses: [],
+      typed: [],
+      pending: "",
+      status: "playing",
+      startedAt: null,
+      score: null,
+    });
     expect(WORD_GAME_ROWS).toBe(6);
     expect(startWordGame("en", 5, "crane", 4).rows).toBe(4);
   });
@@ -149,7 +172,10 @@ describe("a round of kana", () => {
 
   it("marks kana, a kana of the wrong size or mark counting as placed with an arrow", () => {
     const game = { ...start("はな"), size: 2 };
-    expect(guessMarks(game, "ばな")).toEqual([{ mark: "hit", wrongSize: false, wrongMark: true }, { mark: "hit", wrongSize: false, wrongMark: false }]);
+    expect(guessMarks(game, "ばな")).toEqual([
+      { mark: "hit", wrongSize: false, wrongMark: true },
+      { mark: "hit", wrongSize: false, wrongMark: false },
+    ]);
   });
 
   it("refuses a kana guess too short or not in the list", () => {

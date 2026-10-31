@@ -6,7 +6,8 @@ import { EN_WORDS } from "./lists/words-en.data.ts";
 import { FR_WORDS } from "./lists/words-fr.data.ts";
 
 const DATA: Record<WordListLanguage, WordData> = { en: EN_WORDS, fr: FR_WORDS, de: DE_WORDS };
-const isWord = (word: string, size: number, lang: WordListLanguage) => word.length === size && (readWordLists(DATA[lang], size)?.allowed.has(word) ?? false);
+const isWord = (word: string, size: number, lang: WordListLanguage) =>
+  word.length === size && (readWordLists(DATA[lang], size)?.allowed.has(word) ?? false);
 const answersFor = (size: number, easy: boolean, lang: WordListLanguage): readonly string[] => {
   const lists = readWordLists(DATA[lang], size);
   return lists === null ? [] : easy ? lists.easy : lists.answers;
@@ -25,12 +26,66 @@ const answersFor = (size: number, easy: boolean, lang: WordListLanguage): readon
  */
 
 /** Names and noise the subtitle count carried as French or German, none of them a word of either: never guessed, never hidden. */
-const NOT_WORDS = ["rudd", "rood", "aang", "alec", "ahem", "abed", "aldo", "ailo", "aziz", "andi", "anya", "ahab", "argh", "aaron", "abdul", "ahmed", "akira", "alice", "allah"];
+const NOT_WORDS = [
+  "rudd",
+  "rood",
+  "aang",
+  "alec",
+  "ahem",
+  "abed",
+  "aldo",
+  "ailo",
+  "aziz",
+  "andi",
+  "anya",
+  "ahab",
+  "argh",
+  "aaron",
+  "abdul",
+  "ahmed",
+  "akira",
+  "alice",
+  "allah",
+];
 
 /** English words each language borrows, which may be guessed but must never be the hidden word. */
 const BORROWED: Record<"fr" | "de", readonly string[]> = {
-  fr: ["cool", "team", "baby", "lady", "boss", "deal", "look", "star", "black", "crash", "house", "loser", "class", "smart", "design", "leader"],
-  de: ["like", "team", "song", "cool", "head", "push", "jump", "gate", "army", "take", "after", "party", "crash", "design", "leader", "update"],
+  fr: [
+    "cool",
+    "team",
+    "baby",
+    "lady",
+    "boss",
+    "deal",
+    "look",
+    "star",
+    "black",
+    "crash",
+    "house",
+    "loser",
+    "class",
+    "smart",
+    "design",
+    "leader",
+  ],
+  de: [
+    "like",
+    "team",
+    "song",
+    "cool",
+    "head",
+    "push",
+    "jump",
+    "gate",
+    "army",
+    "take",
+    "after",
+    "party",
+    "crash",
+    "design",
+    "leader",
+    "update",
+  ],
 };
 
 /** Inflected forms, which a dictionary knows and a puzzle does not hide: the base form is the answer. */
@@ -47,8 +102,41 @@ const BRANDS: Record<"fr" | "de", readonly string[]> = {
 
 /** Everyday words each list must keep, as answers and as guesses. */
 const EVERYDAY: Record<"fr" | "de", readonly string[]> = {
-  fr: ["arbre", "ecole", "table", "carte", "lapin", "cage", "loup", "pont", "agent", "chat", "rouge", "maison", "jardin", "cheval", "soleil", "oiseau", "enfant"],
-  de: ["abend", "tisch", "vogel", "haus", "brot", "berg", "hand", "kind", "garten", "himmel", "wasser", "sommer", "kirche", "freund"],
+  fr: [
+    "arbre",
+    "ecole",
+    "table",
+    "carte",
+    "lapin",
+    "cage",
+    "loup",
+    "pont",
+    "agent",
+    "chat",
+    "rouge",
+    "maison",
+    "jardin",
+    "cheval",
+    "soleil",
+    "oiseau",
+    "enfant",
+  ],
+  de: [
+    "abend",
+    "tisch",
+    "vogel",
+    "haus",
+    "brot",
+    "berg",
+    "hand",
+    "kind",
+    "garten",
+    "himmel",
+    "wasser",
+    "sommer",
+    "kirche",
+    "freund",
+  ],
 };
 
 /**
@@ -84,7 +172,8 @@ describe("the Gomoji word lists", () => {
     });
 
     it(`${lang}: a borrowed English word and an inflected form may still be guessed`, () => {
-      for (const word of [...BORROWED[lang], ...NOT_BASE[lang]]) expect(isWord(word, word.length, lang), `${lang} refuses ${word}`).toBe(true);
+      for (const word of [...BORROWED[lang], ...NOT_BASE[lang]])
+        expect(isWord(word, word.length, lang), `${lang} refuses ${word}`).toBe(true);
     });
 
     it(`${lang}: keeps the everyday words, as answers and as guesses`, () => {

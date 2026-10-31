@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import {writeWordList} from "./word-list-docs.mjs";
+import { writeWordList } from "./word-list-docs.mjs";
 /**
  * WRITES THE KANA GOMOJI LISTS AND KUMIMOJI'S JAPANESE WORDS AND TILE MIX
  * from JMdict, so the lists in the repository are machine output anybody can
@@ -66,25 +66,66 @@ const JAPANESE_SET_SIZE = 144;
 const BAND = { ichi1: 12, spec1: 12, gai1: 16, spec2: 30 };
 
 /** Parts of speech that are not the kind of word a puzzle hides. */
-const NOT_ANSWER_POS = new Set(["int", "prt", "conj", "suf", "pref", "ctr", "aux", "aux-v", "aux-adj", "cop", "exp", "pn", "unc"]);
+const NOT_ANSWER_POS = new Set([
+  "int",
+  "prt",
+  "conj",
+  "suf",
+  "pref",
+  "ctr",
+  "aux",
+  "aux-v",
+  "aux-adj",
+  "cop",
+  "exp",
+  "pn",
+  "unc",
+]);
 /** JMdict's own marks for words a puzzle should not hide. */
 const NOT_ANSWER_MISC = new Set(["vulg", "X", "derog", "sens", "arch", "obs", "rare", "obsc"]);
 /** Readings a puzzle should not hide that JMdict marks no differently. */
-const NOT_AN_ANSWER = new Set(["うんこ", "うんち", "おなら", "おしっこ", "ちんこ", "まんこ", "ちんぽ", "くそ", "げろ", "しっこ", "ぶす", "でぶ", "はげ", "ばか", "あほ", "ぼけ", "かす", "しょうべん", "ぱんてぃー", "ふぇらちお", "ばいしゅん", "ちくしょう"]);
+const NOT_AN_ANSWER = new Set([
+  "うんこ",
+  "うんち",
+  "おなら",
+  "おしっこ",
+  "ちんこ",
+  "まんこ",
+  "ちんぽ",
+  "くそ",
+  "げろ",
+  "しっこ",
+  "ぶす",
+  "でぶ",
+  "はげ",
+  "ばか",
+  "あほ",
+  "ぼけ",
+  "かす",
+  "しょうべん",
+  "ぱんてぃー",
+  "ふぇらちお",
+  "ばいしゅん",
+  "ちくしょう",
+]);
 
 const HIRAGANA = /^[ぁ-ゖー]+$/u;
 /** Every character a word may hold, in a fixed order: each is written as one printable character. */
 const KANA = [...Array.from({ length: 0x3096 - 0x3041 + 1 }, (_, at) => String.fromCodePoint(0x3041 + at)), "ー"];
 /** Printable ASCII, less the double quote and backslash, so the strings need no escaping. */
-const CODES = Array.from({ length: 0x7e - 0x21 + 1 }, (_, at) => String.fromCodePoint(0x21 + at)).filter((char) => char !== '"' && char !== "\\");
+const CODES = Array.from({ length: 0x7e - 0x21 + 1 }, (_, at) => String.fromCodePoint(0x21 + at)).filter(
+  (char) => char !== '"' && char !== "\\",
+);
 if (CODES.length < KANA.length) throw new Error("Not enough printable characters for the kana.");
 const encode = (word) => [...word].map((kana) => CODES[KANA.indexOf(kana)]).join("");
 
 const toHiragana = (text) =>
-  [...text].map((char) => {
-    const code = char.codePointAt(0);
-    return code >= 0x30a1 && code <= 0x30f6 ? String.fromCodePoint(code - 0x60) : char;
-  }).join("");
+  [...text]
+    .map((char) => {
+      const code = char.codePointAt(0);
+      return code >= 0x30a1 && code <= 0x30f6 ? String.fromCodePoint(code - 0x60) : char;
+    })
+    .join("");
 
 const xml = gunzipSync(readFileSync(SOURCE)).toString("utf8");
 const created = /<!-- JMdict created: (\d{4}-\d{2}-\d{2}) -->/.exec(xml)?.[1];
@@ -105,10 +146,29 @@ const tileWords = new Set();
  * ゑ, which no modern word uses, read as い and え.
  */
 const BASE_KANA = [..."あいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわん"];
-const SMALL_TO_LARGE = { ぁ: "あ", ぃ: "い", ぅ: "う", ぇ: "え", ぉ: "お", っ: "つ", ゃ: "や", ゅ: "ゆ", ょ: "よ", ゎ: "わ", ゕ: "か", ゖ: "け", を: "お", ゐ: "い", ゑ: "え" };
+const SMALL_TO_LARGE = {
+  ぁ: "あ",
+  ぃ: "い",
+  ぅ: "う",
+  ぇ: "え",
+  ぉ: "お",
+  っ: "つ",
+  ゃ: "や",
+  ゅ: "ゆ",
+  ょ: "よ",
+  ゎ: "わ",
+  ゕ: "か",
+  ゖ: "け",
+  を: "お",
+  ゐ: "い",
+  ゑ: "え",
+};
 function tileKanaOf(reading) {
   const folded = [];
-  for (const kana of reading.normalize("NFD").replace(/[\u3099\u309a]/gu, "").normalize("NFC")) {
+  for (const kana of reading
+    .normalize("NFD")
+    .replace(/[\u3099\u309a]/gu, "")
+    .normalize("NFC")) {
     const base = SMALL_TO_LARGE[kana] ?? kana;
     if (!BASE_KANA.includes(base)) return null;
     folded.push(base);
@@ -138,8 +198,12 @@ for (const entry of xml.split("<entry>").slice(1)) {
     if (reading.startsWith("ー") || /^[ぁぃぅぇぉっゃゅょゎゕゖ]/u.test(reading)) continue;
     const loanword = !entry.includes("<k_ele>") && /[ァ-ヶ]/u.test(/<reb>([^<]+)<\/reb>/.exec(element)[1]);
     // A loanword JMdict marks common only by spec1 or spec2 is English in katakana (クレイジー, トレジャー, ネイチャー), not yet Japanese.
-    const marks = [...element.matchAll(/<re_pri>([^<]+)<\/re_pri>/g)].map((match) => match[1]).filter((mark) => !(loanword && /^spec[12]$/.test(mark)));
-    const bands = marks.map((mark) => (/^nf\d\d$/.test(mark) ? Number(mark.slice(2)) : BAND[mark])).filter((band) => band !== undefined);
+    const marks = [...element.matchAll(/<re_pri>([^<]+)<\/re_pri>/g)]
+      .map((match) => match[1])
+      .filter((mark) => !(loanword && /^spec[12]$/.test(mark)));
+    const bands = marks
+      .map((mark) => (/^nf\d\d$/.test(mark) ? Number(mark.slice(2)) : BAND[mark]))
+      .filter((band) => band !== undefined);
     if (bands.length === 0) continue;
     const rank = (marks.includes("ichi1") ? 0 : 1000) + Math.min(...bands) * 10 - marks.length;
     const was = ranked[length].get(reading);
@@ -150,12 +214,18 @@ for (const entry of xml.split("<entry>").slice(1)) {
 const tiers = Object.fromEntries(
   LENGTHS.map((length) => {
     const order = [...ranked[length]].sort((a, b) => a[1] - b[1] || (a[0] < b[0] ? -1 : 1)).map(([reading]) => reading);
-    return [length, { easy: new Set(order.slice(0, EASY)), answers: new Set(order.slice(0, ANSWERS)), allowed: allowed[length] }];
+    return [
+      length,
+      { easy: new Set(order.slice(0, EASY)), answers: new Set(order.slice(0, ANSWERS)), allowed: allowed[length] },
+    ];
   }),
 );
 
 const packed = (set) => JSON.stringify([...set].sort().map(encode).join(""));
-const counts = LENGTHS.map((length) => `${length}: ${tiers[length].easy.size} easy, ${tiers[length].answers.size} answers, ${tiers[length].allowed.size} allowed`);
+const counts = LENGTHS.map(
+  (length) =>
+    `${length}: ${tiers[length].easy.size} easy, ${tiers[length].answers.size} answers, ${tiers[length].allowed.size} allowed`,
+);
 /* One file a length, so a puzzle loads only the list of the length it is (`kanaWords.ts`). */
 for (const length of LENGTHS) {
   const tier = tiers[length];
@@ -215,9 +285,13 @@ const useTotal = [...kanaUse.values()].reduce((sum, count) => sum + count, 0);
 const shares = BASE_KANA.map((kana) => ({ kana, share: (JAPANESE_SET_SIZE * kanaUse.get(kana)) / useTotal }));
 const mix = new Map(shares.map(({ kana, share }) => [kana, Math.max(1, Math.floor(share))]));
 let dealt = [...mix.values()].reduce((sum, count) => sum + count, 0);
-const byRemainder = shares.filter(({ share }) => share >= 1).sort((a, b) => b.share - Math.floor(b.share) - (a.share - Math.floor(a.share)) || (a.kana < b.kana ? -1 : 1));
-for (let at = 0; dealt < JAPANESE_SET_SIZE; at += 1, dealt += 1) mix.set(byRemainder[at].kana, mix.get(byRemainder[at].kana) + 1);
-if (dealt !== JAPANESE_SET_SIZE) throw new Error(`Japanese Kumimoji mix has ${dealt} tiles, expected ${JAPANESE_SET_SIZE}.`);
+const byRemainder = shares
+  .filter(({ share }) => share >= 1)
+  .sort((a, b) => b.share - Math.floor(b.share) - (a.share - Math.floor(a.share)) || (a.kana < b.kana ? -1 : 1));
+for (let at = 0; dealt < JAPANESE_SET_SIZE; at += 1, dealt += 1)
+  mix.set(byRemainder[at].kana, mix.get(byRemainder[at].kana) + 1);
+if (dealt !== JAPANESE_SET_SIZE)
+  throw new Error(`Japanese Kumimoji mix has ${dealt} tiles, expected ${JAPANESE_SET_SIZE}.`);
 
 const byTileLength = new Map();
 for (const word of tileWords) {
@@ -244,10 +318,12 @@ const packedByLength = [...byTileLength.entries()]
   .sort((a, b) => a[0] - b[0])
   .map(([length, words]) => `    ${length}: ${JSON.stringify(packTileWords(words))},`)
   .join("\n");
-if (!existsSync(`${KUMIMOJI_REPO}/src`)) console.log(`No Kumimoji checkout at ${KUMIMOJI_REPO}: its Japanese list is left as it is.`);
-else writeWordList(
-  TILE_WORDS_OUT,
-  `/**
+if (!existsSync(`${KUMIMOJI_REPO}/src`))
+  console.log(`No Kumimoji checkout at ${KUMIMOJI_REPO}: its Japanese list is left as it is.`);
+else
+  writeWordList(
+    TILE_WORDS_OUT,
+    `/**
  * JAPANESE KUMIMOJI WORDS AND TILE MIX, written by scripts/word-lists-ja.mjs.
  * Derived from JMdict release ${created}, and under CC BY-SA 4.0 with EDRDG's
  * conditions: https://www.edrdg.org/edrdg/licence.html. Never edited by hand.
@@ -264,6 +340,8 @@ ${packedByLength}
   },
 };
 `,
+  );
+console.log(
+  `Kumimoji Japanese: ${tileWords.size} words; measured mix (compare JAPANESE_TILE_MIX) ${BASE_KANA.map((kana) => `${kana}${mix.get(kana)}`).join(" ")}`,
 );
-console.log(`Kumimoji Japanese: ${tileWords.size} words; measured mix (compare JAPANESE_TILE_MIX) ${BASE_KANA.map((kana) => `${kana}${mix.get(kana)}`).join(" ")}`);
 console.log(`JMdict ${created}: ${counts.join("; ")}`);

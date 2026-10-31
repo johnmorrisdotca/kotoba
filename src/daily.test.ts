@@ -6,8 +6,21 @@ import { EN_WORDS } from "./lists/words-en.data.ts";
 
 describe("days", () => {
   it("are written YYYY-MM-DD, and only real dates are days", () => {
-    for (const real of ["2026-10-01", "2024-02-29", "0000-01-01", "9999-12-31", "1970-01-01"]) expect(isDayKey(real), real).toBe(true);
-    for (const wrong of ["2026-02-29", "2026-13-01", "2026-00-10", "2026-10-32", "26-10-01", "2026-1-1", "2026/10/01", "", "today", " 2026-10-01"]) expect(isDayKey(wrong), wrong).toBe(false);
+    for (const real of ["2026-10-01", "2024-02-29", "0000-01-01", "9999-12-31", "1970-01-01"])
+      expect(isDayKey(real), real).toBe(true);
+    for (const wrong of [
+      "2026-02-29",
+      "2026-13-01",
+      "2026-00-10",
+      "2026-10-32",
+      "26-10-01",
+      "2026-1-1",
+      "2026/10/01",
+      "",
+      "today",
+      " 2026-10-01",
+    ])
+      expect(isDayKey(wrong), wrong).toBe(false);
     expect(isDayKey(20261001)).toBe(false);
     expect(isDayKey(null)).toBe(false);
   });
@@ -43,7 +56,9 @@ describe("the word of the day", () => {
     const words = ["alpha", "bravo", "charlie", "delta", "echo", "foxtrot", "golf"];
     expect(dailyWord(words, "2026-10-01")).toBe(dailyWord(words, "2026-10-01"));
     expect(dailyWord(words, new Date("2026-10-01T12:00:00Z"))).toBe(dailyWord(words, "2026-10-01"));
-    expect(dailyWord(words, new Date("2026-10-01T23:30:00Z"), { zone: "Asia/Tokyo" })).toBe(dailyWord(words, "2026-10-02"));
+    expect(dailyWord(words, new Date("2026-10-01T23:30:00Z"), { zone: "Asia/Tokyo" })).toBe(
+      dailyWord(words, "2026-10-02"),
+    );
   });
 
   it("deals every word once before any comes up again", () => {
@@ -60,7 +75,8 @@ describe("the word of the day", () => {
 
   it("deals a different order the next time round, and a different one for another salt", () => {
     const count = 11;
-    const order = (from: number, salt = "") => Array.from({ length: count }, (_, at) => dailyIndex(count, dayOf(from + at), salt));
+    const order = (from: number, salt = "") =>
+      Array.from({ length: count }, (_, at) => dailyIndex(count, dayOf(from + at), salt));
     const first = Math.ceil(dayNumber("2026-10-01") / count) * count;
     expect(order(first)).not.toEqual(order(first + count));
     expect(order(first)).not.toEqual(order(first, "en-5"));

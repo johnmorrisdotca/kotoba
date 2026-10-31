@@ -6,7 +6,17 @@ const kana = (word: string) => [...word];
 /** The marks alone, as a string: g green, G green with an arrow, o orange, y yellow, . grey. */
 function marks(guess: string, word: string): string {
   return markKanaGuess(kana(guess), kana(word))
-    .map((each: KanaMarked) => (each.mark === "hit" ? (each.wrongSize || each.wrongMark ? "G" : "g") : each.mark === "near" ? "o" : each.mark === "kin" ? "y" : "."))
+    .map((each: KanaMarked) =>
+      each.mark === "hit"
+        ? each.wrongSize || each.wrongMark
+          ? "G"
+          : "g"
+        : each.mark === "near"
+          ? "o"
+          : each.mark === "kin"
+            ? "y"
+            : ".",
+    )
     .join("");
 }
 

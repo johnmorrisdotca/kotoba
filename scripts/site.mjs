@@ -4,7 +4,15 @@
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 
 import { apiBody } from "./api.mjs";
-import { FAMILY_SCRIPT, FAMILY_EMBED_BUILDER_WORDS, familyEmbedBuilder, familyFooter, familyHead, familyHeader, familyUnreviewed } from "./family-template.mjs";
+import {
+  FAMILY_SCRIPT,
+  FAMILY_EMBED_BUILDER_WORDS,
+  familyEmbedBuilder,
+  familyFooter,
+  familyHead,
+  familyHeader,
+  familyUnreviewed,
+} from "./family-template.mjs";
 
 const id = "kotoba";
 const icon = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='6' y='6' width='88' height='88' rx='16' fill='%232f7a4f'/%3E%3Cpath d='M30 66V34M30 50L52 34M30 50L52 66' stroke='%23fffdf8' stroke-width='9' stroke-linecap='round' fill='none'/%3E%3Ccircle cx='72' cy='66' r='7' fill='%23d9822b'/%3E%3C/svg%3E`;
@@ -37,8 +45,12 @@ writeFileSync(
   "site/index.html",
   frame({
     title: "Kotoba 言葉 — Word lists and word-game rules",
-    description: "Guess the hidden word in six tries in English, French, German or Japanese kana, on the cleaned dictionaries of the Kotoba package, with its marking, romaji input and score. In English and Japanese. Free and open source.",
-    links: [{ href: "docs/index.html", say: "pageDocs" }, { href: "api.html", say: "pageApi" }],
+    description:
+      "Guess the hidden word in six tries in English, French, German or Japanese kana, on the cleaned dictionaries of the Kotoba package, with its marking, romaji input and score. In English and Japanese. Free and open source.",
+    links: [
+      { href: "docs/index.html", say: "pageDocs" },
+      { href: "api.html", say: "pageApi" },
+    ],
     body: readFileSync("demo/body.html", "utf8").replace("__UNREVIEWED__", familyUnreviewed({ id })).trimEnd(),
     scripts: `<script type="module" src="page.js"></script>`,
   }),
@@ -49,7 +61,8 @@ writeFileSync(
   "site/api.html",
   frame({
     title: "Kotoba API reference: every export, with its signature",
-    description: "The API reference of the Kotoba package: every export of every entry point, with its signature and its documentation, made from the source.",
+    description:
+      "The API reference of the Kotoba package: every export of every entry point, with its signature and its documentation, made from the source.",
     links: [{ href: "./", say: "pageBack" }],
     body: `      ${api.html}\n      ${familyUnreviewed({ id })}`,
     scripts: `<script type="module">
@@ -66,8 +79,31 @@ writeFileSync(
 );
 console.log(`site/ is ready (${api.total} exports in api.html): serve it, or let the Pages workflow publish it.`);
 
-writeFileSync("site/family-embed-builder.js", `export const FAMILY_EMBED_BUILDER_WORDS = ${JSON.stringify(FAMILY_EMBED_BUILDER_WORDS)};\nexport ${familyEmbedBuilder.toString()};\n`);
-const builderParts = { builderHead: familyHead({ id, title: "Kotoba · build a word game embed", description: "Choose a word list and daily play, preview a word game and copy its embed code." }), builderHeader: familyHeader({ id, links: [{ href: "./", say: "toGallery" }, { href: "docs/index.html", say: "pageDocs" }, { href: "api.html", say: "pageApi" }] }), unreviewed: familyUnreviewed({ id }), footer: familyFooter({ id }), script: `<script>${FAMILY_SCRIPT}</script>` };
-writeFileSync("site/builder.html", readFileSync("demo/builder.html", "utf8").replace(/<!-- family:([A-Za-z]+) -->/g, (_match, key) => builderParts[key]));
+writeFileSync(
+  "site/family-embed-builder.js",
+  `export const FAMILY_EMBED_BUILDER_WORDS = ${JSON.stringify(FAMILY_EMBED_BUILDER_WORDS)};\nexport ${familyEmbedBuilder.toString()};\n`,
+);
+const builderParts = {
+  builderHead: familyHead({
+    id,
+    title: "Kotoba · build a word game embed",
+    description: "Choose a word list and daily play, preview a word game and copy its embed code.",
+  }),
+  builderHeader: familyHeader({
+    id,
+    links: [
+      { href: "./", say: "toGallery" },
+      { href: "docs/index.html", say: "pageDocs" },
+      { href: "api.html", say: "pageApi" },
+    ],
+  }),
+  unreviewed: familyUnreviewed({ id }),
+  footer: familyFooter({ id }),
+  script: `<script>${FAMILY_SCRIPT}</script>`,
+};
+writeFileSync(
+  "site/builder.html",
+  readFileSync("demo/builder.html", "utf8").replace(/<!-- family:([A-Za-z]+) -->/g, (_match, key) => builderParts[key]),
+);
 cpSync("demo/embed", "site/embed", { recursive: true });
 for (const file of ["builder.js", "builder.css"]) cpSync(`demo/${file}`, `site/${file}`);

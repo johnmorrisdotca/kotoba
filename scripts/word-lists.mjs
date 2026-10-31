@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import {writeWordList} from "./word-list-docs.mjs";
+import { writeWordList } from "./word-list-docs.mjs";
 /**
  * WRITES THE GOMOJI LISTS from SCOWL, so the lists in the repository are
  * a machine's output that anybody can make again, never a hand-kept table.
@@ -47,7 +47,9 @@ const NOT_AN_ANSWER = new Set(
   busty strip chink lynch noose orgy lewd smut hump booty thong puss coke dope moron idiot scum
   bugger condom erotic faggot harlot heroin incest molest nipple orgasm raping rapist sexing sexism sexist sexual sodomy
   vagina rectum rectal testis herpes fetish pantie hooter crotch nudity virgin virile carnal seduce lewder sadism sadist
-  junkie puking racism racist stupid dumber sucker cretin midget retard weirdo nitwit breast abuser`.split(/\s+/).filter(Boolean),
+  junkie puking racism racist stupid dumber sucker cretin midget retard weirdo nitwit breast abuser`
+    .split(/\s+/)
+    .filter(Boolean),
 );
 
 function wordsAt(sizes) {
@@ -91,14 +93,23 @@ function block(words) {
   return `\`\n${lines.join("\n")}\n\``;
 }
 
-const copyright = readFileSync(join(FINAL, "..", "Copyright"), "latin1").split("\n").slice(0, 13).join("\n");
+const copyright = readFileSync(join(FINAL, "..", "Copyright"), "latin1")
+  .split("\n")
+  .slice(0, 13)
+  .join("\n");
 const parts = [];
 for (const length of LENGTHS) {
-  const answers = [...common].filter((word) => word.length === length && !inflected(word) && !NOT_AN_ANSWER.has(word)).sort();
+  const answers = [...common]
+    .filter((word) => word.length === length && !inflected(word) && !NOT_AN_ANSWER.has(word))
+    .sort();
   const easyAnswers = answers.filter((word) => easy.has(word));
   const allowed = [...wide].filter((word) => word.length === length).sort();
-  parts.push(`  ${length}: {\n    easy: ${block(easyAnswers)},\n    answers: ${block(answers)},\n    allowed: ${block(allowed)},\n  },`);
-  console.log(`${length} letters: ${easyAnswers.length} easy answers, ${answers.length} answers, ${allowed.length} allowed`);
+  parts.push(
+    `  ${length}: {\n    easy: ${block(easyAnswers)},\n    answers: ${block(answers)},\n    allowed: ${block(allowed)},\n  },`,
+  );
+  console.log(
+    `${length} letters: ${easyAnswers.length} easy answers, ${answers.length} answers, ${allowed.length} allowed`,
+  );
 }
 
 writeWordList(

@@ -20,7 +20,11 @@ describe("the strings", () => {
   it("the two helps list the same options and the same commands, in the same order", () => {
     const options = (text: string) => [...text.matchAll(/^\s+(?:-\w, )?(--[\w-]+)/gm)].map((match) => match[1]);
     expect(options(KOTOBA_STRINGS.ja.cliUsage)).toEqual(options(KOTOBA_STRINGS.en.cliUsage));
-    const commands = (text: string) => text.split("\n").filter((line) => line.startsWith("  kotoba ")).map((line) => /^ {2}kotoba \w+( --\w+)?/.exec(line)?.[0]);
+    const commands = (text: string) =>
+      text
+        .split("\n")
+        .filter((line) => line.startsWith("  kotoba "))
+        .map((line) => /^ {2}kotoba \w+( --\w+)?/.exec(line)?.[0]);
     expect(commands(KOTOBA_STRINGS.ja.cliUsage)).toEqual(commands(KOTOBA_STRINGS.en.cliUsage));
   });
 

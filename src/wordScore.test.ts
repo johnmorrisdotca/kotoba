@@ -53,8 +53,18 @@ describe("what a Gomoji word scores", () => {
         // The best a loss can do: all but the last letter placed on the first row, the last on the second.
         const nearly = hidden.slice(0, -1) + "x";
         const last = "x".repeat(size - 1) + hidden.at(-1)!;
-        const bestLoss = wordScore(hidden, [nearly, last, ...new Array<string>(rows - 2).fill("x".repeat(size))], rows, 0).total;
-        const worstWin = wordScore(hidden, [...new Array<string>(rows - 1).fill("x".repeat(size)), hidden], rows, 60 * 60_000).total;
+        const bestLoss = wordScore(
+          hidden,
+          [nearly, last, ...new Array<string>(rows - 2).fill("x".repeat(size))],
+          rows,
+          0,
+        ).total;
+        const worstWin = wordScore(
+          hidden,
+          [...new Array<string>(rows - 1).fill("x".repeat(size)), hidden],
+          rows,
+          60 * 60_000,
+        ).total;
         expect(bestLoss, `${size} letters, ${rows} guesses`).toBeLessThan(worstWin);
       }
     }

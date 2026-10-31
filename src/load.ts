@@ -33,7 +33,12 @@ export type WordListName = "en" | "fr" | "de" | "ja";
  * console.log(value);
  * ```
  */
-export type LoadedWordList = { easy: readonly string[]; answers: readonly string[]; allowed: ReadonlySet<string>; release?: string };
+export type LoadedWordList = {
+  easy: readonly string[];
+  answers: readonly string[];
+  allowed: ReadonlySet<string>;
+  release?: string;
+};
 
 /** The lists, in the order they are named.
  *
@@ -53,7 +58,12 @@ export const WORD_LIST_NAMES: readonly WordListName[] = ["en", "fr", "de", "ja"]
  * console.log(WORD_LIST_SIZES);
  * ```
  */
-export const WORD_LIST_SIZES: Readonly<Record<WordListName, readonly number[]>> = { en: [4, 5, 6], fr: [4, 5, 6], de: [4, 5, 6], ja: KANA_SIZES };
+export const WORD_LIST_SIZES: Readonly<Record<WordListName, readonly number[]>> = {
+  en: [4, 5, 6],
+  fr: [4, 5, 6],
+  de: [4, 5, 6],
+  ja: KANA_SIZES,
+};
 
 /** One list of one size read into words, or null for a size the language has no list of.
  *

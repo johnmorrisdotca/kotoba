@@ -5,7 +5,11 @@ import { JA_WORDS_3 } from "../lists/kana-3.data.ts";
 import { JA_WORDS_4 } from "../lists/kana-4.data.ts";
 import { JA_WORDS_5 } from "../lists/kana-5.data.ts";
 
-const LISTS: Record<number, KanaWords> = { 3: unpack(JA_WORDS_3, 3), 4: unpack(JA_WORDS_4, 4), 5: unpack(JA_WORDS_5, 5) };
+const LISTS: Record<number, KanaWords> = {
+  3: unpack(JA_WORDS_3, 3),
+  4: unpack(JA_WORDS_4, 4),
+  5: unpack(JA_WORDS_5, 5),
+};
 
 describe("the kana word lists", () => {
   for (const size of KANA_SIZES) {
