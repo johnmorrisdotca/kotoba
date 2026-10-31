@@ -1,0 +1,4 @@
+# Commits that only reformat code. GitHub skips them in blame; locally:
+#   git config blame.ignoreRevsFile .git-blame-ignore-revs
+# Biome replaces ESLint, and the code is formatted once to the family's settings
+621a2737c2ffca1ec22560ed8bd1aa280ce21807
