@@ -1,10 +1,10 @@
 # API reference
 
-Every export of every entry point of `@johnmorrisdotca/kotoba`, with its signature and its doc comment. This file is made from the source by `pnpm docs:api`, and a test fails when it falls behind: 14 entry points, 100 exports.
+Every export of every entry point of `@johnmorrisdotca/kotoba`, with its signature and its doc comment. This file is made from the source by `pnpm docs:api`, and a test fails when it falls behind: 16 entry points, 120 exports.
 
 ## `@johnmorrisdotca/kotoba`
 
-[`ALPHABETS`](#main-ALPHABETS) · [`changeWordGame`](#main-changeWordGame) · [`cycleMark`](#main-cycleMark) · [`dailyIndex`](#main-dailyIndex) · [`DailyOptions`](#main-DailyOptions) · [`dailyWord`](#main-dailyWord) · [`dayKey`](#main-dayKey) · [`DayKey`](#main-DayKey) · [`dayNumber`](#main-dayNumber) · [`decodeGuesses`](#main-decodeGuesses) · [`decodeHidden`](#main-decodeHidden) · [`encodeHidden`](#main-encodeHidden) · [`eraseWordGame`](#main-eraseWordGame) · [`finishRomaji`](#main-finishRomaji) · [`foundBonus`](#main-foundBonus) · [`GomojiLanguage`](#main-GomojiLanguage) · [`guessMarks`](#main-guessMarks) · [`isDayKey`](#main-isDayKey) · [`isKanaGame`](#main-isKanaGame) · [`isSmall`](#main-isSmall) · [`KANA_COLUMN`](#main-KANA_COLUMN) · [`KANA_SIZES`](#main-KANA_SIZES) · [`kanaBase`](#main-kanaBase) · [`kanaFamily`](#main-kanaFamily) · [`kanaFound`](#main-kanaFound) · [`KanaMark`](#main-KanaMark) · [`KanaMarked`](#main-KanaMarked) · [`kanaScore`](#main-kanaScore) · [`KanaScore`](#main-KanaScore) · [`kanaTone`](#main-kanaTone) · [`KanaWords`](#main-KanaWords) · [`KEYBOARD_ROWS`](#main-KEYBOARD_ROWS) · [`keyMarks`](#main-keyMarks) · [`KOTOBA_STRINGS`](#main-KOTOBA_STRINGS) · [`kotobaLanguage`](#main-kotobaLanguage) · [`kotobaSay`](#main-kotobaSay) · [`KotobaStrings`](#main-KotobaStrings) · [`Language`](#main-Language) · [`LetterMark`](#main-LetterMark) · [`LONG_BAR`](#main-LONG_BAR) · [`markGuess`](#main-markGuess) · [`markKanaGuess`](#main-markKanaGuess) · [`Packed`](#main-Packed) · [`PlaceMark`](#main-PlaceMark) · [`readRomaji`](#main-readRomaji) · [`readWordLists`](#main-readWordLists) · [`startWordGame`](#main-startWordGame) · [`submitWordGame`](#main-submitWordGame) · [`toggleSize`](#main-toggleSize) · [`typeWordGame`](#main-typeWordGame) · [`unpack`](#main-unpack) · [`VERSION`](#main-VERSION) · [`WORD_GAME_ROWS`](#main-WORD_GAME_ROWS) · [`WORD_SCORE`](#main-WORD_SCORE) · [`WordData`](#main-WordData) · [`WordGame`](#main-WordGame) · [`wordGameKeys`](#main-wordGameKeys) · [`WordGameLanguage`](#main-WordGameLanguage) · [`WordGameRefusal`](#main-WordGameRefusal) · [`WordGameStatus`](#main-WordGameStatus) · [`WordGameSubmit`](#main-WordGameSubmit) · [`WordGameWords`](#main-WordGameWords) · [`WordListLanguage`](#main-WordListLanguage) · [`WordLists`](#main-WordLists) · [`wordScore`](#main-wordScore) · [`WordScore`](#main-WordScore)
+[`ALPHABETS`](#main-ALPHABETS) · [`changeWordGame`](#main-changeWordGame) · [`cycleMark`](#main-cycleMark) · [`dailyIndex`](#main-dailyIndex) · [`DailyOptions`](#main-DailyOptions) · [`dailyWord`](#main-dailyWord) · [`dayKey`](#main-dayKey) · [`DayKey`](#main-DayKey) · [`dayNumber`](#main-dayNumber) · [`decodeGuesses`](#main-decodeGuesses) · [`decodeHidden`](#main-decodeHidden) · [`encodeHidden`](#main-encodeHidden) · [`eraseWordGame`](#main-eraseWordGame) · [`finishRomaji`](#main-finishRomaji) · [`foundBonus`](#main-foundBonus) · [`GomojiLanguage`](#main-GomojiLanguage) · [`guessMarks`](#main-guessMarks) · [`Idiom`](#main-Idiom) · [`IdiomKind`](#main-IdiomKind) · [`isDayKey`](#main-isDayKey) · [`isKanaGame`](#main-isKanaGame) · [`isSmall`](#main-isSmall) · [`KANA_COLUMN`](#main-KANA_COLUMN) · [`KANA_SIZES`](#main-KANA_SIZES) · [`kanaBase`](#main-kanaBase) · [`kanaFamily`](#main-kanaFamily) · [`kanaFound`](#main-kanaFound) · [`KanaMark`](#main-KanaMark) · [`KanaMarked`](#main-KanaMarked) · [`kanaScore`](#main-kanaScore) · [`KanaScore`](#main-KanaScore) · [`kanaTone`](#main-kanaTone) · [`KanaWords`](#main-KanaWords) · [`KEYBOARD_ROWS`](#main-KEYBOARD_ROWS) · [`keyMarks`](#main-keyMarks) · [`KOTOBA_STRINGS`](#main-KOTOBA_STRINGS) · [`kotobaLanguage`](#main-kotobaLanguage) · [`kotobaSay`](#main-kotobaSay) · [`KotobaStrings`](#main-KotobaStrings) · [`Language`](#main-Language) · [`LetterMark`](#main-LetterMark) · [`LONG_BAR`](#main-LONG_BAR) · [`markGuess`](#main-markGuess) · [`markKanaGuess`](#main-markKanaGuess) · [`normalizeShiritoriReading`](#main-normalizeShiritoriReading) · [`Packed`](#main-Packed) · [`PackedIdioms`](#main-PackedIdioms) · [`PlaceMark`](#main-PlaceMark) · [`playShiritori`](#main-playShiritori) · [`readIdioms`](#main-readIdioms) · [`readRomaji`](#main-readRomaji) · [`readShiritoriWords`](#main-readShiritoriWords) · [`readWordLists`](#main-readWordLists) · [`searchIdioms`](#main-searchIdioms) · [`shiritoriChoices`](#main-shiritoriChoices) · [`shiritoriDistractorScore`](#main-shiritoriDistractorScore) · [`shiritoriHeadKey`](#main-shiritoriHeadKey) · [`ShiritoriPlay`](#main-ShiritoriPlay) · [`shiritoriReadingContinues`](#main-shiritoriReadingContinues) · [`shiritoriReadingIsPlayable`](#main-shiritoriReadingIsPlayable) · [`ShiritoriRefusal`](#main-ShiritoriRefusal) · [`ShiritoriRules`](#main-ShiritoriRules) · [`shiritoriTailKey`](#main-shiritoriTailKey) · [`ShiritoriWord`](#main-ShiritoriWord) · [`startWordGame`](#main-startWordGame) · [`submitWordGame`](#main-submitWordGame) · [`toggleSize`](#main-toggleSize) · [`typeWordGame`](#main-typeWordGame) · [`unpack`](#main-unpack) · [`VERSION`](#main-VERSION) · [`WORD_GAME_ROWS`](#main-WORD_GAME_ROWS) · [`WORD_SCORE`](#main-WORD_SCORE) · [`WordData`](#main-WordData) · [`WordGame`](#main-WordGame) · [`wordGameKeys`](#main-wordGameKeys) · [`WordGameLanguage`](#main-WordGameLanguage) · [`WordGameRefusal`](#main-WordGameRefusal) · [`WordGameStatus`](#main-WordGameStatus) · [`WordGameSubmit`](#main-WordGameSubmit) · [`WordGameWords`](#main-WordGameWords) · [`WordListLanguage`](#main-WordListLanguage) · [`WordLists`](#main-WordLists) · [`wordScore`](#main-wordScore) · [`WordScore`](#main-WordScore)
 
 <a id="main-ALPHABETS"></a>
 
@@ -182,6 +182,27 @@ guessMarks(game: Pick<WordGame, "language" | "hidden">, guess: string): PlaceMar
 ```
 
 How each place of a guess did against the hidden word. For letters `wrongSize` and `wrongMark` are false.
+
+<a id="main-Idiom"></a>
+
+### type `Idiom`
+
+```ts
+type Idiom = { /** How it is written. */ readonly idiom: string; /** How it is read. */ readonly reading: string; /** Its first plain English gloss, from the sense that makes it an idiom. */ readonly meaning: string; /** Every plain English gloss of that sense, `meaning` first. */ readonly meanings: readonly string[]; /** Whose judgement put it on the list. */ readonly kind: IdiomKind; /** The kanji it is written wi…
+```
+
+One set phrase.
+
+<a id="main-IdiomKind"></a>
+
+### type `IdiomKind`
+
+```ts
+type IdiomKind = "idiom" | "expression";
+```
+
+Whose judgement put a phrase on the list: `"idiom"` is JMdict's own, an entry it marks idiomatic; `"expression"` is
+this package's rule, for set phrases JMdict files as plain expressions (鼻が高い, "proud").
 
 <a id="main-isDayKey"></a>
 
@@ -469,6 +490,16 @@ markKanaGuess(guess: readonly string[], word: readonly string[]): KanaMarked[]
 
 A guess coloured against the word, place by place. Both are arrays of single kana.
 
+<a id="main-normalizeShiritoriReading"></a>
+
+### function `normalizeShiritoriReading`
+
+```ts
+normalizeShiritoriReading(reading: string): string
+```
+
+A reading folded to hiragana, with anything that is not kana or a long vowel mark dropped.
+
 <a id="main-Packed"></a>
 
 ### type `Packed`
@@ -478,6 +509,16 @@ type Packed = { release: string; alphabet: string; codes: string; easy: string; 
 ```
 
 A kana list as its entry point exports it: the JMdict release, an alphabet of kana and one character a kana for each, and the three lists written in those characters.
+
+<a id="main-PackedIdioms"></a>
+
+### type `PackedIdioms`
+
+```ts
+type PackedIdioms = { /** The JMdict release it was made from. */ readonly release: string; /** Written form, reading, meanings, then is-JMdict's-idiom, elementary and common. */ readonly idioms: readonly (readonly [string, string, readonly string[], number, number, number])[]; };
+```
+
+The idiom list as it is stored: one row a phrase, the three flags as 0 or 1.
 
 <a id="main-PlaceMark"></a>
 
@@ -489,6 +530,26 @@ type PlaceMark = { mark: LetterMark | "kin"; wrongSize: boolean; wrongMark: bool
 
 One place of a marked guess: how it did, and for kana whether its size or mark is wrong.
 
+<a id="main-playShiritori"></a>
+
+### function `playShiritori`
+
+```ts
+playShiritori(played: readonly string[], reading: string, rules?: ShiritoriRules): ShiritoriPlay
+```
+
+Judges one word against the readings played so far.
+
+<a id="main-readIdioms"></a>
+
+### function `readIdioms`
+
+```ts
+readIdioms(packed: PackedIdioms): Idiom[]
+```
+
+Reads the stored idiom list into plain rows.
+
 <a id="main-readRomaji"></a>
 
 ### function `readRomaji`
@@ -499,6 +560,16 @@ readRomaji(typed: string): { kana: string[]; rest: string; }
 
 What has been typed, as kana, and what is still being typed.
 
+<a id="main-readShiritoriWords"></a>
+
+### function `readShiritoriWords`
+
+```ts
+readShiritoriWords(packed: { readonly release: string; readonly rows: string; }): ShiritoriWord[]
+```
+
+Reads the stored shiritori list into plain rows, commonest first.
+
 <a id="main-readWordLists"></a>
 
 ### function `readWordLists`
@@ -508,6 +579,119 @@ readWordLists(data: WordData, size: number): WordLists | null
 ```
 
 One length of a list read into words, or null for a length the list does not have.
+
+<a id="main-searchIdioms"></a>
+
+### function `searchIdioms`
+
+```ts
+searchIdioms(idioms: readonly Idiom[], text: string): Idiom[]
+```
+
+The phrases that hold a piece of text in their written form, their reading or any of their meanings, ignoring case.
+
+<a id="main-shiritoriChoices"></a>
+
+### function `shiritoriChoices`
+
+```ts
+shiritoriChoices<Word extends { readonly reading: string; }>(pool: readonly Word[], played: readonly string[], rules?: ShiritoriRules): Word[]
+```
+
+The words of a pool that could be played next and do not lose, in the pool's own order.
+
+<a id="main-shiritoriDistractorScore"></a>
+
+### function `shiritoriDistractorScore`
+
+```ts
+shiritoriDistractorScore(reading: string, chainKey: string, rules?: ShiritoriRules): number
+```
+
+How tempting a word that does not continue the chain is, for a game offering wrong answers: 0 for a word that does
+continue, or holds no kana; 1 for any other; more for one that shares the vowel, or that ends where the chain stands.
+
+<a id="main-shiritoriHeadKey"></a>
+
+### function `shiritoriHeadKey`
+
+```ts
+shiritoriHeadKey(reading: string, rules?: ShiritoriRules): string | null
+```
+
+The kana a reading starts on, or null when it holds none.
+
+<a id="main-ShiritoriPlay"></a>
+
+### type `ShiritoriPlay`
+
+```ts
+type ShiritoriPlay = | { readonly ok: true; readonly loses: false; readonly next: string } | { readonly ok: true; readonly loses: true; readonly next: null } | { readonly ok: false; readonly why: ShiritoriRefusal };
+```
+
+What a word does to a chain.
+
+<a id="main-shiritoriReadingContinues"></a>
+
+### function `shiritoriReadingContinues`
+
+```ts
+shiritoriReadingContinues(reading: string, chainKey: string, rules?: ShiritoriRules): boolean
+```
+
+Whether a word starts on the kana the chain has reached.
+
+<a id="main-shiritoriReadingIsPlayable"></a>
+
+### function `shiritoriReadingIsPlayable`
+
+```ts
+shiritoriReadingIsPlayable(reading: string, chainKey: string, rules?: ShiritoriRules): boolean
+```
+
+Whether a word continues the chain and does not end it.
+
+<a id="main-ShiritoriRefusal"></a>
+
+### type `ShiritoriRefusal`
+
+```ts
+type ShiritoriRefusal = "not-kana" | "wrong-start" | "repeated";
+```
+
+Why a word was refused: it starts on the wrong kana, holds no kana, or was said already. A word ending in ん is not
+refused; it is played and it loses (`loses`).
+
+<a id="main-ShiritoriRules"></a>
+
+### type `ShiritoriRules`
+
+```ts
+type ShiritoriRules = { /** `"ignored"` (the default): が chains from か. `"kept"`: only from が. */ readonly voicing?: "ignored" | "kept"; /** What a final ー chains on. `"vowel"` (the default): コーヒー chains on い. `"before"`: on ひ. */ readonly longVowel?: "vowel" | "before"; };
+```
+
+House rules, since no two tables play alike. The defaults are the forgiving
+ones, which keep a chain going from a small pool of words.
+
+<a id="main-shiritoriTailKey"></a>
+
+### function `shiritoriTailKey`
+
+```ts
+shiritoriTailKey(reading: string, rules?: ShiritoriRules): string | null
+```
+
+The kana the next word must start on, or null when the word ends the chain: it ends in ん, or holds no kana.
+
+<a id="main-ShiritoriWord"></a>
+
+### type `ShiritoriWord`
+
+```ts
+type ShiritoriWord = { /** How it is read: what a chain is judged on. */ readonly reading: string; /** How it is written. */ readonly word: string; /** Its first plain English gloss. */ readonly meaning: string; };
+```
+
+One word of the shiritori list.
 
 <a id="main-startWordGame"></a>
 
@@ -965,6 +1149,54 @@ This list is derived from it and is under the same licence.
 900 easy answers, 2000 answers at medium and hard, 35419 words that may be guessed.
 Each word is written one character a kana through `alphabet` and `codes`,
 the words run together with nothing between them (`kanaWords.ts` reads them).
+
+## `@johnmorrisdotca/kotoba/idioms-ja`
+
+[`JA_IDIOMS`](#idioms-ja-JA_IDIOMS)
+
+<a id="idioms-ja-JA_IDIOMS"></a>
+
+### const `JA_IDIOMS`
+
+```ts
+JA_IDIOMS: PackedIdioms
+```
+
+THE JAPANESE IDIOMS. Written by `scripts/word-lists-ja-phrases.mjs` from JMdict,
+release 2026-10-31, and KANJIDIC2, 2026-10-31. Never edited by hand; the monthly refresh
+(.github/workflows/jmdict-refresh.yml) runs the script again.
+
+JMdict and KANJIDIC2 are the property of the Electronic Dictionary Research and
+Development Group (EDRDG), used under the Creative Commons Attribution-ShareAlike
+4.0 licence and the Group's conditions: https://www.edrdg.org/edrdg/licence.html.
+This list is derived from them and under the same licence.
+
+1404 that JMdict marks idiomatic and 617 expressions taken by this package's own rule;
+1055 written only in kanji taught in elementary school; 41 marked common.
+
+## `@johnmorrisdotca/kotoba/shiritori-ja`
+
+[`JA_SHIRITORI`](#shiritori-ja-JA_SHIRITORI)
+
+<a id="shiritori-ja-JA_SHIRITORI"></a>
+
+### const `JA_SHIRITORI`
+
+```ts
+JA_SHIRITORI: { release: string; rows: string; }
+```
+
+THE SHIRITORI WORDS. Written by `scripts/word-lists-ja-phrases.mjs` from JMdict,
+release 2026-10-31. Never edited by hand; the monthly refresh
+(.github/workflows/jmdict-refresh.yml) runs the script again.
+
+JMdict and KANJIDIC2 are the property of the Electronic Dictionary Research and
+Development Group (EDRDG), used under the Creative Commons Attribution-ShareAlike
+4.0 licence and the Group's conditions: https://www.edrdg.org/edrdg/licence.html.
+This list is derived from them and under the same licence.
+
+6393 nouns of JMdict's textbook-common list, one a reading, commonest first. Each row is
+reading, word and meaning, separated by tabs (`readShiritoriWords` reads them).
 
 ## `@johnmorrisdotca/kotoba/cli`
 

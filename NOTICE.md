@@ -11,6 +11,7 @@ written out in full.
 | `words-fr` | Lexique 3.83, ranked by hermitdave's FrequencyWords, checked against Wiktionary | CC BY-SA 4.0 |
 | `words-de` | LanguageTool's german-pos-dict, ranked by hermitdave's FrequencyWords, checked against Wiktionary | CC BY-SA 4.0 |
 | `kana-3`, `kana-4`, `kana-5` | JMdict, of the Electronic Dictionary Research and Development Group | CC BY-SA 4.0 and the Group's conditions |
+| `idioms-ja`, `shiritori-ja` | JMdict and KANJIDIC2, of the Electronic Dictionary Research and Development Group | CC BY-SA 4.0 and the Group's conditions |
 | `pop-answers` | The package's own hand-kept list | MIT |
 
 ## English: SCOWL
@@ -57,6 +58,17 @@ the Creative Commons Attribution-ShareAlike 4.0 licence, with the group's
 conditions: https://www.edrdg.org/edrdg/licence.html. These derived lists are
 shared under the same licence. The release each was made from is in its `release`
 field, and the lists are made again from the newest release every month.
+
+`idioms-ja` and `shiritori-ja` are derived from JMdict in the same way, under the same
+licence, and `idioms-ja`'s `elementary` flag from the grades in KANJIDIC2, which is the
+same Group's (https://www.edrdg.org/wiki/index.php/KANJIDIC_Project). In `idioms-ja`, the
+rows of kind `idiom` are the entries JMdict itself marks idiomatic; the rows of kind
+`expression`, and the choice of which words `shiritori-ja` holds, are this package's own
+selection from JMdict, and JMdict's editors did not make them. The Group's conditions
+(https://www.edrdg.org/edrdg/licence.html, read 2026-10-31) ask a page showing words from
+these files to acknowledge them on that screen, for example at its foot: *Words from JMdict,
+the property of the Electronic Dictionary Research and Development Group, used under the
+Group's licence (https://www.edrdg.org/edrdg/licence.html).*
 
 ## What that asks of a project that uses this package
 

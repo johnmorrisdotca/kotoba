@@ -1,6 +1,6 @@
 name: JMdict refresh
 
-# THE KANA GOMOJI WORDS, KEPT CURRENT (KUMIMOJI'S ARE ITS OWN REPOSITORY'S). JMdict's licence (EDRDG, clause 4,
+# THE KANA GOMOJI WORDS, THE IDIOMS AND THE SHIRITORI WORDS, KEPT CURRENT (KUMIMOJI'S ARE ITS OWN REPOSITORY'S). JMdict's licence (EDRDG, clause 4,
 # https://www.edrdg.org/edrdg/licence.html, read 2026-09-25) asks a site using
 # its data for "a procedure for regular updating… at least once a month";
 # John chose that on 2026-09-25 (docs/plans/other/WORD-04-kana.md).
@@ -31,10 +31,14 @@ jobs:
         with:
           node-version: 24
       - name: Fetch the newest JMdict
-        run: curl -sSfL -o "$RUNNER_TEMP/JMdict_e.gz" http://ftp.edrdg.org/pub/Nihongo/JMdict_e.gz
+        run: |
+          curl -sSfL -o "$RUNNER_TEMP/JMdict_e.gz" http://ftp.edrdg.org/pub/Nihongo/JMdict_e.gz
+          curl -sSfL -o "$RUNNER_TEMP/kanjidic2.xml.gz" http://ftp.edrdg.org/pub/Nihongo/kanjidic2.xml.gz
       # Kumimoji's Japanese list is its own repository's to refresh (github.com/johnmorrisdotca/kumimoji).
       - name: Write the kana lists
         run: node scripts/word-lists-ja.mjs "$RUNNER_TEMP/JMdict_e.gz"
+      - name: Write the idioms and the shiritori words
+        run: node scripts/word-lists-ja-phrases.mjs "$RUNNER_TEMP/JMdict_e.gz" "$RUNNER_TEMP/kanjidic2.xml.gz"
       - name: Leave the new lists on a branch, and say so by failing
         run: |
           if git diff --quiet -- src/lists; then

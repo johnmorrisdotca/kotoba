@@ -257,6 +257,8 @@ describe("the licences", () => {
       "kana-3",
       "kana-4",
       "kana-5",
+      "idioms-ja",
+      "shiritori-ja",
       "pop-answers",
     ])
       expect(notice, entry).toContain(`\`${entry}\``);

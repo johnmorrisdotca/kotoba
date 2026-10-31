@@ -27,6 +27,30 @@
         <p class="fam-muted" id="credit" data-testid="credit"></p>
         <p class="fam-muted" id="counts" data-testid="counts"></p>
       </section>
+      <section class="more phrases" aria-labelledby="chain-title" data-testid="chain">
+        <h2 id="chain-title" data-say="chainTitle"></h2>
+        <p data-say="chainText"></p>
+        <ol class="chain" id="chain-list" data-testid="chain-list"></ol>
+        <p class="chain-status" id="chain-status" data-testid="chain-status" aria-live="polite"></p>
+        <form class="fam-row chain-form" id="chain-form">
+          <label class="fam-label" for="chain-input" data-say="chainLabel"></label>
+          <input class="phrase-input" id="chain-input" data-testid="chain-input" autocomplete="off" autocapitalize="off" spellcheck="false" lang="ja">
+          <button type="submit" class="fam-button" data-primary="true" id="chain-say" data-testid="chain-say" data-say="chainSay"></button>
+          <button type="button" class="fam-button" id="chain-new" data-testid="chain-new" data-say="chainNew"></button>
+        </form>
+      </section>
+      <section class="more phrases" aria-labelledby="idiom-title" data-testid="idioms">
+        <h2 id="idiom-title" data-say="idiomTitle"></h2>
+        <p data-say="idiomText"></p>
+        <div class="fam-row">
+          <label class="fam-label" for="idiom-search" data-say="idiomLabel"></label>
+          <input class="phrase-input" id="idiom-search" data-testid="idiom-search" type="search" autocomplete="off" spellcheck="false">
+          <button type="button" class="fam-button" id="idiom-another" data-testid="idiom-another" data-say="idiomAnother"></button>
+        </div>
+        <p class="fam-muted" id="idiom-count" data-testid="idiom-count" aria-live="polite"></p>
+        <ul class="idioms" id="idiom-list" data-testid="idiom-list"></ul>
+        <p class="fam-muted" id="phrases-credit" data-testid="phrases-credit"></p>
+      </section>
       <section class="more" aria-labelledby="using-title">
         <h2 id="using-title" data-say="usingTitle"></h2>
         <p data-say="usingText"></p>

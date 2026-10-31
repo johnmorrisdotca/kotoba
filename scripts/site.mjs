@@ -38,7 +38,7 @@ ${body}
 
 rmSync("site", { recursive: true, force: true });
 mkdirSync("site", { recursive: true });
-for (const file of ["family.css", "kotoba.css", "page.js"]) cpSync(`demo/${file}`, `site/${file}`);
+for (const file of ["family.css", "kotoba.css", "page.js", "phrases.js"]) cpSync(`demo/${file}`, `site/${file}`);
 cpSync("dist", "site/dist", { recursive: true });
 
 writeFileSync(

@@ -28,6 +28,7 @@ src/
 ├── lists.ts         reading a word list once it is loaded; each list is its own entry point
 ├── load.ts          loading a list by its language and size, each as a module of its own
 ├── marks.ts         marking a guess: the rule every five-letter word game shares
+├── phrases.ts       reading the Japanese idiom and shiritori lists once they are loaded, and searching the idioms
 ├── play.ts          the board you can put on a page, and its stylesheet
 ├── strings.ts       every word Kotoba says, in English and Japanese
 ├── version.ts       the package's version
@@ -35,13 +36,16 @@ src/
 ├── kana/  the Japanese side of the games
 │   ├── kanaMarks.ts  how a kana guess is coloured, including a kana of the wrong size or mark
 │   ├── kanaScore.ts  what a kana word scores, on the same scale as English
-│   └── romaji.ts     romaji typed into kana, with no input-method library
+│   ├── romaji.ts     romaji typed into kana, with no input-method library
+│   └── shiritori.ts  the word chain: what a word starts and ends on, and whether it may be played
 └── lists/  the word lists, each its own entry point so a page loads only what it plays
+    ├── idioms-ja.data.ts    the Japanese idioms
     ├── kana-3.data.ts       the three-kana words
     ├── kana-4.data.ts       the four-kana words
     ├── kana-5.data.ts       the five-kana words
     ├── pop-answers.data.ts  the pop-culture answers
     ├── pop-guesses.data.ts  the pop-culture guesses accepted at three and seven letters
+    ├── shiritori-ja.data.ts the shiritori words
     ├── words-de.data.ts     the German words
     ├── words-en.data.ts     the English words
     └── words-fr.data.ts     the French words

@@ -65,6 +65,14 @@
     "./kana-5": {
       "en": "Five-kana words",
       "ja": "5かなの単語"
+    },
+    "./idioms-ja": {
+      "en": "Japanese idioms",
+      "ja": "日本語の慣用句"
+    },
+    "./shiritori-ja": {
+      "en": "Shiritori words",
+      "ja": "しりとりの単語"
     }
   }
 }

@@ -13,6 +13,8 @@ const entries = {
   "kana-3.data.ts": "kana-3",
   "kana-4.data.ts": "kana-4",
   "kana-5.data.ts": "kana-5",
+  "idioms-ja.data.ts": "idioms-ja",
+  "shiritori-ja.data.ts": "shiritori-ja",
 };
 export function withWordExamples(source, entry) {
   let text = source;

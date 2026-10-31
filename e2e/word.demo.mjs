@@ -401,3 +401,49 @@ test("Help is off at first, and on it shows a line under each option row, in eit
   await expect(lines.first()).toBeHidden();
   expect(errors).toEqual([]);
 });
+
+test("the word chain answers a word, refuses a wrong one, and says where the words come from", async ({ page }) => {
+  const errors = await open(page);
+  await page.getByTestId("chain").scrollIntoViewIfNeeded();
+  await expect(page.getByTestId("chain-list").locator("li")).toHaveCount(1);
+  await expect(page.getByTestId("phrases-credit")).toContainText("JMdict");
+  const before = await page.locator("#board").textContent();
+
+  // Typing in the box is not typing into the game above it.
+  await page.getByTestId("chain-input").fill("zzz");
+  await tap(page, page.getByTestId("chain-say"));
+  await expect(page.getByTestId("chain-status")).not.toHaveText("");
+  expect(await page.locator("#board").textContent()).toBe(before);
+  await expect(page.getByTestId("chain-list").locator("li")).toHaveCount(1);
+
+  // A word from the list that starts where the chain stands: the computer answers it.
+  const said = await page.evaluate(async () => {
+    const { JA_SHIRITORI } = await import("./dist/lists/shiritori-ja.data.js");
+    const { readShiritoriWords, shiritoriChoices } = await import("./dist/index.js");
+    const words = readShiritoriWords(JA_SHIRITORI);
+    const shown =
+      document.querySelector("#chain-list li .phrase-head span")?.textContent ??
+      document.querySelector("#chain-list li .phrase-head")?.textContent;
+    return shiritoriChoices(words, [shown])[0].reading;
+  });
+  await page.getByTestId("chain-input").fill(said);
+  await tap(page, page.getByTestId("chain-say"));
+  await expect(page.getByTestId("chain-list").locator("li")).toHaveCount(3);
+  await tap(page, page.getByTestId("chain-new"));
+  await expect(page.getByTestId("chain-list").locator("li")).toHaveCount(1);
+  await sound(page, errors);
+});
+
+test("the idioms can be searched by what they mean, and say whose judgement put them there", async ({ page }) => {
+  const errors = await open(page);
+  await page.getByTestId("idioms").scrollIntoViewIfNeeded();
+  await page.getByTestId("idiom-search").fill("laurels");
+  await expect(page.getByTestId("idiom-list")).toContainText("胡坐をかく");
+  await expect(page.getByTestId("idiom-list")).toContainText("JMdict");
+  await expect(page.getByTestId("idiom-count")).not.toHaveText("");
+  await page.getByTestId("idiom-search").fill("no such phrase anywhere");
+  await expect(page.getByTestId("idiom-list").locator("li")).toHaveCount(0);
+  await tap(page, page.getByTestId("idiom-another"));
+  await expect(page.getByTestId("idiom-list").locator("li")).toHaveCount(1);
+  await sound(page, errors);
+});

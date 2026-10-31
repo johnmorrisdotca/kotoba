@@ -9,7 +9,7 @@ English, French, German and Japanese (kana) dictionaries for five-letter and oth
   <a href="./NOTICE.md"><img alt="Code MIT; word lists SCOWL, CC BY-SA 4.0" src="https://img.shields.io/badge/licence-MIT%20code%2C%20CC%20BY--SA%20lists-2f5d4a"></a>
   <img alt="No dependencies" src="https://img.shields.io/badge/dependencies-0-2f5d4a">
   <img alt="TypeScript" src="https://img.shields.io/badge/types-TypeScript-3178c6">
-  <a href="https://johnmorrisdotca.github.io/kotoba/docs/api/main/index.html"><img alt="8.2 kB minified and gzipped" src="https://img.shields.io/badge/min%2Bgzip-8.2%20kB-2f5d4a"></a>
+  <a href="https://johnmorrisdotca.github.io/kotoba/docs/api/main/index.html"><img alt="9.3 kB minified and gzipped" src="https://img.shields.io/badge/min%2Bgzip-9.3%20kB-2f5d4a"></a>
   <a href="https://www.npmjs.com/package/@johnmorrisdotca/kotoba#provenance"><img alt="Published with npm provenance" src="https://img.shields.io/badge/npm-provenance-2f5d4a"></a>
 </p>
 
@@ -92,6 +92,10 @@ npx @johnmorrisdotca/kotoba check crane
   romaji into kana, the size and mark of a kana, and the score.
 - **A word of the day** (`dailyWord`), the same for everybody, every word once
   before any comes round again.
+- **Shiritori**, the Japanese word chain: what a word starts and ends on, house
+  rules, a judge for each word, and a list of 6,393 everyday nouns to play from.
+- **Japanese idioms**: 2,021 set phrases from JMdict with their readings and
+  English meanings, each saying whose judgement put it on the list.
 - **A board you can put on a page** (`/play`), with the keyboards of English,
   French (AZERTY), German (QWERTZ, with ä ö ü) and kana typed in romaji; marks that never rely on colour alone; and CSS variables to theme it.
 - **A command line**: look a word up, list a list, mark a guess, give the word
@@ -428,6 +432,31 @@ console.log(markKanaGuess([..."ざくら"], [..."さかな"]).map((place) => `${
 // → [ 'hit (voicing)', 'kin', 'miss' ]
 ```
 
+### Shiritori: judge a word chain
+
+`playShiritori` judges a word against the readings so far; `shiritoriChoices` lists what may follow, from any words with a `reading`. The rules that vary from table to table are options: see the [shiritori and idioms guide](https://johnmorrisdotca.github.io/kotoba/docs/guides/shiritori-idioms.html).
+
+```ts
+import { playShiritori, readShiritoriWords, shiritoriChoices } from "@johnmorrisdotca/kotoba";
+import { JA_SHIRITORI } from "@johnmorrisdotca/kotoba/shiritori-ja";
+
+console.log(playShiritori(["さくら"], "らくだ")); // { ok: true, loses: false, next: "た" }
+console.log(playShiritori(["さくら"], "いぬ")); // { ok: false, why: "wrong-start" }
+console.log(playShiritori(["さくら"], "らいおん")); // { ok: true, loses: true, next: null }
+console.log(shiritoriChoices(readShiritoriWords(JA_SHIRITORI), ["さくら"]).length > 10); // true
+```
+
+### Japanese idioms: read and search
+
+```ts
+import { readIdioms, searchIdioms } from "@johnmorrisdotca/kotoba";
+import { JA_IDIOMS } from "@johnmorrisdotca/kotoba/idioms-ja";
+
+const idioms = readIdioms(JA_IDIOMS);
+const [found] = searchIdioms(idioms, "油を売");
+console.log(found.idiom, found.reading, found.kind); // 油を売る あぶらをうる idiom
+```
+
 ### A hidden word and guesses in a link
 
 A puzzle written down as text, and read back with the language's alphabet checked: `null` is anything that is not that many letters of it.
@@ -549,6 +578,8 @@ may be guessed.
 | `@johnmorrisdotca/kotoba/pop-answers` | `POP_ANSWERS`, `POP_CATEGORIES` | Pop-culture answers, each with its category as a clue |
 | `@johnmorrisdotca/kotoba/pop-guesses` | `POP_GUESSES` | Dictionary guesses at three and seven letters for the pop list |
 | `@johnmorrisdotca/kotoba/kana-3`, `/kana-4`, `/kana-5` | `JA_WORDS_3`, `JA_WORDS_4`, `JA_WORDS_5` | Japanese words of three, four and five kana, packed; read with `unpack` |
+| `@johnmorrisdotca/kotoba/idioms-ja` | `JA_IDIOMS` | 2,021 Japanese set phrases: written form, reading, English meanings, and whose judgement put each there; read with `readIdioms` |
+| `@johnmorrisdotca/kotoba/shiritori-ja` | `JA_SHIRITORI` | 6,393 everyday Japanese nouns, one a reading, commonest first, for a word chain; read with `readShiritoriWords` |
 
 `readWordLists(data, size)` reads one length of an alphabet list; `unpack(packed,
 size)` reads a kana list; `loadWordList(language, size)` (`/load`) does either by
@@ -763,6 +794,8 @@ The [API reference](https://johnmorrisdotca.github.io/kotoba/api.html) (also kep
 | `startWordGame(language, size, hidden)` and `typeWordGame`, `submitWordGame`, `eraseWordGame` | A round of a game as plain data, and the moves on it |
 | `dailyWord(answers, day, { salt })` | The word of a day, the same for everybody |
 | `wordScore`, `kanaScore` | Points for a finished round |
+| `playShiritori(played, reading, rules)`, `shiritoriChoices(pool, played, rules)` | A word chain: judge a word, and list what may follow |
+| `readIdioms(JA_IDIOMS)`, `searchIdioms(idioms, text)` | The Japanese idioms as plain rows, and a search over them |
 | `mountKotoba(element, options)` | The board, on a page |
 | `runCli(args)` | The command line as a function |
 
@@ -875,6 +908,10 @@ The code is MIT. The lists are data under their sources' terms, set out in full 
 - **Japanese**: JMdict, the property of the Electronic Dictionary Research and
   Development Group: CC BY-SA 4.0 and the Group's conditions. Refreshed from
   JMdict's newest release every month (`.github/workflows/jmdict-refresh.yml`).
+- **Japanese idioms and shiritori words**: JMdict too, with the `elementary` flag
+  from KANJIDIC2, the same Group's: CC BY-SA 4.0 and the Group's conditions, on
+  the same monthly refresh. A page showing these words must say so on that screen;
+  [NOTICE.md](./NOTICE.md) has wording to use.
 
 A word is a word only if a real dictionary of the language says so; a frequency
 count only ranks. The lists are made by the scripts in `scripts/`, never by hand.

@@ -115,6 +115,16 @@
       "import": "./dist/lists/kana-5.data.js",
       "default": "./dist/lists/kana-5.data.js"
     },
+    "./idioms-ja": {
+      "types": "./dist/lists/idioms-ja.data.d.ts",
+      "import": "./dist/lists/idioms-ja.data.js",
+      "default": "./dist/lists/idioms-ja.data.js"
+    },
+    "./shiritori-ja": {
+      "types": "./dist/lists/shiritori-ja.data.d.ts",
+      "import": "./dist/lists/shiritori-ja.data.js",
+      "default": "./dist/lists/shiritori-ja.data.js"
+    },
     "./cli": {
       "types": "./dist/cli.d.ts",
       "import": "./dist/cli.js",

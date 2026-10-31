@@ -1,0 +1,51 @@
+---
+title: "しりとりと日本語の慣用句"
+section: how-to
+order: 11
+description: "しりとりをハウスルールつきで判定し、慣用句のリストを読み、検索します。"
+---
+
+## しりとりを判定する
+
+しりとりは、前の言葉の最後のかなで始まる言葉をつないでいく遊びです。「ん」で終わる言葉を言うと負けです。「ん」で始まる言葉がないからです。
+
+```ts
+import {playShiritori,shiritoriChoices,readShiritoriWords} from "@johnmorrisdotca/kotoba";
+import {JA_SHIRITORI} from "@johnmorrisdotca/kotoba/shiritori-ja";
+console.log(playShiritori(["さくら"],"らくだ"));
+console.log(playShiritori(["さくら"],"いぬ"));
+console.log(playShiritori(["さくら"],"らいおん"));
+console.log(shiritoriChoices(readShiritoriWords(JA_SHIRITORI),["さくら"])[0]);
+```
+
+`playShiritori`は、これまでの読みと今言った言葉を受け取り、次に続くかな、負けになること、または受け付けない理由（`wrong-start`、`repeated`、`not-kana`）を返します。`shiritoriChoices`は`reading`を持つどんな言葉の集まりにも使えるので、リスト全体でも、学習者が覚えた言葉だけでも同じようにつなげられます。候補がなくなれば、「ん」がなくてもそこで終わりです。
+
+## ハウスルール
+
+遊び方は場によって違うので、二つのルールを選べます。既定は、少ない言葉でも続けやすいゆるやかなルールです。
+
+```ts
+import {shiritoriHeadKey,shiritoriTailKey} from "@johnmorrisdotca/kotoba";
+console.log(shiritoriHeadKey("がっこう"),shiritoriHeadKey("がっこう",{voicing:"kept"}));
+console.log(shiritoriTailKey("コーヒー"),shiritoriTailKey("コーヒー",{longVowel:"before"}));
+```
+
+`voicing`は、「か」のあとに「が」で続けてよいか（`"ignored"`）、「が」のあとは「が」だけか（`"kept"`）を決めます。`longVowel`は、「コーヒー」を伸ばす音の母音「い」でつなぐか（`"vowel"`）、長音符の前のかな「ひ」でつなぐか（`"before"`）を決めます。小さいかなは常に大きいかなとして読みます。
+
+## 慣用句を読む、検索する
+
+```ts
+import {readIdioms,searchIdioms} from "@johnmorrisdotca/kotoba";
+import {JA_IDIOMS} from "@johnmorrisdotca/kotoba/idioms-ja";
+const idioms=readIdioms(JA_IDIOMS);
+console.log(searchIdioms(idioms,"laurels")[0]);
+console.log(idioms.filter((one)=>one.kind==="idiom"&&one.elementary).length);
+```
+
+どの行にも、誰の判断で載っているかが書かれています。`"idiom"`はJMdict自身が慣用句と示している項目です。`"expression"`はこのパッケージ独自のルールによるもので、JMdictでは普通の表現とされている決まり文句を拾います。体の部分、「気」、または動物に助詞と述語が続き、意味がそのもの自体に触れていないものです。ですから「鼻が高い」（proud）は載り、「手を洗う」（to wash one's hands）は載りません。
+
+`meaning`は、慣用句にあたる語義の最初の英語訳です。その前に文字どおりの語義があっても、そちらは使いません。訳が一つだけだと誤解を招くことがあるので、`meanings`にはすべての訳が入っています。`elementary`は、句の中の漢字がすべて日本の小学校で習う漢字であることを示します。これは漢字についての事実であり、学校の慣用句リストではありません。リストはそれぞれ独立したエントリポイントです。必要になったときだけ読み込むには、`await import("@johnmorrisdotca/kotoba/idioms-ja")`と書きます。
+
+## 言葉の出どころ
+
+どちらのリストもJMdictから作り、`elementary`はKANJIDIC2から作っています。どちらもElectronic Dictionary Research and Development Groupの所有で、CC BY-SA 4.0と同グループの条件のもとで使っています。これらの言葉を表示するページでは、その画面に出典を示す必要があります。文例は[NOTICE.md](https://github.com/johnmorrisdotca/kotoba/blob/main/NOTICE.md)（英語）にあります。JMdictが卑語、成人向け、配慮が必要、または蔑称と示している項目は入れていません。これらのリストは子ども向けのゲームにも使われるからです。

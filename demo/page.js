@@ -5,6 +5,7 @@
 import { dayKey, KOTOBA_STRINGS, kotobaSay } from "./dist/index.js";
 import { loadWordList, WORD_LIST_SIZES } from "./dist/load.js";
 import { mountKotoba } from "./dist/play.js";
+import { mountPhrases } from "./phrases.js";
 
 const $ = (id) => document.getElementById(id);
 
@@ -45,6 +46,30 @@ const PAGE = {
     usingCopied: "Copied",
     usingCopyFailed: "Copy it by hand",
     foot: "Open source under the MIT licence. Nothing here is stored or sent anywhere.",
+    chainTitle: "Shiritori",
+    chainText:
+      "The Japanese word chain. Each word starts on the kana the last one ended on, and a word ending in ん loses. Type a noun in kana or romaji; the computer answers from the list.",
+    chainLabel: "Your word",
+    chainSay: "Say it",
+    chainNew: "Start again",
+    chainStart: "The chain starts on {word}. Say a word starting on {key}.",
+    chainYour: "The computer said {word}. Say a word starting on {key}.",
+    chainNotWord: "That is not in the list.",
+    chainWrongStart: "That does not start on {key}.",
+    chainRepeated: "That word has been said already.",
+    chainNotKana: "Type it in kana or romaji.",
+    chainLost: "That ends in ん, so you lose. The chain was {n} words long.",
+    chainWon: "The computer has no word left starting on {key}. You win, at {n} words.",
+    idiomTitle: "Japanese idioms",
+    idiomText: "Set phrases, with their readings and English meanings. Search by any of the three.",
+    idiomLabel: "Search the idioms",
+    idiomAnother: "Another idiom",
+    idiomKindIdiom: "JMdict marks this an idiom.",
+    idiomKindExpression: "An expression, chosen by this package's own rule rather than by JMdict.",
+    idiomFound: "{n} of {all} phrases.",
+    idiomNone: "No phrase holds that.",
+    phrasesCredit:
+      "Words from JMdict ({release}), the property of the Electronic Dictionary Research and Development Group, used under the Group's licence (CC BY-SA 4.0).",
   },
   ja: {
     pitch:
@@ -82,6 +107,30 @@ const PAGE = {
     usingCopied: "コピーしました",
     usingCopyFailed: "手でコピーしてください",
     foot: "MITライセンスのオープンソースです。ここでは何も保存せず、どこにも送りません。",
+    chainTitle: "しりとり",
+    chainText:
+      "前の言葉の最後のかなで始まる言葉をつなぎます。「ん」で終わる言葉を言うと負けです。名詞をかなかローマ字で入力すると、コンピューターがリストから答えます。",
+    chainLabel: "あなたの言葉",
+    chainSay: "言う",
+    chainNew: "最初から",
+    chainStart: "最初の言葉は{word}です。「{key}」で始まる言葉を言ってください。",
+    chainYour: "コンピューターは{word}と言いました。「{key}」で始まる言葉を言ってください。",
+    chainNotWord: "その言葉はリストにありません。",
+    chainWrongStart: "「{key}」で始まっていません。",
+    chainRepeated: "その言葉はもう出ました。",
+    chainNotKana: "かなかローマ字で入力してください。",
+    chainLost: "「ん」で終わったので、あなたの負けです。{n}語続きました。",
+    chainWon: "コンピューターには「{key}」で始まる言葉がもうありません。{n}語であなたの勝ちです。",
+    idiomTitle: "日本語の慣用句",
+    idiomText: "決まった言い回しを、読みと英語の意味つきで載せています。三つのどれでも検索できます。",
+    idiomLabel: "慣用句を検索",
+    idiomAnother: "別の慣用句",
+    idiomKindIdiom: "JMdictが慣用句と示しています。",
+    idiomKindExpression: "JMdictではなく、このパッケージ独自のルールで選んだ表現です。",
+    idiomFound: "{all}件中{n}件です。",
+    idiomNone: "当てはまる句はありません。",
+    phrasesCredit:
+      "言葉はJMdict（{release}）から。Electronic Dictionary Research and Development Groupの所有で、同グループのライセンス（CC BY-SA 4.0）のもとで使っています。",
   },
 };
 const WORDS = { en: { ...KOTOBA_STRINGS.en, ...PAGE.en }, ja: { ...KOTOBA_STRINGS.ja, ...PAGE.ja } };
@@ -113,9 +162,11 @@ const language = familyLanguage({
     docsLink();
     play.setLocale(lang);
     draw();
+    phrases.draw();
   },
 });
 const t = (key, values = {}) => kotobaSay(language.word(key), values);
+const phrases = mountPhrases({ t });
 const isKana = () => state.words === "ja";
 
 let play = null;

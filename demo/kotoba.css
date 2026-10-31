@@ -146,6 +146,56 @@
 .more .fam-row {
   gap: 8px 14px;
 }
+/* Shiritori and the idioms: each word or phrase with its reading and its meaning. */
+.phrase-input {
+  min-height: 44px;
+  min-width: 0;
+  flex: 1 1 12rem;
+  padding: 0 12px;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  background: transparent;
+}
+.chain,
+.idioms {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  width: 100%;
+  max-width: none;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.chain:empty,
+.idioms:empty {
+  display: none;
+}
+.chain li,
+.idioms li {
+  display: grid;
+  gap: 2px;
+  padding: 8px 12px;
+  border: 1px solid var(--rule);
+  border-radius: 10px;
+  overflow-wrap: anywhere;
+}
+.phrase-head {
+  font-weight: 600;
+}
+.phrase-head span {
+  margin-left: 8px;
+  font-weight: 400;
+  color: var(--muted);
+}
+.phrase-note {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.chain-status {
+  font-weight: 500;
+  color: inherit;
+}
 .credits p + p {
   margin-top: 6px;
 }

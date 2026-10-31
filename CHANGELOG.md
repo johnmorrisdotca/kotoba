@@ -6,6 +6,12 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- Shiritori, the Japanese word chain: `playShiritori` judges a word, `shiritoriChoices` lists what may follow from any pool of words, `shiritoriHeadKey` and `shiritoriTailKey` say what a word starts and ends on, with house rules for voicing and the long vowel mark. The entry point `/shiritori-ja` holds 6,393 everyday nouns from JMdict, commonest first.
+- Japanese idioms: the entry point `/idioms-ja` holds 2,021 set phrases from JMdict, with readings, English meanings, whose judgement put each there, and whether its kanji are all taught in elementary school (from KANJIDIC2). `readIdioms` and `searchIdioms` read them. Each list is its own entry point, so a page fetches it only when it imports it.
+- The demo has a panel for each, with the source named on the screen. Both lists are CC BY-SA 4.0 and on the monthly JMdict refresh: see NOTICE.md.
+
 ## [1.2.1] - 2026-10-31
 
 ### Changed
