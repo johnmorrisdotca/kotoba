@@ -93,9 +93,9 @@ all.forEach((m, i) => { if (Object.keys(m).length === 0) throw new Error(names[i
 const { markGuess, readWordLists, unpack, VERSION } = m0;
 const dealt = markGuess("crane", "react").join(",");
 if (dealt !== ${JSON.stringify(dealt)}) throw new Error("crane against react marked " + dealt);
-const en = all[names.indexOf(${JSON.stringify(pkg.name + "/words-en")})];
+const en = all[names.indexOf(${JSON.stringify(`${pkg.name}/words-en`)})];
 if (!readWordLists(en.EN_WORDS, 5).allowed.has("crane")) throw new Error("the English list does not hold crane");
-const kana = all[names.indexOf(${JSON.stringify(pkg.name + "/kana-3")})];
+const kana = all[names.indexOf(${JSON.stringify(`${pkg.name}/kana-3`)})];
 if (unpack(kana.JA_WORDS_3, 3).answers.length !== 2000) throw new Error("the 3-kana list is not 2,000 answers");
 if (VERSION !== ${JSON.stringify(pkg.version)}) throw new Error("VERSION is " + VERSION);
 console.log(names.join(" "));

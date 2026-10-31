@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { kanaBase, kanaFamily, kanaFound, kanaTone, markKanaGuess, type KanaMarked } from "./kanaMarks.ts";
+import { type KanaMarked, kanaBase, kanaFamily, kanaFound, kanaTone, markKanaGuess } from "./kanaMarks.ts";
 
 const kana = (word: string) => [...word];
 /** The marks alone, as a string: g green, G green with an arrow, o orange, y yellow, . grey. */

@@ -1,8 +1,9 @@
-import { mountKotoba, KOTOBA_PLAY_CSS, type KotobaPlay, type KotobaPlayOptions, type KotobaNewGame } from "./play.ts";
-import { WORD_LIST_NAMES, WORD_LIST_SIZES, type WordListName } from "./load.ts";
 import { embedDay } from "./embed-day.ts";
 import type { WordGame } from "./game.ts";
+import { WORD_LIST_NAMES, WORD_LIST_SIZES, type WordListName } from "./load.ts";
+import { KOTOBA_PLAY_CSS, type KotobaNewGame, type KotobaPlay, type KotobaPlayOptions, mountKotoba } from "./play.ts";
 import type { Language } from "./strings.ts";
+
 const ElementBase = typeof HTMLElement === "undefined" ? (class {} as typeof HTMLElement) : HTMLElement;
 const isOn = (value: string | null, fallback = true): boolean =>
   value === null ? fallback : !["off", "false", "no", "0"].includes(value.trim().toLowerCase());
@@ -192,8 +193,8 @@ export class KotobaGame extends ElementBase {
   #frame(): void {
     this.style.display = "block";
     this.style.maxWidth = "100%";
-    const width = Number(this.getAttribute("width")),
-      size = this.getAttribute("size");
+    const width = Number(this.getAttribute("width"));
+    const size = this.getAttribute("size");
     const pixels =
       this.hasAttribute("width") && width > 0 && Number.isFinite(width)
         ? Math.min(width, 2000)
@@ -215,9 +216,9 @@ export class KotobaGame extends ElementBase {
     const theme = this.getAttribute("theme");
     this.style.colorScheme = theme === "light" || theme === "dark" ? theme : "light dark";
     this.setAttribute("data-kotoba-embed", "");
-    const root = this.getRootNode(),
-      target: ParentNode =
-        typeof ShadowRoot !== "undefined" && root instanceof ShadowRoot ? root : this.ownerDocument.head;
+    const root = this.getRootNode();
+    const target: ParentNode =
+      typeof ShadowRoot !== "undefined" && root instanceof ShadowRoot ? root : this.ownerDocument.head;
     if (target.querySelector("style[data-kotoba-embed-style]") === null) {
       const style = this.ownerDocument.createElement("style");
       style.setAttribute("data-kotoba-embed-style", "");
@@ -250,8 +251,8 @@ export class KotobaGame extends ElementBase {
     this.#mount?.destroy();
     this.#mount = null;
     this.#key = "";
-    const message = error instanceof Error ? error.message : String(error),
-      status = this.ownerDocument.createElement("p");
+    const message = error instanceof Error ? error.message : String(error);
+    const status = this.ownerDocument.createElement("p");
     status.setAttribute("role", "status");
     status.textContent = message;
     this.replaceChildren(status);
@@ -263,8 +264,8 @@ export class KotobaGame extends ElementBase {
       const words = (this.getAttribute("words") ?? this.#options.words ?? "en") as WordListName;
       const n = (name: string, fallback: number): number =>
         this.hasAttribute(name) ? Number(this.getAttribute(name)) : fallback;
-      const letters = n("letters", this.#options.size ?? (words === "ja" ? 4 : 5)),
-        rows = n("rows", this.#options.rows ?? 6);
+      const letters = n("letters", this.#options.size ?? (words === "ja" ? 4 : 5));
+      const rows = n("rows", this.#options.rows ?? 6);
       if (
         !WORD_LIST_NAMES.includes(words) ||
         !WORD_LIST_SIZES[words].includes(letters) ||
@@ -289,10 +290,10 @@ export class KotobaGame extends ElementBase {
         easy: isOn(this.getAttribute("easy"), this.#options.easy ?? false),
         hidden: this.#options.hidden,
       };
-      const key = JSON.stringify([round, isOn(this.getAttribute("keyboard"), this.#options.keyboard ?? true)]),
-        locale = (this.getAttribute("lang") ??
-          this.#options.locale ??
-          (this.ownerDocument.documentElement.lang === "ja" ? "ja" : "en")) as Language;
+      const key = JSON.stringify([round, isOn(this.getAttribute("keyboard"), this.#options.keyboard ?? true)]);
+      const locale = (this.getAttribute("lang") ??
+        this.#options.locale ??
+        (this.ownerDocument.documentElement.lang === "ja" ? "ja" : "en")) as Language;
       if (key === this.#key && this.#mount !== null) {
         this.#mount.setLocale(locale);
         return;

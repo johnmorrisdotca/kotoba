@@ -7,7 +7,7 @@ import { describe, expect, it } from "vitest";
 
 import { runCli } from "./cli.ts";
 import * as kotoba from "./index.ts";
-import { WORD_LIST_NAMES, WORD_LIST_SIZES, loadWordList } from "./load.ts";
+import { loadWordList, WORD_LIST_NAMES, WORD_LIST_SIZES } from "./load.ts";
 import { KOTOBA_PLAY_CSS, KOTOBA_PLAY_VARIABLES } from "./play.ts";
 import { KOTOBA_STRINGS } from "./strings.ts";
 
@@ -165,6 +165,7 @@ describe("the README on a round", () => {
       "keyMarks",
       "wordGameKeys",
     ]);
+    // biome-ignore lint/performance/noDynamicNamespaceImportAccess: the test reads each export by its name
     for (const name of named) expect(typeof kotoba[name], name).toBe("function");
     expect(WORD_GAME_ROWS).toBe(6);
     expect(startWordGame("en", 5, "crane").rows).toBe(6);
@@ -296,7 +297,7 @@ describe("package.json", () => {
 });
 
 describe("docs/strings-ja.md", () => {
-  const escape = (text) => text.replaceAll("|", "\\|").replaceAll("\n", "<br>");
+  const escapeCell = (text) => text.replaceAll("|", "\\|").replaceAll("\n", "<br>");
   const lines = [
     "# Kotoba's words, in English and Japanese",
     "",
@@ -310,7 +311,7 @@ describe("docs/strings-ja.md", () => {
     "| --- | --- | --- |",
     ...Object.keys(KOTOBA_STRINGS.en)
       .filter((key) => key !== "cliUsage")
-      .map((key) => `| \`${key}\` | ${escape(KOTOBA_STRINGS.en[key])} | ${escape(KOTOBA_STRINGS.ja[key])} |`),
+      .map((key) => `| \`${key}\` | ${escapeCell(KOTOBA_STRINGS.en[key])} | ${escapeCell(KOTOBA_STRINGS.ja[key])} |`),
     "",
     "## The command line's help",
     "",

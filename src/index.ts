@@ -4,14 +4,14 @@
  * loads only what it plays: see the README.
  */
 
-export * from "./marks.ts";
-export * from "./lists.ts";
-export * from "./wordScore.ts";
-export * from "./keyboardRows.ts";
-export * from "./kana/kanaMarks.ts";
-export * from "./kana/romaji.ts";
-export * from "./kana/kanaScore.ts";
 export * from "./daily.ts";
 export * from "./game.ts";
+export * from "./kana/kanaMarks.ts";
+export * from "./kana/kanaScore.ts";
+export * from "./kana/romaji.ts";
+export * from "./keyboardRows.ts";
+export * from "./lists.ts";
+export * from "./marks.ts";
 export * from "./strings.ts";
 export { VERSION } from "./version.ts";
+export * from "./wordScore.ts";

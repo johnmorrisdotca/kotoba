@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
 
 import { dailyIndex, dailyWord, dayKey, dayNumber, isDayKey } from "./daily.ts";
-import { readWordLists } from "./lists.ts";
 import { EN_WORDS } from "./lists/words-en.data.ts";
+import { readWordLists } from "./lists.ts";
 
 describe("days", () => {
   it("are written YYYY-MM-DD, and only real dates are days", () => {

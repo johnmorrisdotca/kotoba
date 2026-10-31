@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-import { writeWordList } from "./word-list-docs.mjs";
 /**
  * WRITES POP GOMOJI'S LISTS from its hand-kept corpus and from SCOWL.
  *
@@ -29,6 +28,7 @@ import { writeWordList } from "./word-list-docs.mjs";
  */
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { writeWordList } from "./word-list-docs.mjs";
 
 const FINAL = process.argv[2];
 if (FINAL === undefined) {

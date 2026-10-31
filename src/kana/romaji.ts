@@ -33,7 +33,9 @@ const ROWS: Record<string, string> = {
 const TABLE: Record<string, string> = (() => {
   const table: Record<string, string> = {};
   for (const [consonant, kana] of Object.entries(ROWS)) {
-    [...VOWELS].forEach((vowel, at) => (table[consonant + vowel] = kana[at]!));
+    [...VOWELS].forEach((vowel, at) => {
+      table[consonant + vowel] = kana[at]!;
+    });
   }
   Object.assign(table, {
     ya: "や",

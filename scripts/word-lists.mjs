@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-import { writeWordList } from "./word-list-docs.mjs";
 /**
  * WRITES THE GOMOJI LISTS from SCOWL, so the lists in the repository are
  * a machine's output that anybody can make again, never a hand-kept table.
@@ -30,6 +29,7 @@ import { writeWordList } from "./word-list-docs.mjs";
  */
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { writeWordList } from "./word-list-docs.mjs";
 
 const FINAL = process.argv[2];
 if (FINAL === undefined) {

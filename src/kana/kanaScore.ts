@@ -1,4 +1,4 @@
-import { WORD_SCORE, foundBonus, type WordScore } from "../wordScore.ts";
+import { foundBonus, WORD_SCORE, type WordScore } from "../wordScore.ts";
 import { kanaBase, markKanaGuess } from "./kanaMarks.ts";
 
 /**

@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-import { writeWordList } from "./word-list-docs.mjs";
 /**
  * WRITES THE FRENCH AND GERMAN GOMOJI LISTS, so the lists in the repository
  * are a machine's output that anybody can make again, never a hand-kept table.
@@ -95,6 +94,7 @@ import { writeWordList } from "./word-list-docs.mjs";
  */
 import { createReadStream, readFileSync } from "node:fs";
 import { createInterface } from "node:readline";
+import { writeWordList } from "./word-list-docs.mjs";
 
 const [frPath, dePath, frDictPath, deDictPath, frWiktPath, deWiktPath] = process.argv.slice(2);
 if ([frPath, dePath, frDictPath, deDictPath, frWiktPath, deWiktPath].includes(undefined)) {

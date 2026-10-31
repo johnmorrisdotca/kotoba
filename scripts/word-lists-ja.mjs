@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-import { writeWordList } from "./word-list-docs.mjs";
 /**
  * WRITES THE KANA GOMOJI LISTS AND KUMIMOJI'S JAPANESE WORDS AND TILE MIX
  * from JMdict, so the lists in the repository are machine output anybody can
@@ -43,6 +42,7 @@ import { writeWordList } from "./word-list-docs.mjs";
  */
 import { existsSync, readFileSync } from "node:fs";
 import { gunzipSync } from "node:zlib";
+import { writeWordList } from "./word-list-docs.mjs";
 
 const SOURCE = process.argv[2];
 if (SOURCE === undefined) {

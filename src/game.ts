@@ -2,8 +2,8 @@ import { cycleMark, kanaFound, markKanaGuess, toggleSize } from "./kana/kanaMark
 import { kanaScore } from "./kana/kanaScore.ts";
 import { finishRomaji, readRomaji } from "./kana/romaji.ts";
 import { KEYBOARD_ROWS } from "./keyboardRows.ts";
-import { markGuess, type GomojiLanguage, type LetterMark } from "./marks.ts";
-import { wordScore, type WordScore } from "./wordScore.ts";
+import { type GomojiLanguage, type LetterMark, markGuess } from "./marks.ts";
+import { type WordScore, wordScore } from "./wordScore.ts";
 
 /**
  * A ROUND OF A WORD GAME, as plain data: a hidden word, the guesses made, the

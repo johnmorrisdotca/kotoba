@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
 
 import { runCli } from "./cli.ts";
-import { WORD_LIST_SIZES, loadWordList } from "./load.ts";
 import { dailyWord } from "./daily.ts";
-import { readWordLists } from "./lists.ts";
 import { EN_WORDS } from "./lists/words-en.data.ts";
+import { readWordLists } from "./lists.ts";
+import { loadWordList, WORD_LIST_SIZES } from "./load.ts";
 import { KOTOBA_STRINGS } from "./strings.ts";
 import { VERSION } from "./version.ts";
 

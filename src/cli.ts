@@ -1,8 +1,8 @@
 import { dailyIndex, dayKey, isDayKey } from "./daily.ts";
 import { guessMarks } from "./game.ts";
-import { WORD_LIST_NAMES, WORD_LIST_SIZES, loadWordList, type LoadedWordList, type WordListName } from "./load.ts";
+import { type LoadedWordList, loadWordList, WORD_LIST_NAMES, WORD_LIST_SIZES, type WordListName } from "./load.ts";
 import { ALPHABETS } from "./marks.ts";
-import { KOTOBA_STRINGS, kotobaLanguage, kotobaSay, type KotobaStrings, type Language } from "./strings.ts";
+import { KOTOBA_STRINGS, type KotobaStrings, kotobaLanguage, kotobaSay, type Language } from "./strings.ts";
 import { VERSION } from "./version.ts";
 
 /**

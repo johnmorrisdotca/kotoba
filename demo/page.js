@@ -2,8 +2,8 @@
 // six tries, and read the marks. The game itself (the board, the keys, the rules of a round, the marking, the romaji
 // reader and the score) is the package's own `mountKotoba`; this page sets it up and shows the code that makes it.
 // Each list is fetched only when it is played. English or Japanese.
-import { KOTOBA_STRINGS, dayKey, kotobaSay } from "./dist/index.js";
-import { WORD_LIST_SIZES, loadWordList } from "./dist/load.js";
+import { dayKey, KOTOBA_STRINGS, kotobaSay } from "./dist/index.js";
+import { loadWordList, WORD_LIST_SIZES } from "./dist/load.js";
 import { mountKotoba } from "./dist/play.js";
 
 const $ = (id) => document.getElementById(id);
@@ -184,7 +184,7 @@ function draw() {
         button.addEventListener("click", (event) => {
           letGo(event);
           state.size = size;
-          deal(true);
+          void deal(true);
         });
         return button;
       }),
@@ -199,7 +199,7 @@ function draw() {
   $("easy").setAttribute("aria-pressed", String(state.easy));
   $("daily").setAttribute("aria-pressed", String(state.daily));
   $("credit").textContent = state.daily
-    ? t("dailyNote", { day: dayKey(Date.now()) }) + " " + t(isKana() ? "creditKana" : "creditLetters", { release })
+    ? `${t("dailyNote", { day: dayKey(Date.now()) })} ${t(isKana() ? "creditKana" : "creditLetters", { release })}`
     : t(isKana() ? "creditKana" : "creditLetters", { release });
   $("counts").textContent = counts === null ? "" : t("counts", counts);
   $("using-code").textContent = usingCode();
@@ -225,23 +225,23 @@ for (const button of $("languages").children) {
     letGo(event);
     state.words = button.dataset.langId;
     state.size = state.words === "ja" ? 4 : 5;
-    deal(true);
+    void deal(true);
   });
 }
 $("easy").addEventListener("click", (event) => {
   letGo(event);
   state.easy = !state.easy;
-  deal(true);
+  void deal(true);
 });
 $("daily").addEventListener("click", (event) => {
   letGo(event);
   state.daily = !state.daily;
-  deal(true);
+  void deal(true);
 });
 $("new").addEventListener("click", (event) => {
   letGo(event);
   state.daily = false;
-  deal(true);
+  void deal(true);
 });
 
 /** Put text on the clipboard and say so on the button for a moment. */

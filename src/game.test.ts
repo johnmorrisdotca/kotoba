@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 
 import {
-  WORD_GAME_ROWS,
   changeWordGame,
   eraseWordGame,
   guessMarks,
@@ -9,8 +8,9 @@ import {
   startWordGame,
   submitWordGame,
   typeWordGame,
-  wordGameKeys,
+  WORD_GAME_ROWS,
   type WordGame,
+  wordGameKeys,
 } from "./game.ts";
 import { kanaScore } from "./kana/kanaScore.ts";
 import { wordScore } from "./wordScore.ts";

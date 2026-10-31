@@ -474,7 +474,7 @@ A guess coloured against the word, place by place. Both are arrays of single kan
 ### type `Packed`
 
 ```ts
-type Packed = { release: string; alphabet: string; codes: string; easy: string; answers: string; allowed: string };
+type Packed = { release: string; alphabet: string; codes: string; easy: string; answers: string; allowed: string; };
 ```
 
 A kana list as its entry point exports it: the JMdict release, an alphabet of kana and one character a kana for each, and the three lists written in those characters.
@@ -1039,7 +1039,7 @@ Run the command line. See `kotoba --help` for what it takes.
 ### type `LoadedWordList`
 
 ```ts
-type LoadedWordList = { easy: readonly string[]; answers: readonly string[]; allowed: ReadonlySet<string>; release?: string };
+type LoadedWordList = { easy: readonly string[]; answers: readonly string[]; allowed: ReadonlySet<string>; release?: string; };
 ```
 
 A list read into words: the easy answers inside the answers inside the words that may be guessed. A kana list also says which JMdict release it was made from.

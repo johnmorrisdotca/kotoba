@@ -1,8 +1,9 @@
 /** Preserve checked public examples in generated word lists without changing their data or notices. */
 import { readFileSync, writeFileSync as writeRaw } from "node:fs";
 import { basename, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
 import process from "node:process";
+import { fileURLToPath } from "node:url";
+
 const entries = {
   "words-en.data.ts": "words-en",
   "words-fr.data.ts": "words-fr",
@@ -13,13 +14,14 @@ const entries = {
   "kana-4.data.ts": "kana-4",
   "kana-5.data.ts": "kana-5",
 };
-export function withWordExamples(text, entry) {
+export function withWordExamples(source, entry) {
+  let text = source;
   const edits = [];
   for (const match of text.matchAll(/^export const (\w+)/gm)) {
-    const start = match.index,
-      name = match[1],
-      end = text.lastIndexOf("*/", start) + 2,
-      pos = text.lastIndexOf("/**", end);
+    const start = match.index;
+    const name = match[1];
+    const end = text.lastIndexOf("*/", start) + 2;
+    const pos = text.lastIndexOf("/**", end);
     const doc = pos >= 0 && end > 1 && /^\s*$/.test(text.slice(end, start)) ? { pos, end } : null;
     if (doc && text.slice(doc.pos, doc.end).includes("@example")) continue;
     let comment = doc
@@ -50,9 +52,9 @@ if (
   process.argv.includes("--refresh")
 ) {
   for (const [file, entry] of Object.entries(entries)) {
-    const target = "src/lists/" + file,
-      before = readFileSync(target, "utf8"),
-      after = withWordExamples(before, entry);
+    const target = `src/lists/${file}`;
+    const before = readFileSync(target, "utf8");
+    const after = withWordExamples(before, entry);
     if (before !== after) writeRaw(target, after);
     console.log(target);
   }

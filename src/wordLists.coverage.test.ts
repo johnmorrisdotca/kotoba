@@ -1,9 +1,8 @@
 import { describe, expect, it } from "vitest";
-
-import { readWordLists, type WordData, type WordListLanguage } from "./lists.ts";
 import { DE_WORDS } from "./lists/words-de.data.ts";
 import { EN_WORDS } from "./lists/words-en.data.ts";
 import { FR_WORDS } from "./lists/words-fr.data.ts";
+import { readWordLists, type WordData, type WordListLanguage } from "./lists.ts";
 
 const DATA: Record<WordListLanguage, WordData> = { en: EN_WORDS, fr: FR_WORDS, de: DE_WORDS };
 const isWord = (word: string, size: number, lang: WordListLanguage) =>

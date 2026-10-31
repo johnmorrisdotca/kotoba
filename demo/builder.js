@@ -1,9 +1,10 @@
+import { KOTOBA_EMBED_OPTION_KEYS, KotobaGame } from "./dist/element.js";
+import { embedDay } from "./dist/embed-day.js";
 import { VERSION } from "./dist/index.js";
 import { WORD_LIST_NAMES, WORD_LIST_SIZES } from "./dist/load.js";
-import { KotobaGame, KOTOBA_EMBED_OPTION_KEYS } from "./dist/element.js";
-import { embedDay } from "./dist/embed-day.js";
 import "./dist/element-define.js";
-import { familyEmbedBuilder, FAMILY_EMBED_BUILDER_WORDS } from "./family-embed-builder.js";
+import { FAMILY_EMBED_BUILDER_WORDS, familyEmbedBuilder } from "./family-embed-builder.js";
+
 const words = {
   en: {
     ...FAMILY_EMBED_BUILDER_WORDS.en,
@@ -140,14 +141,14 @@ for (const name of ["onChange", "onFinish", "load", "now"])
   leftOut[`mount.${name}`] = "Host callbacks, loaders and clocks belong to options.";
 let mounted;
 const page = globalThis.familyLanguage({
-    id: "kotoba",
-    words,
-    onChange: () => {
-      docsLink();
-      mounted?.draw();
-    },
-  }),
-  heights = {};
+  id: "kotoba",
+  words,
+  onChange: () => {
+    docsLink();
+    mounted?.draw();
+  },
+});
+const heights = {};
 const key = (settings) => JSON.stringify(settings);
 function problem(settings) {
   try {

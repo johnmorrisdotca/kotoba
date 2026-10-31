@@ -1,9 +1,8 @@
 import { describe, expect, it } from "vitest";
-
-import { KANA_SIZES, unpack, type KanaWords } from "../lists.ts";
 import { JA_WORDS_3 } from "../lists/kana-3.data.ts";
 import { JA_WORDS_4 } from "../lists/kana-4.data.ts";
 import { JA_WORDS_5 } from "../lists/kana-5.data.ts";
+import { KANA_SIZES, type KanaWords, unpack } from "../lists.ts";
 
 const LISTS: Record<number, KanaWords> = {
   3: unpack(JA_WORDS_3, 3),

@@ -1,10 +1,10 @@
 import { describe, expect, it } from "vitest";
-
-import { readWordLists } from "./lists.ts";
 import { EN_WORDS } from "./lists/words-en.data.ts";
+import { readWordLists } from "./lists.ts";
 
 const isWord = (word: string, size: number) => readWordLists(EN_WORDS, size)?.allowed.has(word) ?? false;
-import { WORD_SCORE, foundBonus, wordScore } from "./wordScore.ts";
+
+import { foundBonus, WORD_SCORE, wordScore } from "./wordScore.ts";
 
 describe("what a Gomoji word scores", () => {
   it("is 0 only when no letter was ever found", () => {
@@ -51,7 +51,7 @@ describe("what a Gomoji word scores", () => {
       for (let rows = size + 1; rows <= 9; rows += 1) {
         const hidden = size === 5 ? "crane" : "cake";
         // The best a loss can do: all but the last letter placed on the first row, the last on the second.
-        const nearly = hidden.slice(0, -1) + "x";
+        const nearly = `${hidden.slice(0, -1)}x`;
         const last = "x".repeat(size - 1) + hidden.at(-1)!;
         const bestLoss = wordScore(
           hidden,

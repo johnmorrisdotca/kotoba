@@ -2,11 +2,12 @@ import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { expect, test } from "@playwright/test";
+
 const site = join(dirname(fileURLToPath(import.meta.url)), "..", "site");
 async function serve(page) {
   await page.route("http://kotoba.test/**", (route) => {
-    const { pathname } = new URL(route.request().url()),
-      file = join(site, pathname.endsWith("/") ? `${pathname}index.html` : pathname);
+    const { pathname } = new URL(route.request().url());
+    const file = join(site, pathname.endsWith("/") ? `${pathname}index.html` : pathname);
     if (!existsSync(file)) return route.fulfill({ status: 404, body: "" });
     return route.fulfill({
       body: readFileSync(file),
@@ -48,8 +49,8 @@ test("focused keyboard and callbacks preserve independent games and outside inpu
     const { defineGame } = await import("../dist/element.js");
     defineGame("article-word");
     defineGame("article-word");
-    const host = document.createElement("div"),
-      shadow = host.attachShadow({ mode: "open" });
+    const host = document.createElement("div");
+    const shadow = host.attachShadow({ mode: "open" });
     document.body.append(host);
     const game = document.createElement("article-word");
     game.setAttribute("size", "small");

@@ -1,6 +1,5 @@
 import { dailyWord, dayKey } from "./daily.ts";
 import {
-  WORD_GAME_ROWS,
   changeWordGame,
   eraseWordGame,
   guessMarks,
@@ -8,13 +7,14 @@ import {
   startWordGame,
   submitWordGame,
   typeWordGame,
-  wordGameKeys,
+  WORD_GAME_ROWS,
   type WordGame,
   type WordGameRefusal,
+  wordGameKeys,
 } from "./game.ts";
 import { KEYBOARD_ROWS } from "./keyboardRows.ts";
-import { loadWordList, type LoadedWordList, type WordListName } from "./load.ts";
-import { KOTOBA_STRINGS, kotobaSay, type KotobaStrings, type Language } from "./strings.ts";
+import { type LoadedWordList, loadWordList, type WordListName } from "./load.ts";
+import { KOTOBA_STRINGS, type KotobaStrings, kotobaSay, type Language } from "./strings.ts";
 
 /**
  * A WORD GAME YOU CAN PUT ON A PAGE: a board of guesses, the keyboard of the
@@ -443,7 +443,8 @@ export function mountKotoba(container: HTMLElement, options: KotobaPlayOptions =
     if (next.size !== undefined) choice.size = next.size;
     if (next.easy !== undefined) choice.easy = next.easy;
     if (next.rows !== undefined) choice.rows = next.rows;
-    const mine = (token += 1);
+    token += 1;
+    const mine = token;
     list = null;
     game = null;
     message = null;
