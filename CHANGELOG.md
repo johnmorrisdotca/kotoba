@@ -6,6 +6,17 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+## [1.3.2] - 2026-11-02
+
+The kana word lists are made again from JMdict's release of 2026-11-01 (they were from 2026-09-28). The code is unchanged.
+
+### Changed
+
+- **3 kana:** the words that may be guessed go from 16,444 to 16,448 (one word, やまま, left; five, かたに たくふ ほもび ますけ ゆいま, joined). The 900 easy and 2,000 other answers are unchanged.
+- **4 kana:** the words that may be guessed go from 39,046 to 39,069 (23 joined, none left). The easy and other answers are unchanged.
+- **5 kana:** the words that may be guessed go from 35,419 to 35,449 (31 joined, one left: ふかいきり), and one of the 2,000 answers is swapped (しょざいち out, なまびーる in). The 900 easy answers are unchanged.
+- The order of the words that stayed is the same in every list, but a list that gains or loses a word deals another pack, so a day's kana word from `dailyWord` can differ from 1.3.1 (see "What the word depends on" in the README). The idioms and shiritori lists are not changed.
+
 ## [1.3.1] - 2026-11-02
 
 ### Added
