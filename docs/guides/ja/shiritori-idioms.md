@@ -46,6 +46,28 @@ console.log(idioms.filter((one)=>one.kind==="idiom"&&one.elementary).length);
 
 `meaning`は、慣用句にあたる語義の最初の英語訳です。その前に文字どおりの語義があっても、そちらは使いません。訳が一つだけだと誤解を招くことがあるので、`meanings`にはすべての訳が入っています。`elementary`は、句の中の漢字がすべて日本の小学校で習う漢字であることを示します。これは漢字についての事実であり、学校の慣用句リストではありません。リストはそれぞれ独立したエントリポイントです。必要になったときだけ読み込むには、`await import("@johnmorrisdotca/kotoba/idioms-ja")`と書きます。
 
+## 自分のサイトに言葉を足す
+
+リストは読み込んだあとはただのデータです。サイトに合わせる方法の一つは、パッケージをそのまま使い、サイト側のコードで、そのリストの上に独自の行を重ねることです。パッケージには手を加えないので、新しい版が出れば、増えた言葉もそのまま使えます。
+
+```ts
+import {readIdioms,searchIdioms,readShiritoriWords,shiritoriChoices} from "@johnmorrisdotca/kotoba";
+import {JA_IDIOMS} from "@johnmorrisdotca/kotoba/idioms-ja";
+import {JA_SHIRITORI} from "@johnmorrisdotca/kotoba/shiritori-ja";
+const byPhrase=new Map(readIdioms(JA_IDIOMS).map((one)=>[one.idiom,one]));
+const proud=byPhrase.get("鼻が高い");
+if(proud)byPhrase.set(proud.idiom,{...proud,meaning:"proud of someone",meanings:["proud of someone"]});
+byPhrase.set("胸を張る",{idiom:"胸を張る",reading:"むねをはる",meaning:"to hold one's head high",meanings:["to hold one's head high"],kind:"expression",kanji:["胸","張"],elementary:true,common:false});
+const idioms=[...byPhrase.values()];
+console.log(searchIdioms(idioms,"head high")[0]?.idiom);
+const words=[...readShiritoriWords(JA_SHIRITORI),{reading:"らむね",word:"ラムネ",meaning:"a fizzy lemon drink"}];
+console.log(shiritoriChoices(words,["さくら"]).some((one)=>one.word==="ラムネ"));
+```
+
+慣用句は表記をキーにして持っているので、独自の行は、リストにある同じ句の行と置き換わり、リストにない句なら新しく加わります。あとの版でリストにその句が入っても、独自の行が残り、二重にはなりません。句を外すには`byPhrase.delete("…")`と書きます。しりとりの言葉は、リストにもう一つのリストをつなぐだけです。`searchIdioms`も`shiritoriChoices`もどんな行でも受け取るので、それ以外のコードは変わりません。
+
+独自の行の`kind`、`kanji`、`elementary`、`common`は、このパッケージやJMdictの判断ではなく、サイト側の判断によるものです。リストは子ども向けのゲームにも使われるため、次の節に挙げる項目を入れていません。子ども向けでないサイトなら、そうした句をこの方法で足すこともできますが、足すかどうかはサイト側の判断です。一から自分で書いた行は、自分のものです。リストから取って言い換えた行はJMdictをもとにしたままなので、次の節のライセンスのもとにあり、画面への出典表示も必要です。
+
 ## 言葉の出どころ
 
 どちらのリストもJMdictから作り、`elementary`はKANJIDIC2から作っています。どちらも電子辞書研究開発グループの所有で、CC BY-SA 4.0と同グループの条件のもとで使っています。これらの言葉を表示するページでは、その画面に出典を示す必要があります。文例は[NOTICE.md](https://github.com/johnmorrisdotca/kotoba/blob/main/NOTICE.md)（英語）にあります。JMdictが卑語、成人向け、配慮が必要、または蔑称と示している項目は入れていません。これらのリストは子ども向けのゲームにも使われるからです。

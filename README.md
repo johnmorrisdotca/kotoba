@@ -1015,7 +1015,7 @@ never edit a list by hand. Please follow the [code of conduct](./CODE_OF_CONDUCT
 
 See [CHANGELOG.md](./CHANGELOG.md).
 
-The latest release, 1.3.0, adds shiritori and Japanese idioms.
+The latest release, 1.3.1, adds a guide to laying your own words over the lists. 1.3.0 added shiritori and Japanese idioms.
 
 ## Licence
 

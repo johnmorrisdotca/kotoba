@@ -6,6 +6,12 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+## [1.3.1] - 2026-11-02
+
+### Added
+
+- The guide to shiritori and idioms says how a site adds its own words: keep using the package and lay your own rows over its list, in English and Japanese. Nothing in the code or the lists has changed.
+
 ## [1.3.0] - 2026-11-02
 
 ### Added

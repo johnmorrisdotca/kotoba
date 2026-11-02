@@ -752,7 +752,7 @@ A packed kana list read into its words, `size` kana each.
 ### const `VERSION`
 
 ```ts
-VERSION: "1.3.0"
+VERSION: "1.3.1"
 ```
 
 The package's version.
