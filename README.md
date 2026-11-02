@@ -597,9 +597,9 @@ the lists):
 | Deutsch | 4 | 339 | 677 | 1976 |
 | Deutsch | 5 | 570 | 1139 | 5032 |
 | Deutsch | 6 | 851 | 1702 | 10608 |
-| かな | 3 | 900 | 2000 | 16448 |
-| かな | 4 | 900 | 2000 | 39069 |
-| かな | 5 | 900 | 2000 | 35449 |
+| かな | 3 | 900 | 2000 | 16371 |
+| かな | 4 | 900 | 2000 | 38844 |
+| かな | 5 | 900 | 2000 | 35298 |
 
 ## The rules
 
@@ -1015,7 +1015,7 @@ never edit a list by hand. Please follow the [code of conduct](./CODE_OF_CONDUCT
 
 See [CHANGELOG.md](./CHANGELOG.md).
 
-The latest release, 1.3.2, brings the kana lists to JMdict's release of 2026-11-01 (one answer swapped, a few dozen guessable words added). 1.3.1 added a guide to laying your own words over the lists. 1.3.0 added shiritori and Japanese idioms.
+The latest release, 1.3.2, brings the kana lists to JMdict's release of 2026-11-02 (a few dozen guessable words added, 457 readings not for a child barred, a few answers swapped). 1.3.1 added a guide to laying your own words over the lists. 1.3.0 added shiritori and Japanese idioms.
 
 ## Licence
 

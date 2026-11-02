@@ -8,13 +8,15 @@ All notable changes to this project are written here. The format follows
 
 ## [1.3.2] - 2026-11-02
 
-The kana word lists are made again from JMdict's release of 2026-11-01 (they were from 2026-09-28). The code is unchanged.
+The kana word lists are made again from JMdict's release of 2026-11-02 (they were from 2026-09-28), a word that may be guessed is never taken away because JMdict stopped listing it, and a bar on words that are not for a child now applies to the whole list. The code is unchanged.
 
 ### Changed
 
-- **3 kana:** the words that may be guessed go from 16,444 to 16,448 (one word, やまま, left; five, かたに たくふ ほもび ますけ ゆいま, joined). The 900 easy and 2,000 other answers are unchanged.
-- **4 kana:** the words that may be guessed go from 39,046 to 39,069 (23 joined, none left). The easy and other answers are unchanged.
-- **5 kana:** the words that may be guessed go from 35,419 to 35,449 (31 joined, one left: ふかいきり), and one of the 2,000 answers is swapped (しょざいち out, なまびーる in). The 900 easy answers are unchanged.
+- **A word that may be guessed stays so.** `scripts/word-lists-ja.mjs` keeps the lists it is run over and adds what JMdict lists now, so a game somebody played, kept or half way through, is still checked against a list that has its words. JMdict stopped listing やまま (3 kana), ふかいきり and うまふぶき (5 kana); all three stay. The only way out is the bar below, and `src/kanaAllowed.test.js` holds it (a floor for each list, the words JMdict dropped, the merge, and no barred word anywhere).
+- **The bar on words that are not for a child reaches the whole list.** Until now JMdict's marks for vulgar, X-rated, sensitive and derogatory kept such words out of the answers only; every reading was a word that may be guessed, which is how ほもび and ほもびでお (JMdict: gay pornographic video) came to join. A reading is now barred from the answers and the guesses alike when every entry that spells it has one of those four marks on its first sense, the rule the shiritori words use. 457 readings are barred (3 kana 78, 4 kana 226, 5 kana 153; 452 of them were guessable before), each listed with its English in `scripts/kana-barred.json`. A hand list in the script adds two readings JMdict marks nowhere (じょそこ, ひどうてい), and six existing answers are no longer hidden (うわき, おりもの, ほうきょう, なんしょく, じさつ, しんじゅう) but stay words that may be guessed.
+- **3 kana:** the words that may be guessed go from 16,444 to 16,371 (77 left, all barred; 4 joined). The 900 easy answers: じさつ out, ないか in. The 2,000 answers: じさつ and うわき out, まねー and まーく in.
+- **4 kana:** the words that may be guessed go from 39,046 to 38,844 (224 left, all barred; 22 joined). The easy answers are unchanged. The 2,000 answers: おりもの out, ちゅうや in.
+- **5 kana:** the words that may be guessed go from 35,419 to 35,298 (151 left, all barred; 30 joined). The easy answers: しんじゅう out, ほそながい in. The 2,000 answers: しんじゅう, なんしょく and ほうきょう out, じょうすい, せばんごう and なまびーる in.
 - The order of the words that stayed is the same in every list, but a list that gains or loses a word deals another pack, so a day's kana word from `dailyWord` can differ from 1.3.1 (see "What the word depends on" in the README). The idioms and shiritori lists are not changed.
 
 ## [1.3.1] - 2026-11-02

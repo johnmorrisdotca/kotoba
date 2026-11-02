@@ -16,7 +16,12 @@
  * file it makes. The list it makes is a derived work under the same licence.
  *
  * Every kana reading of 3, 4 or 5 kana may be guessed, folded to hiragana (ー
- * stays). The answers are the COMMONEST readings, ranked by a rule rather than
+ * stays), and stays so: the lists before are kept whole (a game somebody played was
+ * checked against them), less the readings barred below. THE BAR: a reading is barred
+ * from the whole list, answers and guesses alike, when every entry that spells it has
+ * JMdict's mark for vulgar, X-rated, sensitive or derogatory on its first sense (the
+ * rule the shiritori words use), so it has no ordinary meaning left; the barred words
+ * and their English are written to scripts/kana-barred.json for a person to read. The answers are the COMMONEST readings, ranked by a rule rather than
  * picked by hand, and about as many as English has (John, 2026-09-25: "a
  * programmatic way to narrow down words to best words… shouldn't be too much
  * larger than english"): easy the first 900 at each length, medium and hard the
@@ -40,8 +45,9 @@
  * nothing between them, one file a length: a 3-kana puzzle loads about fifty
  * kilobytes, where all three lists written out as kana would be over a megabyte.
  */
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { gunzipSync } from "node:zlib";
+import { firstSenseNotForEveryone, keepGuessable, readAllowed } from "./kana-keep.mjs";
 import { writeWordList } from "./word-list-docs.mjs";
 
 const SOURCE = process.argv[2];
@@ -107,6 +113,18 @@ const NOT_AN_ANSWER = new Set([
   "ふぇらちお",
   "ばいしゅん",
   "ちくしょう",
+  // Marked by nobody, and not for a child to be handed (read by eye, 2026-11): sexual, a body's private matter, or a death by one's own hand.
+  "うわき", // extramarital sex; affair
+  "おりもの", // vaginal discharge
+  "ほうきょう", // phimosis
+  "なんしょく", // male homosexuality; sodomy
+  "じさつ", // suicide
+  "しんじゅう", // double suicide; group suicide
+]);
+/** Readings JMdict marks no differently that are left out of the lists altogether, as the barred are: new in a release, never guessable before. */
+const NOT_GUESSABLE = new Map([
+  ["じょそこ", "male-to-female crossdresser; femboy"],
+  ["ひどうてい", "non-virgin man; man with sexual experience"],
 ]);
 
 const HIRAGANA = /^[ぁ-ゖー]+$/u;
@@ -135,6 +153,9 @@ const allowed = Object.fromEntries(LENGTHS.map((length) => [length, new Set()]))
 /** Each reading fit to hide, and its best rank: lower is commoner. */
 const ranked = Object.fromEntries(LENGTHS.map((length) => [length, new Map()]));
 const tileWords = new Set();
+/** Readings an entry spells whose main meaning is not for everyone, and those with an ordinary entry; barred is the first less the second. */
+const unfit = Object.fromEntries(LENGTHS.map((length) => [length, new Map()]));
+const ordinary = Object.fromEntries(LENGTHS.map((length) => [length, new Set()]));
 
 /**
  * KUMIMOJI'S TILES ARE THE 45 BASE KANA, and every other kana is one of them
@@ -192,6 +213,13 @@ for (const entry of xml.split("<entry>").slice(1)) {
     const length = [...reading].length;
     if (!LENGTHS.includes(length)) continue;
     allowed[length].add(reading);
+    if (firstSenseNotForEveryone(entry)) {
+      const gloss = [.../<sense>[\s\S]*?<\/sense>/.exec(entry)[0].matchAll(/<gloss[^>]*>([^<]*)<\/gloss>/g)]
+        .map((match) => match[1])
+        .slice(0, 3)
+        .join("; ");
+      if (!unfit[length].has(reading)) unfit[length].set(reading, gloss);
+    } else ordinary[length].add(reading);
     // An irregular or outdated kana spelling may be guessed, never hidden.
     if (/<re_inf>&(ik|ok|rk|sk);<\/re_inf>/.test(element) || !fit || NOT_AN_ANSWER.has(reading)) continue;
     // A word may not start with ー or a small kana, whatever a dictionary spells.
@@ -211,14 +239,39 @@ for (const entry of xml.split("<entry>").slice(1)) {
   }
 }
 
+/** Each length's barred readings, with the English of the meaning that bars them. */
+const barred = Object.fromEntries(
+  LENGTHS.map((length) => [
+    length,
+    new Map(
+      [
+        ...[...unfit[length]].filter(([reading]) => !ordinary[length].has(reading)),
+        ...[...NOT_GUESSABLE].filter(([reading]) => [...reading].length === length),
+      ].sort((a, b) => (a[0] < b[0] ? -1 : 1)),
+    ),
+  ]),
+);
 const tiers = Object.fromEntries(
   LENGTHS.map((length) => {
-    const order = [...ranked[length]].sort((a, b) => a[1] - b[1] || (a[0] < b[0] ? -1 : 1)).map(([reading]) => reading);
+    const bars = new Set(barred[length].keys());
+    const order = [...ranked[length]]
+      .filter(([reading]) => !bars.has(reading))
+      .sort((a, b) => a[1] - b[1] || (a[0] < b[0] ? -1 : 1))
+      .map(([reading]) => reading);
+    const before = existsSync(OUT(length)) ? readAllowed(readFileSync(OUT(length), "utf8"), length) : new Set();
     return [
       length,
-      { easy: new Set(order.slice(0, EASY)), answers: new Set(order.slice(0, ANSWERS)), allowed: allowed[length] },
+      {
+        easy: new Set(order.slice(0, EASY)),
+        answers: new Set(order.slice(0, ANSWERS)),
+        allowed: keepGuessable({ before, fresh: allowed[length], barred: bars }),
+      },
     ];
   }),
+);
+writeFileSync(
+  "scripts/kana-barred.json",
+  `${JSON.stringify(Object.fromEntries(LENGTHS.map((length) => [length, Object.fromEntries(barred[length])])), null, 2)}\n`,
 );
 
 const packed = (set) => JSON.stringify([...set].sort().map(encode).join(""));

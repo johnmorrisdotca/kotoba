@@ -1088,7 +1088,7 @@ JA_WORDS_3: { release: string; alphabet: string; codes: string; easy: string; an
 ```
 
 THE 3-KANA WORDS FOR GOMOJI. Written by `scripts/word-lists-ja.mjs` from
-JMdict, release 2026-11-01. Never edited by hand; the monthly refresh
+JMdict, release 2026-11-02. Never edited by hand; the monthly refresh
 (.github/workflows/jmdict-refresh.yml) runs the script again.
 
 JMdict is the property of the Electronic Dictionary Research and Development
@@ -1096,7 +1096,7 @@ Group (EDRDG), used under the Creative Commons Attribution-ShareAlike 4.0
 licence and the Group's conditions: https://www.edrdg.org/edrdg/licence.html.
 This list is derived from it and is under the same licence.
 
-900 easy answers, 2000 answers at medium and hard, 16448 words that may be guessed.
+900 easy answers, 2000 answers at medium and hard, 16371 words that may be guessed.
 Each word is written one character a kana through `alphabet` and `codes`,
 the words run together with nothing between them (`kanaWords.ts` reads them).
 
@@ -1113,7 +1113,7 @@ JA_WORDS_4: { release: string; alphabet: string; codes: string; easy: string; an
 ```
 
 THE 4-KANA WORDS FOR GOMOJI. Written by `scripts/word-lists-ja.mjs` from
-JMdict, release 2026-11-01. Never edited by hand; the monthly refresh
+JMdict, release 2026-11-02. Never edited by hand; the monthly refresh
 (.github/workflows/jmdict-refresh.yml) runs the script again.
 
 JMdict is the property of the Electronic Dictionary Research and Development
@@ -1121,7 +1121,7 @@ Group (EDRDG), used under the Creative Commons Attribution-ShareAlike 4.0
 licence and the Group's conditions: https://www.edrdg.org/edrdg/licence.html.
 This list is derived from it and is under the same licence.
 
-900 easy answers, 2000 answers at medium and hard, 39069 words that may be guessed.
+900 easy answers, 2000 answers at medium and hard, 38844 words that may be guessed.
 Each word is written one character a kana through `alphabet` and `codes`,
 the words run together with nothing between them (`kanaWords.ts` reads them).
 
@@ -1138,7 +1138,7 @@ JA_WORDS_5: { release: string; alphabet: string; codes: string; easy: string; an
 ```
 
 THE 5-KANA WORDS FOR GOMOJI. Written by `scripts/word-lists-ja.mjs` from
-JMdict, release 2026-11-01. Never edited by hand; the monthly refresh
+JMdict, release 2026-11-02. Never edited by hand; the monthly refresh
 (.github/workflows/jmdict-refresh.yml) runs the script again.
 
 JMdict is the property of the Electronic Dictionary Research and Development
@@ -1146,7 +1146,7 @@ Group (EDRDG), used under the Creative Commons Attribution-ShareAlike 4.0
 licence and the Group's conditions: https://www.edrdg.org/edrdg/licence.html.
 This list is derived from it and is under the same licence.
 
-900 easy answers, 2000 answers at medium and hard, 35449 words that may be guessed.
+900 easy answers, 2000 answers at medium and hard, 35298 words that may be guessed.
 Each word is written one character a kana through `alphabet` and `codes`,
 the words run together with nothing between them (`kanaWords.ts` reads them).
 
