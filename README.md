@@ -711,6 +711,7 @@ play.destroy();          // off the page, and the keyboard let go
 | `onChange` | called after every change, and with null while a list loads | |
 | `load` | where a list comes from | `loadWordList` |
 | `now` | the time in milliseconds, for the clock a score reads | `Date.now` |
+| `meanings` | what a word means, from your own source: `(word, words) => Promise<string \| null>` | none, and nothing about meanings is drawn |
 
 The board is plain elements with `kt-` classes and one `<style id="kotoba-play-style">`
 it adds to the page, so its colours and size are CSS variables. A mark is never
@@ -719,6 +720,34 @@ row of the kana table, ○ not in the word) and an arrow when a kana's size (↓
 mark (↑) is wrong, and every place has an accessible label that says the same.
 The keys never take the focus, so the device's keyboard still types and Enter
 still sends.
+
+### What a word means
+
+Kotoba holds no dictionary: the lists say which words are words, and nothing more. A host that has one gives the
+game a `meanings` function, and the game draws what comes back without adding anything to the screen's shape:
+
+```ts no-check
+mountKotoba(element, {
+  words: "en",
+  // Called with the word and the list's language; resolve one short plain line, or null for "nothing to say".
+  meanings: async (word, words) => (await myDictionary(words)).firstSense(word),
+});
+```
+
+- **A guess already made.** Tapping, hovering or focusing its row (it can be tabbed to) puts the word's meaning in the
+  status line, which already kept its height, as `CRANE: a tall bird…` (`meaningFor` in `KOTOBA_STRINGS`). The line goes
+  back when the pointer leaves, when you tap anywhere else, when you press Escape on the row, or when you type. Nothing
+  is added to the board: no icon, no popover, no new row, and no height or width changes at any size. A press on a row
+  never moves the focus, so the device's keyboard goes on typing, and the status line is a live region, so a screen
+  reader hears it.
+- **The hidden word.** Its meaning is asked for, and drawn as one small line on the end card under the tiles, only after
+  the round is over. Before then the function is never called with it.
+- **Quiet.** The function is called once for a word; the first answer may take a moment and nothing is drawn until it
+  arrives. A `null`, an empty line or a rejection draws nothing at all: no placeholder, no error.
+- **The colour guide** says a guess can be tapped, only when a `meanings` function was given. Without one the game is
+  exactly as it was.
+
+The meanings are the host's, and so is their licence and their credit: the package carries none.
 
 ## The command line
 

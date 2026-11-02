@@ -31,6 +31,7 @@ export const KOTOBA_EMBED_OPTION_KEYS = Object.keys({
   onChange: true,
   load: true,
   now: true,
+  meanings: true,
 } satisfies Record<keyof KotobaPlayOptions, boolean>);
 /** Host data, appearance overrides, loading and callbacks; attributes override round choices.
  * @example
@@ -81,6 +82,7 @@ export class KotobaGame extends ElementBase {
   set options(value: KotobaElementOptions) {
     const reset =
       value?.load !== this.#options.load ||
+      value?.meanings !== this.#options.meanings ||
       value?.now !== this.#options.now ||
       value?.strings !== this.#options.strings ||
       value?.theme !== this.#options.theme;

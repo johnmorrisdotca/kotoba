@@ -517,3 +517,336 @@ test("the kana guide adds yellow and the arrows, and kana marks show both arrows
   await page.keyboard.press("Escape");
   await sound(page, errors);
 });
+
+// ---- What a guess means: the host's `meanings` function, drawn in the status line and on the end card ----
+
+/** Hand the page a stand-in `meanings` function of its own, before it loads: `null` for no function at all. Every word it is asked is kept in `window.kotobaAsked`. */
+async function withMeanings(page, how) {
+  await page.addInitScript((mode) => {
+    window.kotobaAsked = [];
+    if (mode === "none") window.kotobaTestMeanings = false;
+    else
+      window.kotobaTestMeanings = async (word) => {
+        window.kotobaAsked.push(word);
+        if (mode === "fails") throw new Error("the dictionary is down");
+        if (mode === "slow") await new Promise((done) => setTimeout(done, 400));
+        // A word with no meaning shows nothing; the longest line a meaning may be is sixty characters.
+        if (word === "plant" || word === "かみ") return null;
+        return mode === "long"
+          ? `the meaning of ${word}, which is as long as a line may be ok`.slice(0, 60)
+          : `meaning of ${word}`;
+      };
+  }, how);
+}
+
+const rowOf = (page, row) => page.locator('[data-kt="grid"] .kt-row').nth(row);
+const boardBox = (page) =>
+  page.evaluate(() => {
+    const box = (selector) => {
+      const { width, height } = document.querySelector(selector).getBoundingClientRect();
+      return `${Math.round(width)}×${Math.round(height * 10) / 10}`;
+    };
+    // The status line is as wide as its words; what must not change is every height and the width of the rest.
+    const high = (selector) => Math.round(document.querySelector(selector).getBoundingClientRect().height * 10) / 10;
+    return `${[".kt-root", ".kt-grid", ".kt-keys"].map(box).join(" ")} status ${high(".kt-status")}`;
+  });
+/** Guess a word that is not the hidden one, sending it with the keys. */
+async function guess(page, word) {
+  await typeWord(page, word);
+  await tap(page, '[data-kt="keys"] [data-act="enter"]');
+}
+
+test("tapping a guess says what its word means in the status line, and nothing moves", async ({ page }) => {
+  await withMeanings(page, "ok");
+  const errors = await open(page, "?lang=en&seed=3");
+  const secret = await hidden(page);
+  const [first, second] = ["crane", "stone"].filter((word) => word !== secret);
+  await guess(page, first);
+  await guess(page, second);
+  const before = await boardBox(page);
+  const prompt = await status(page).textContent();
+  await tap(page, rowOf(page, 0));
+  await expect(status(page)).toContainText(`${first.toUpperCase()}: meaning of ${first}`);
+  // It is the status line's own live region that says it, so a screen reader hears it.
+  await expect(status(page)).toHaveAttribute("role", "status");
+  expect(await boardBox(page), "nothing changes size").toBe(before);
+  // Another guess: its own meaning replaces the first.
+  await tap(page, rowOf(page, 1));
+  await expect(status(page)).toContainText(`${second.toUpperCase()}: meaning of ${second}`);
+  expect(await boardBox(page)).toBe(before);
+  // A press anywhere else puts the line back.
+  await tap(page, "h1");
+  await expect(status(page)).toHaveText(prompt);
+  expect(await boardBox(page)).toBe(before);
+  await sound(page, errors);
+});
+
+test("a tap on a guess does not type, and what is typed after it still lands", async ({ page }) => {
+  await withMeanings(page, "ok");
+  const errors = await open(page, "?lang=en&seed=3");
+  const secret = await hidden(page);
+  await guess(
+    page,
+    ["crane", "stone"].find((word) => word !== secret),
+  );
+  await tap(page, rowOf(page, 0));
+  await expect(status(page)).toContainText("meaning of");
+  // The tap typed nothing and kept the focus where it was: not on the row.
+  await expect(cells(page, 1).first()).toHaveText("");
+  expect(await page.evaluate(() => document.activeElement?.closest?.(".kt-row[data-guess]") ?? null)).toBeNull();
+  // The device's keyboard types straight away, and the meaning gives way to the game (a mouse left over the row would show it again).
+  await page.mouse.move(2, 2);
+  await page.keyboard.type("ab");
+  await expect(cells(page, 1).nth(0)).toHaveText("A");
+  await expect(cells(page, 1).nth(1)).toHaveText("B");
+  await expect(status(page)).not.toContainText("meaning of");
+  // So do the keys on the screen.
+  await tap(page, rowOf(page, 0));
+  await expect(status(page)).toContainText("meaning of");
+  await tap(page, key(page, "c"));
+  await page.mouse.move(2, 2);
+  await expect(cells(page, 1).nth(2)).toHaveText("C");
+  await expect(status(page)).not.toContainText("meaning of");
+  await sound(page, errors);
+});
+
+test("a guess can be focused with the keyboard, says what it means, and does not take typing away", async ({
+  page,
+}) => {
+  await withMeanings(page, "ok");
+  const errors = await open(page, "?lang=en&seed=3");
+  const secret = await hidden(page);
+  const word = ["crane", "stone"].find((one) => one !== secret);
+  await guess(page, word);
+  const row = rowOf(page, 0);
+  await expect(row).toHaveAttribute("tabindex", "0");
+  await row.focus();
+  await expect(status(page)).toContainText(`meaning of ${word}`);
+  // Escape puts the line back without leaving the row; typing goes to the game from the row.
+  await page.keyboard.press("Escape");
+  await expect(status(page)).not.toContainText("meaning of");
+  await page.keyboard.type("a");
+  await expect(cells(page, 1).first()).toHaveText("A");
+  // The empty rows and the row being typed are not for looking at.
+  await expect(rowOf(page, 1)).not.toHaveAttribute("tabindex", "0");
+  await expect(rowOf(page, 5)).not.toHaveAttribute("tabindex", "0");
+  await sound(page, errors);
+});
+
+test("a mouse shows the meaning while it is over a guess", async ({ page }) => {
+  test.skip(test.info().project.use.hasTouch === true, "a mouse is the desk's");
+  await withMeanings(page, "ok");
+  await open(page, "?lang=en&seed=3");
+  const secret = await hidden(page);
+  const word = ["crane", "stone"].find((one) => one !== secret);
+  await guess(page, word);
+  const prompt = await status(page).textContent();
+  await rowOf(page, 0).hover();
+  await expect(status(page)).toContainText(`meaning of ${word}`);
+  await page.mouse.move(2, 2);
+  await expect(status(page)).toHaveText(prompt);
+});
+
+test("a word with no meaning shows nothing, and a failing source stays silent", async ({ page }) => {
+  await withMeanings(page, "ok");
+  const errors = await open(page, "?lang=en&seed=3");
+  const secret = await hidden(page);
+  test.skip(secret === "plant", "the word is the one with no meaning");
+  await guess(page, "plant");
+  const prompt = await status(page).textContent();
+  const before = await boardBox(page);
+  await tap(page, rowOf(page, 0));
+  await expect.poll(() => page.evaluate(() => window.kotobaAsked)).toContain("plant");
+  await expect(status(page)).toHaveText(prompt);
+  expect(await boardBox(page)).toBe(before);
+  await expect(page.locator('[data-kt="meaning"]')).toHaveCount(0);
+  await sound(page, errors);
+});
+
+test("a source that fails is silent: no line, no error on the page", async ({ page }) => {
+  await withMeanings(page, "fails");
+  const errors = await open(page, "?lang=en&seed=3");
+  const secret = await hidden(page);
+  await guess(
+    page,
+    ["crane", "stone"].find((word) => word !== secret),
+  );
+  const prompt = await status(page).textContent();
+  await tap(page, rowOf(page, 0));
+  await expect.poll(() => page.evaluate(() => window.kotobaAsked.length)).toBeGreaterThan(0);
+  await expect(status(page)).toHaveText(prompt);
+  await expect(page.locator('[data-kt="meaning"]')).toHaveCount(0);
+  await sound(page, errors);
+});
+
+test("the first time may take a moment: nothing shows until the meaning arrives, then it does", async ({ page }) => {
+  await withMeanings(page, "slow");
+  await open(page, "?lang=en&seed=3");
+  const secret = await hidden(page);
+  const word = ["crane", "stone"].find((one) => one !== secret);
+  await guess(page, word);
+  const prompt = await status(page).textContent();
+  await tap(page, rowOf(page, 0));
+  await expect(status(page)).toHaveText(prompt);
+  await expect(status(page)).toContainText(`meaning of ${word}`);
+});
+
+test("the hidden word's meaning is never asked for or shown before the round ends, and is on the end card after", async ({
+  page,
+}) => {
+  await withMeanings(page, "ok");
+  const errors = await open(page, "?lang=en&seed=3");
+  const secret = await hidden(page);
+  const tries = ["crane", "stone", "light", "sweet", "train", "house"].filter((word) => word !== secret).slice(0, 6);
+  for (let row = 0; row < 5; row += 1) {
+    await guess(page, tries[row]);
+    await tap(page, rowOf(page, row));
+    await expect(status(page)).toContainText(`meaning of ${tries[row]}`);
+    expect(await page.evaluate(() => window.kotobaAsked), "the hidden word is not asked about").not.toContain(secret);
+    await expect(page.locator('[data-kt="result"]')).toHaveCount(0);
+  }
+  await guess(page, tries[5]);
+  const card = page.locator('[data-kt="result"]');
+  await expect(card).toHaveAttribute("data-result", "lost");
+  await expect(card.locator('[data-kt="meaning"]')).toHaveText(`meaning of ${secret}`);
+  expect(await page.evaluate(() => window.kotobaAsked)).toContain(secret);
+  // The score stays, and the card still fits the keyboard's place.
+  await expect(card).toContainText("points");
+  const fit = await page.evaluate(() => {
+    const card = document.querySelector(".kt-result");
+    return {
+      card: card.getBoundingClientRect().height,
+      keys: document.querySelector(".kt-keys").getBoundingClientRect().height,
+      overflow: card.scrollHeight - card.clientHeight,
+    };
+  });
+  expect(fit.card).toBeLessThanOrEqual(fit.keys + 0.5);
+  expect(fit.overflow).toBeLessThanOrEqual(1);
+  // A guess can still be tapped after the round, and says what it means on the line.
+  await tap(page, rowOf(page, 0));
+  await expect(status(page)).toContainText(`meaning of ${tries[0]}`);
+  await sound(page, errors);
+});
+
+test("a won round shows the meaning on the card too, and the longest meaning still fits at every length", async ({
+  page,
+}) => {
+  await withMeanings(page, "long");
+  const errors = await open(page, "?lang=en&seed=3");
+  for (const [size, hiddenWord] of [
+    [4, "bake"],
+    [5, "crane"],
+    [6, "garden"],
+  ]) {
+    await page.evaluate(
+      ([size, word]) => window.kotobaState.play.newGame({ words: "en", size, hidden: word }),
+      [size, hiddenWord],
+    );
+    await expect(cells(page, 0)).toHaveCount(size);
+    await typeWord(page, hiddenWord);
+    await tap(page, '[data-kt="keys"] [data-act="enter"]');
+    const card = page.locator('[data-kt="result"]');
+    await expect(card).toHaveAttribute("data-result", "won");
+    await expect(card.locator('[data-kt="meaning"]')).toContainText(`the meaning of ${hiddenWord}`);
+    const fit = await page.evaluate(() => {
+      const card = document.querySelector(".kt-result");
+      const parts = [...card.children].map((part) => part.getBoundingClientRect());
+      return {
+        card: card.getBoundingClientRect().height,
+        keys: document.querySelector(".kt-keys").getBoundingClientRect().height,
+        overflow: card.scrollHeight - card.clientHeight,
+        wide: Math.max(...parts.map((part) => part.right)) - card.getBoundingClientRect().right,
+      };
+    });
+    expect(fit.card, `${size} letters: the card fits the keyboard's place`).toBeLessThanOrEqual(fit.keys + 0.5);
+    expect(fit.overflow, `${size} letters: nothing runs out of the card`).toBeLessThanOrEqual(1);
+    expect(fit.wide).toBeLessThanOrEqual(1);
+    const tile = await card.locator(".kt-result-tile").first().boundingBox();
+    expect(tile.height, "the word is still large").toBeGreaterThanOrEqual(34);
+  }
+  await sound(page, errors);
+});
+
+test("kana: a guess says what it means, and the card does too", async ({ page }) => {
+  await withMeanings(page, "ok");
+  const errors = await open(page, "?lang=en&seed=3");
+  await tap(page, '[data-testid="languages"] [data-lang-id="ja"]');
+  await expect.poll(() => page.evaluate(() => window.kotobaState.play.game?.language)).toBe("ja");
+  await page.evaluate(() => window.kotobaState.play.newGame({ words: "ja", size: 3, hidden: "さくら" }));
+  await expect(cells(page, 0)).toHaveCount(3);
+  await typeWord(page, "ikura");
+  await page.keyboard.press("Enter");
+  const before = await boardBox(page);
+  await tap(page, rowOf(page, 0));
+  await expect(status(page)).toContainText("いくら: meaning of いくら");
+  expect(await boardBox(page)).toBe(before);
+  await typeWord(page, "sakura");
+  await page.keyboard.press("Enter");
+  await expect(page.locator('[data-kt="result"] [data-kt="meaning"]')).toHaveText("meaning of さくら");
+  const fit = await page.evaluate(() => {
+    const card = document.querySelector(".kt-result");
+    return {
+      card: card.getBoundingClientRect().height,
+      keys: document.querySelector(".kt-keys").getBoundingClientRect().height,
+    };
+  });
+  expect(fit.card).toBeLessThanOrEqual(fit.keys + 0.5);
+  await sound(page, errors);
+});
+
+test("in Japanese the guide says guesses can be tapped", async ({ page }) => {
+  await withMeanings(page, "ok");
+  const errors = await open(page, "?lang=ja&seed=3");
+  const secret = await hidden(page);
+  const word = ["crane", "stone"].find((one) => one !== secret);
+  await guess(page, word);
+  await tap(page, rowOf(page, 0));
+  await expect(status(page)).toContainText(`${word.toUpperCase()}: meaning of ${word}`);
+  await tap(page, '[data-kt="guide-open"]');
+  await expect(page.locator('[data-kt="guide"] .kt-guide-tap')).toHaveText(
+    "予想した行をタップすると、その単語の意味が見られます。",
+  );
+  await page.keyboard.press("Escape");
+  await sound(page, errors);
+});
+
+test("the colour guide says a guess can be tapped, only where the game has meanings", async ({ page }) => {
+  await withMeanings(page, "ok");
+  const errors = await open(page, "?lang=en&seed=3");
+  await tap(page, '[data-kt="guide-open"]');
+  await expect(page.locator('[data-kt="guide"] .kt-guide-tap')).toHaveText("Tap a guess to see what its word means.");
+  await page.keyboard.press("Escape");
+  await sound(page, errors);
+});
+
+test("with no meanings function nothing is added: no focusable guess, no line in the guide, no tap that does anything", async ({
+  page,
+}) => {
+  await withMeanings(page, "none");
+  const errors = await open(page, "?lang=en&seed=3");
+  const secret = await hidden(page);
+  await guess(
+    page,
+    ["crane", "stone"].find((word) => word !== secret),
+  );
+  await expect(page.locator('[data-kt="grid"] [tabindex]')).toHaveCount(0);
+  await expect(page.locator('[data-kt="grid"] [data-guess]')).toHaveCount(0);
+  const prompt = await status(page).textContent();
+  await tap(page, rowOf(page, 0));
+  await expect(status(page)).toHaveText(prompt);
+  await tap(page, '[data-kt="guide-open"]');
+  await expect(page.locator('[data-kt="guide"] .kt-guide-tap')).toHaveCount(0);
+  await page.keyboard.press("Escape");
+  await sound(page, errors);
+});
+
+test("the demo's small stand-in knows a few words and says nothing for the rest", async ({ page }) => {
+  const errors = await open(page, "?lang=en&seed=3");
+  const secret = await hidden(page);
+  const word = ["crane", "house"].find((one) => one !== secret);
+  await guess(page, word);
+  await tap(page, rowOf(page, 0));
+  await expect(status(page)).toContainText(word.toUpperCase());
+  await expect(page.locator('[data-kt="meaning"]')).toHaveCount(1);
+  await sound(page, errors);
+});

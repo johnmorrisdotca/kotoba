@@ -68,6 +68,8 @@ Names that begin `cli` are the command line's; the others are the game's.
 | `guideKeyboard` | On the keyboard | キーボードの上で |
 | `guideKeyboardLead` | Each key takes the best colour any of your guesses gave that letter. A white key has not been tried yet. | それぞれのキーは、これまでの予想でその文字がもらった、いちばんよい色になります。白いキーは、まだためしていません。 |
 | `guideShapes` | Each mark also has a small shape in its corner, so the colour is never the only clue: ● green, ◐ orange, ○ grey, and ≈ yellow in the kana game. | どのマスにも、すみに小さな形がついているので、手がかりは色だけではありません。● 緑色、◐ オレンジ色、○ グレー、かなのゲームでは ≈ 黄色。 |
+| `guideTap` | Tap a guess to see what its word means. | 予想した行をタップすると、その単語の意味が見られます。 |
+| `meaningFor` | {word}: {meaning} | {word}: {meaning} |
 | `cliUnknown` | unknown option {part} | 不明なオプションです: {part} |
 | `cliNeeds` | {part} needs a value | {part} には値が必要です |
 | `cliTryHelp` | Try `kotoba --help`. | `kotoba --help` をご覧ください。 |

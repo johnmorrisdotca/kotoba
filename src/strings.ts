@@ -93,6 +93,9 @@ export type KotobaStrings = {
   guideKeyboard: string;
   guideKeyboardLead: string;
   guideShapes: string;
+  /** A guess can be tapped to read what its word means, and how the line says it. */
+  guideTap: string;
+  meaningFor: string;
   /** The command line's help, whole, and its words. */
   cliUsage: string;
   cliUnknown: string;
@@ -197,6 +200,8 @@ export const KOTOBA_STRINGS: Record<Language, KotobaStrings> = {
       "Each key takes the best colour any of your guesses gave that letter. A white key has not been tried yet.",
     guideShapes:
       "Each mark also has a small shape in its corner, so the colour is never the only clue: ● green, ◐ orange, ○ grey, and ≈ yellow in the kana game.",
+    guideTap: "Tap a guess to see what its word means.",
+    meaningFor: "{word}: {meaning}",
     cliUsage: `Usage: kotoba <command> [options]
 
 Word lists and the rules of word games: English, French, German and Japanese kana.
@@ -320,6 +325,8 @@ the list), 2 the command was wrong.
       "それぞれのキーは、これまでの予想でその文字がもらった、いちばんよい色になります。白いキーは、まだためしていません。",
     guideShapes:
       "どのマスにも、すみに小さな形がついているので、手がかりは色だけではありません。● 緑色、◐ オレンジ色、○ グレー、かなのゲームでは ≈ 黄色。",
+    guideTap: "予想した行をタップすると、その単語の意味が見られます。",
+    meaningFor: "{word}: {meaning}",
     cliUsage: `使い方: kotoba <コマンド> [オプション]
 
 単語リストと、言葉遊びのルール。英語、フランス語、ドイツ語、日本語（かな）に対応しています。

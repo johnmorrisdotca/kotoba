@@ -169,6 +169,35 @@ const t = (key, values = {}) => kotobaSay(language.word(key), values);
 const phrases = mountPhrases({ t });
 const isKana = () => state.words === "ja";
 
+// A STAND-IN FOR MEANINGS, so the demo shows the tap-a-guess line and the end card's meaning. It knows a handful of words
+// and says nothing for the rest, as a real source does for a word it lacks. When Moji (@johnmorrisdotca/moji) can
+// supply them, swap these two things and nothing else: delete `STAND_IN` and `standIn`, and pass Moji's lookup as
+// `meanings` to `mountKotoba` below (it is called with the word and the list's language, and resolves a line or null).
+const STAND_IN = {
+  en: {
+    crane: "a tall bird with long legs and a long neck",
+    house: "a building where people live",
+    stone: "a small piece of rock",
+    bread: "food baked from flour and water",
+    apple: "a round fruit with red or green skin",
+    plant: "a living thing that grows in the ground",
+    water: "the clear liquid that rain is made of",
+    light: "what lets us see; not heavy",
+    sweet: "tasting like sugar",
+    train: "a line of carriages pulled along rails",
+  },
+  fr: { livre: "book", pomme: "apple", chien: "dog", maison: "house", table: "table" },
+  de: { hund: "dog", apfel: "apple", brot: "bread", haus: "house", katze: "cat" },
+  ja: {
+    さくら: "cherry tree; cherry blossom",
+    こころ: "heart; mind",
+    ひかり: "light",
+    あした: "tomorrow",
+    くるま: "car",
+  },
+};
+const standIn = async (word, words) => STAND_IN[words]?.[word] ?? null;
+
 let play = null;
 let release = "";
 let counts = null;
@@ -269,6 +298,13 @@ play = mountKotoba($("board"), {
   locale: language.lang,
   // The board sits on the cloth of the page.
   theme: { "--kt-board": "transparent", "--kt-ink": "var(--felt-ink)" },
+  // A test may hand the game a stand-in of its own, or none at all (false), so that it does not depend on this one's few words.
+  meanings:
+    window.kotobaTest === true && "kotobaTestMeanings" in window
+      ? typeof window.kotobaTestMeanings === "function"
+        ? window.kotobaTestMeanings
+        : undefined
+      : standIn,
 });
 
 for (const button of $("languages").children) {

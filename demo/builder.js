@@ -137,7 +137,7 @@ const leftOut = {
   "mount.theme": "Custom CSS variables belong to options; the theme attribute selects light/dark/auto.",
   "mount.keyboardTarget": "The element scopes keyboard events to its own focused game.",
 };
-for (const name of ["onChange", "onFinish", "load", "now"])
+for (const name of ["onChange", "onFinish", "load", "now", "meanings"])
   leftOut[`mount.${name}`] = "Host callbacks, loaders and clocks belong to options.";
 let mounted;
 const page = globalThis.familyLanguage({

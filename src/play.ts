@@ -78,6 +78,13 @@ export type KotobaPlayOptions = {
   load?: (words: WordListName, size: number) => Promise<LoadedWordList | null>;
   /** The time in milliseconds, for the clock a score reads. Unless said, `Date.now`. */
   now?: () => number;
+  /**
+   * What a word means, supplied by the host: asked for a guess when somebody taps, hovers or focuses that row, and for
+   * the hidden word only once the round is over. Resolve a short plain line, or null (or reject) when there is
+   * nothing to say, and nothing is drawn. Unless given, nothing about meanings is added to the screen, and the colour
+   * guide does not mention them.
+   */
+  meanings?: (word: string, words: WordListName) => Promise<string | null>;
 };
 
 /** What `newGame` may change: the choices about the word, and nothing about the look.
@@ -185,6 +192,13 @@ export const KOTOBA_PLAY_CSS = `.kt-root { ${Object.entries(KOTOBA_PLAY_VARIABLE
 .kt-key[data-mark="near"] { background: var(--kt-near); color: #fff; }
 .kt-key[data-mark="miss"] { background: var(--kt-miss); color: #fff; opacity: .7; }
 .kt-key[data-act="small"], .kt-key[data-act="mark"] { max-width: 78px; flex: 1.6 1 0; font-size: 1.1rem; text-transform: none; }
+.kt-row[data-guess] { border-radius: 10px; -webkit-tap-highlight-color: transparent; }
+.kt-row[data-guess]:focus-visible { outline: 3px solid var(--kt-typed); outline-offset: 2px; }
+.kt-row[data-meaning-open] { box-shadow: 0 0 0 2px rgba(255,255,255,.3); }
+.kt-status[data-meaning] { display: grid; justify-items: center; }
+.kt-status[data-meaning] > * { grid-area: 1 / 1; max-width: 100%; }
+.kt-keep { visibility: hidden; }
+.kt-meaning { display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; overflow-wrap: anywhere; }
 ${KOTOBA_RESULT_CSS}
 ${KOTOBA_GUIDE_CSS}
 `;
@@ -237,6 +251,14 @@ export function mountKotoba(container: HTMLElement, options: KotobaPlayOptions =
   let token = 0;
   let destroyed = false;
   let guideFor = "";
+  // What a word means, as the host's function answered: by language and word, a line or null (nothing to say, or it failed).
+  const askMeanings = options.meanings ?? null;
+  const meant = new Map<string, string | null>();
+  const asking = new Set<string>();
+  /** The guess row whose meaning the status line is showing, or -1. */
+  let shown = -1;
+  let pointer = "mouse";
+  let restoring = false;
 
   if (doc.getElementById("kotoba-play-style") === null) {
     const style = doc.createElement("style");
@@ -279,6 +301,7 @@ export function mountKotoba(container: HTMLElement, options: KotobaPlayOptions =
   function update(next: WordGame, because: Message = null) {
     game = next;
     message = because;
+    shown = -1;
     draw();
     changed();
   }
@@ -301,6 +324,7 @@ export function mountKotoba(container: HTMLElement, options: KotobaPlayOptions =
     if (sent.refused !== null) return update(sent.game, { key: refusals[sent.refused] });
     if (sent.game.status === "playing") return update(sent.game);
     const done = sent.game;
+    wantMeaning(done.hidden);
     update(
       done,
       done.status === "won"
@@ -316,26 +340,109 @@ export function mountKotoba(container: HTMLElement, options: KotobaPlayOptions =
     }
   }
 
-  function draw() {
+  /** What the status line says when no meaning is on it: the loading note, a refusal, the result, or the prompt. */
+  function statusText(): string {
     const round = game;
     const kana = (round?.language ?? choice.words) === "ja";
-    const told =
-      list === null || round === null
-        ? say("loading")
-        : message !== null
-          ? say(message.key, message.values)
-          : round.status !== "playing"
-            ? ""
-            : say(kana ? "readyKana" : "ready", { n: round.size });
-    // Over, the card under the grid says it large; the line stays for a screen reader, and keeps its height so nothing moves.
+    return list === null || round === null
+      ? say("loading")
+      : message !== null
+        ? say(message.key, message.values)
+        : round.status !== "playing"
+          ? ""
+          : say(kana ? "readyKana" : "ready", { n: round.size });
+  }
+
+  const meaningKey = (word: string) => `${game?.language ?? choice.words}\t${word}`;
+
+  /** What the host said a word means, once it has said so; null while it is being asked, or when it has nothing to say. */
+  function meaningOf(word: string | undefined): string | null {
+    return word === undefined || game === null ? null : (meant.get(meaningKey(word)) ?? null);
+  }
+
+  /** Ask the host what a word means, once: it is told the word and the list's language, and a line that comes back is drawn where it belongs. Silent if it has nothing or fails. */
+  function wantMeaning(word: string) {
+    if (askMeanings === null || game === null) return;
+    const key = meaningKey(word);
+    const language = game.language as WordListName;
+    if (meant.has(key) || asking.has(key)) return;
+    asking.add(key);
+    const settle = (line: string | null) => {
+      asking.delete(key);
+      meant.set(key, line);
+      if (destroyed) return;
+      paintStatus();
+      paintResult();
+    };
+    Promise.resolve()
+      .then(() => askMeanings(word, language))
+      .then((line) => settle(typeof line === "string" && line.trim() !== "" ? line.trim() : null))
+      .catch(() => settle(null));
+  }
+
+  /** The status line: the meaning of the guess being looked at if there is one to show, otherwise what it says. Nothing else on the page is touched, so a tap on a guess moves nothing and keeps the focus where it was. */
+  function paintStatus() {
+    const round = game;
+    const told = statusText();
+    const word = round !== null && shown >= 0 ? round.guesses[shown] : undefined;
+    const meaning = meaningOf(word);
     const over = round !== null && round.status !== "playing";
     status.replaceChildren();
-    if (over) {
+    status.removeAttribute("data-meaning");
+    if (word !== undefined && meaning !== null) {
+      const line = doc.createElement("span");
+      line.className = "kt-meaning";
+      line.dataset.kt = "meaning";
+      line.textContent = say("meaningFor", { word: word.toUpperCase(), meaning });
+      // The prompt stays under it, unseen, so the line is as wide as the prompt was and the game does not change width when a meaning comes and goes.
+      const keep = doc.createElement("span");
+      keep.className = "kt-keep";
+      keep.setAttribute("aria-hidden", "true");
+      keep.textContent = say(round?.language === "ja" ? "readyKana" : "ready", { n: round?.size ?? choice.size });
+      status.dataset.meaning = "true";
+      status.append(keep, line);
+    } else if (over) {
+      // Over, the card under the grid says it large; the line stays for a screen reader, and keeps its height so nothing moves.
       const quiet = doc.createElement("span");
       quiet.className = "kt-sr";
       quiet.textContent = told;
       status.append(quiet);
     } else status.textContent = told;
+    grid.querySelector("[data-meaning-open]")?.removeAttribute("data-meaning-open");
+    if (word !== undefined && meaning !== null) grid.children[shown]?.setAttribute("data-meaning-open", "true");
+  }
+
+  /** The end card again, once the hidden word's meaning has arrived: only its text is added, and only after the round is over. */
+  function paintResult() {
+    if (game === null || game.status === "playing") return;
+    const old = keys.querySelector('[data-kt="result"]');
+    const card = drawResult(doc, game, say, hiddenMeaning());
+    if (old && card?.hasAttribute("data-meaning") && !old.hasAttribute("data-meaning")) old.replaceWith(card);
+  }
+
+  /** What the hidden word means, never before the round is over. */
+  function hiddenMeaning() {
+    if (game === null || game.status === "playing") return null;
+    return meaningOf(game.hidden);
+  }
+
+  /** Look at one guess's meaning, or at none (-1). */
+  function look(row: number) {
+    if (row === shown) return;
+    shown = row;
+    if (row >= 0 && game !== null) wantMeaning(game.guesses[row] ?? "");
+    paintStatus();
+  }
+
+  function draw() {
+    const round = game;
+    const kana = (round?.language ?? choice.words) === "ja";
+    const over = round !== null && round.status !== "playing";
+    paintStatus();
+    // A row of the board the focus is on is given it back when the board is drawn again, so that tabbing along the guesses is not lost to a letter typed.
+    const focused = grid.contains(doc.activeElement)
+      ? [...grid.children].indexOf(doc.activeElement?.closest(".kt-row") as Element)
+      : -1;
 
     // The board: a row for every guess the round gives, the guesses marked, the row being typed, and empty places.
     const size = round?.size ?? choice.size;
@@ -372,9 +479,16 @@ export function mountKotoba(container: HTMLElement, options: KotobaPlayOptions =
         if (typing && place === shown.length && kana && round.pending !== "") cell.dataset.pending = round.pending;
         line.append(cell);
       }
+      if (guess !== undefined && askMeanings !== null) makeLookable(line, row);
       rows.push(line);
     }
     grid.replaceChildren(...rows);
+    if (focused >= 0 && rows[focused]?.hasAttribute("data-guess")) {
+      restoring = true;
+      (rows[focused] as HTMLElement).focus({ preventScroll: true });
+      restoring = false;
+    }
+    paintStatus();
 
     // The keys: a keyboard under the grid, with Enter and Delete, and for kana the two keys that change a kana.
     const marked = round === null ? new Map() : keyMarks(round);
@@ -413,15 +527,50 @@ export function mountKotoba(container: HTMLElement, options: KotobaPlayOptions =
     // Over, the rows stay (for their height) but are hidden and out of the tab order, and the card stands over them.
     keys.dataset.over = String(over);
     for (const line of lines) line.toggleAttribute("inert", over);
-    const card = drawResult(doc, round, say);
+    const card = drawResult(doc, round, say, hiddenMeaning());
     keys.replaceChildren(...lines, ...(card === null ? [] : [card]));
     // The guide is drawn again only when its words or its marks change, so an open dialog is not rebuilt under a reader.
-    const guideNow = `${locale}|${kana}|${Object.keys(own).length}`;
+    const guideNow = `${locale}|${kana}|${Object.keys(own).length}|${askMeanings !== null}`;
     if (guideNow !== guideFor) {
       guideFor = guideNow;
-      guide.replaceChildren(...drawGuide(doc, say, kana));
+      guide.replaceChildren(...drawGuide(doc, say, kana, askMeanings !== null));
     }
   }
+
+  /**
+   * A guess's row, made so its meaning can be looked at by mouse, touch or keyboard, without the row ever taking what is
+   * typed: a press does not move the focus (as the keys do not), a mouse shows it while it is over the row, a tap shows
+   * it until the next tap anywhere else, and the row can be tabbed to, where Escape puts the line back.
+   */
+  function makeLookable(line: HTMLElement, row: number) {
+    line.dataset.guess = "true";
+    line.tabIndex = 0;
+    line.addEventListener("pointerdown", (event) => {
+      pointer = event.pointerType;
+    });
+    line.addEventListener("mousedown", (event) => event.preventDefault());
+    line.addEventListener("pointerenter", (event) => {
+      if (event.pointerType === "mouse") look(row);
+    });
+    line.addEventListener("pointerleave", (event) => {
+      if (event.pointerType === "mouse" && shown === row && doc.activeElement !== line) look(-1);
+    });
+    line.addEventListener("click", () => look(pointer === "mouse" ? row : shown === row ? -1 : row));
+    line.addEventListener("focus", () => {
+      if (!restoring) look(row);
+    });
+    line.addEventListener("blur", () => {
+      if (shown === row) look(-1);
+    });
+    line.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") look(-1);
+    });
+  }
+  /** A press anywhere but on a guess puts the status line back. */
+  function onPress(event: Event) {
+    if (shown >= 0 && !(event.target as Element | null)?.closest?.(".kt-row[data-guess]")) look(-1);
+  }
+  doc.addEventListener("pointerdown", onPress);
 
   /** The device's keyboard does what the one on the page does. */
   function onKey(event: KeyboardEvent) {
@@ -470,6 +619,7 @@ export function mountKotoba(container: HTMLElement, options: KotobaPlayOptions =
     list = null;
     game = null;
     message = null;
+    shown = -1;
     draw();
     changed();
     const loaded = await load(choice.words, choice.size);
@@ -497,6 +647,7 @@ export function mountKotoba(container: HTMLElement, options: KotobaPlayOptions =
     destroy() {
       destroyed = true;
       keyboardTarget.removeEventListener("keydown", onKey as EventListener);
+      doc.removeEventListener("pointerdown", onPress);
       root.remove();
     },
   };

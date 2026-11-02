@@ -27,6 +27,7 @@ export const KOTOBA_GUIDE_CSS = [
   ".kt-guide li { display: flex; align-items: center; gap: 12px; }",
   ".kt-guide li > .kt-cell, .kt-guide li > .kt-key { flex: none; width: 48px; height: 48px; min-height: 0; max-width: none; }",
   ".kt-guide > p { margin-top: 14px; }",
+  ".kt-guide .kt-guide-tap { margin: 12px 0 0; }",
   ".kt-guide li p { margin: 0; font-size: .95rem; }",
   ".kt-guide li strong { display: block; }",
   ".kt-guide-keys { display: flex; flex-wrap: wrap; gap: 10px; }",
@@ -51,9 +52,10 @@ function make<K extends keyof HTMLElementTagNameMap>(doc: Document, tag: K, clas
  * @param doc - The document that will own them.
  * @param say - The game's words.
  * @param kana - Whether the game is in kana, which adds yellow and the arrows.
+ * @param tap - Whether a guess can be tapped to read what its word means, which adds a line saying so.
  * @returns The button, then the dialog, to be put next to each other.
  */
-export function drawGuide(doc: Document, say: Say, kana: boolean): [HTMLButtonElement, HTMLDialogElement] {
+export function drawGuide(doc: Document, say: Say, kana: boolean, tap = false): [HTMLButtonElement, HTMLDialogElement] {
   const open = make(doc, "button", "kt-guide-open");
   open.type = "button";
   open.dataset.kt = "guide-open";
@@ -118,7 +120,12 @@ export function drawGuide(doc: Document, say: Say, kana: boolean): [HTMLButtonEl
     keys.append(key("hit", "A"), key("near", "B"), key("miss", "C"), key("", "D"));
     dialog.replaceChildren(
       head,
-      section(say("guideBoard"), say(kana ? "guideBoardKana" : "guideBoardLetters"), list(...board)),
+      section(
+        say("guideBoard"),
+        say(kana ? "guideBoardKana" : "guideBoardLetters"),
+        list(...board),
+        ...(tap ? [make(doc, "p", "kt-guide-tap", say("guideTap"))] : []),
+      ),
       ...(kana
         ? [
             section(

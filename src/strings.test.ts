@@ -5,7 +5,7 @@ import { KOTOBA_STRINGS, kotobaLanguage, kotobaSay } from "./strings.ts";
 const places = (text: string) => [...new Set([...text.matchAll(/\{(\w+)\}/g)].map((match) => match[1]))].sort();
 
 /** The strings that read the same in both languages: a language's own name for itself, a key's face, a line that is only its places to fill in. */
-const SAME = new Set(["listEn", "listFr", "listDe", "listJa", "small", "mark", "cliDaily"]);
+const SAME = new Set(["listEn", "listFr", "listDe", "listJa", "small", "mark", "cliDaily", "meaningFor"]);
 
 describe("the strings", () => {
   it("have a Japanese line for every English one, in the same order, keeping every place to fill in", () => {
