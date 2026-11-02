@@ -6,6 +6,18 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+### Added
+
+- A colour guide on the game itself: a labelled "Colour guide" button under the keyboard opens a dialog that shows every colour and arrow as the game draws it, each beside its name and a short sentence, with the keyboard's colours and the corner shapes that repeat them. The kana game adds yellow and the two arrows. It closes by its button, Got it, Escape or a press outside, and the game ignores the keys typed while it is open. Thirty-three new strings in `KOTOBA_STRINGS` (`guide…`, `lostTitle`, `wonTitle`, `lostNote`, `points`), English and Japanese.
+
+### Changed
+
+- When a round ends, the hidden word is shown as a row of large tiles in the colour of a right letter, over the keyboard's own place, with a kind note and the score, instead of a line of small text in the status. The status line keeps its words for a screen reader and its height, so nothing moves. The visible legend line under the keyboard is replaced by the colour guide; the `legendLetters` and `legendKana` strings remain.
+
+### Fixed
+
+- A kana with both arrows (wrong size and wrong mark) drew only the up arrow; it now draws both.
+
 ## [1.3.1] - 2026-11-02
 
 ### Added

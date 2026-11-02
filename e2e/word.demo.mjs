@@ -145,6 +145,19 @@ test("a wrong word is marked by the package's own rule, and six wrong words lose
     for (let at = 0; at < 5; at += 1) await expect(cells(page, row).nth(at)).toHaveAttribute("data-mark", expected[at]);
   }
   await expect(status(page)).toContainText(`The word was ${word}`);
+  // The answer is the biggest thing there: a card of tiles over the keyboard's own place, which keeps its height.
+  const card = page.locator('[data-kt="result"]');
+  await expect(card).toBeVisible();
+  await expect(card).toHaveAttribute("data-result", "lost");
+  await expect(card.locator('[data-kt="answer"]')).toHaveAttribute("aria-label", word.toUpperCase());
+  await expect(card.locator(".kt-result-tile")).toHaveText([...word]);
+  const tile = await card.locator(".kt-result-tile").first().boundingBox();
+  expect(tile.height).toBeGreaterThanOrEqual(36);
+  const heights = await page.evaluate(() => ({
+    over: document.querySelector(".kt-keys").getBoundingClientRect().height,
+    card: document.querySelector(".kt-result").getBoundingClientRect().height,
+  }));
+  expect(heights.card, "the card fits the keyboard's place").toBeLessThanOrEqual(heights.over + 0.5);
   await sound(page, errors);
 });
 
@@ -445,5 +458,45 @@ test("the idioms can be searched by what they mean, and say whose judgement put 
   await expect(page.getByTestId("idiom-list").locator("li")).toHaveCount(0);
   await tap(page, page.getByTestId("idiom-another"));
   await expect(page.getByTestId("idiom-list").locator("li")).toHaveCount(1);
+  await sound(page, errors);
+});
+
+test("the colour guide opens and closes by mouse, touch and keyboard, and Escape leaves it", async ({ page }) => {
+  const errors = await open(page, "?lang=en&seed=3");
+  const button = page.locator('[data-kt="guide-open"]');
+  const guide = page.locator('[data-kt="guide"]');
+  await expect(button).toHaveText(/Colour guide/);
+  await expect(guide).not.toBeVisible();
+  await tap(page, button);
+  await expect(guide).toBeVisible();
+  for (const name of ["Green", "Orange", "Grey"]) await expect(guide).toContainText(name);
+  await expect(guide.locator("li .kt-cell")).toHaveCount(3);
+  // Typing while it is open does not reach the game.
+  await page.keyboard.press("c");
+  await page.keyboard.press("Escape");
+  await expect(guide).not.toBeVisible();
+  await expect(cells(page, 0).first()).toHaveText("");
+  await expect(button).toBeFocused();
+  await tap(page, button);
+  await tap(page, '[data-kt="guide-close"]');
+  await expect(guide).not.toBeVisible();
+  await button.focus();
+  await page.keyboard.press("Enter");
+  await expect(guide).toBeVisible();
+  await tap(page, '[data-kt="guide-done"]');
+  await expect(guide).not.toBeVisible();
+  await sound(page, errors);
+});
+
+test("the kana guide adds yellow and the arrows, and kana marks show both arrows at once", async ({ page }) => {
+  const errors = await open(page, "?lang=en&seed=3");
+  await tap(page, '[data-testid="languages"] [data-lang-id="ja"]');
+  await expect.poll(() => page.evaluate(() => window.kotobaState.play.game?.language)).toBe("ja");
+  await tap(page, '[data-kt="guide-open"]');
+  const guide = page.locator('[data-kt="guide"]');
+  for (const name of ["Yellow", "Arrow down", "Arrow up", "Both arrows"]) await expect(guide).toContainText(name);
+  await expect(guide.locator("li .kt-cell")).toHaveCount(7);
+  await expect(guide.locator('.kt-cell[data-size="wrong"][data-tone="wrong"]')).toHaveCount(1);
+  await page.keyboard.press("Escape");
   await sound(page, errors);
 });

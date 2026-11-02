@@ -14,6 +14,8 @@ import {
 } from "./game.ts";
 import { KEYBOARD_ROWS } from "./keyboardRows.ts";
 import { type LoadedWordList, loadWordList, type WordListName } from "./load.ts";
+import { drawGuide, KOTOBA_GUIDE_CSS } from "./playGuide.ts";
+import { drawResult, KOTOBA_RESULT_CSS } from "./playResult.ts";
 import { KOTOBA_STRINGS, type KotobaStrings, kotobaSay, type Language } from "./strings.ts";
 
 /**
@@ -156,8 +158,7 @@ export const KOTOBA_PLAY_CSS = `.kt-root { ${Object.entries(KOTOBA_PLAY_VARIABLE
     " ",
   )} box-sizing: border-box; display: grid; gap: 12px; padding: 14px; justify-items: center; background: var(--kt-board); color: var(--kt-ink); border-radius: var(--kt-radius); font-family: system-ui, sans-serif; }
 .kt-root *, .kt-root *::before, .kt-root *::after { box-sizing: border-box; }
-.kt-status { margin: 0; min-height: 2.8em; font-weight: 700; text-align: center; }
-.kt-legend { margin: 0; font-size: .8rem; opacity: .9; text-align: center; min-height: 3.4em; max-width: 46ch; }
+.kt-status { position: relative; margin: 0; min-height: 2.8em; font-weight: 700; text-align: center; }
 .kt-grid { --size: 5; display: grid; gap: 6px; width: min(100%, calc(var(--size) * var(--kt-cell-size))); }
 .kt-row { display: grid; grid-template-columns: repeat(var(--size), minmax(0, 1fr)); gap: 6px; }
 .kt-cell { position: relative; aspect-ratio: 1; display: grid; place-items: center; border-radius: 8px; background: var(--kt-cell); color: var(--kt-cell-ink); border: 2px solid rgba(0,0,0,.25); font-weight: 800; font-size: clamp(1.1rem, 6vw, 1.7rem); user-select: none; -webkit-user-select: none; }
@@ -174,6 +175,7 @@ export const KOTOBA_PLAY_CSS = `.kt-root { ${Object.entries(KOTOBA_PLAY_VARIABLE
 .kt-cell[data-mark="hit"]::after, .kt-cell[data-mark="near"]::after, .kt-cell[data-mark="kin"]::after, .kt-cell[data-mark="miss"]::after { position: absolute; top: 2px; right: 5px; font-size: .55rem; font-weight: 700; opacity: .8; }
 .kt-cell[data-size="wrong"]::before { content: "↓"; position: absolute; left: 4px; bottom: 1px; font-size: .7rem; }
 .kt-cell[data-tone="wrong"]::before { content: "↑"; position: absolute; left: 4px; bottom: 1px; font-size: .7rem; }
+.kt-cell[data-size="wrong"][data-tone="wrong"]::before { content: "↓↑"; }
 .kt-cell[data-pending]::before { content: attr(data-pending); position: absolute; left: 4px; bottom: 1px; font-size: .6rem; opacity: .7; }
 .kt-keys { display: grid; gap: 6px; width: min(100%, 520px); }
 .kt-key-row { display: flex; justify-content: center; gap: 4px; }
@@ -183,6 +185,8 @@ export const KOTOBA_PLAY_CSS = `.kt-root { ${Object.entries(KOTOBA_PLAY_VARIABLE
 .kt-key[data-mark="near"] { background: var(--kt-near); color: #fff; }
 .kt-key[data-mark="miss"] { background: var(--kt-miss); color: #fff; opacity: .7; }
 .kt-key[data-act="small"], .kt-key[data-act="mark"] { max-width: 78px; flex: 1.6 1 0; font-size: 1.1rem; text-transform: none; }
+${KOTOBA_RESULT_CSS}
+${KOTOBA_GUIDE_CSS}
 `;
 
 /** A seeded stream: the same seed picks the same word. */
@@ -232,6 +236,7 @@ export function mountKotoba(container: HTMLElement, options: KotobaPlayOptions =
   let told = false;
   let token = 0;
   let destroyed = false;
+  let guideFor = "";
 
   if (doc.getElementById("kotoba-play-style") === null) {
     const style = doc.createElement("style");
@@ -254,10 +259,9 @@ export function mountKotoba(container: HTMLElement, options: KotobaPlayOptions =
   const keys = doc.createElement("div");
   keys.className = "kt-keys";
   keys.dataset.kt = "keys";
-  const legend = doc.createElement("p");
-  legend.className = "kt-legend";
-  legend.dataset.kt = "legend";
-  root.append(status, grid, keys, legend);
+  const guide = doc.createElement("div");
+  guide.dataset.kt = "legend";
+  root.append(status, grid, keys, guide);
   container.append(root);
 
   const changed = () => {
@@ -315,7 +319,7 @@ export function mountKotoba(container: HTMLElement, options: KotobaPlayOptions =
   function draw() {
     const round = game;
     const kana = (round?.language ?? choice.words) === "ja";
-    status.textContent =
+    const told =
       list === null || round === null
         ? say("loading")
         : message !== null
@@ -323,6 +327,15 @@ export function mountKotoba(container: HTMLElement, options: KotobaPlayOptions =
           : round.status !== "playing"
             ? ""
             : say(kana ? "readyKana" : "ready", { n: round.size });
+    // Over, the card under the grid says it large; the line stays for a screen reader, and keeps its height so nothing moves.
+    const over = round !== null && round.status !== "playing";
+    status.replaceChildren();
+    if (over) {
+      const quiet = doc.createElement("span");
+      quiet.className = "kt-sr";
+      quiet.textContent = told;
+      status.append(quiet);
+    } else status.textContent = told;
 
     // The board: a row for every guess the round gives, the guesses marked, the row being typed, and empty places.
     const size = round?.size ?? choice.size;
@@ -397,15 +410,24 @@ export function mountKotoba(container: HTMLElement, options: KotobaPlayOptions =
       );
       lines.push(extra);
     }
-    keys.replaceChildren(...lines);
-    legend.textContent = say(kana ? "legendKana" : "legendLetters");
+    // Over, the rows stay (for their height) but are hidden and out of the tab order, and the card stands over them.
+    keys.dataset.over = String(over);
+    for (const line of lines) line.toggleAttribute("inert", over);
+    const card = drawResult(doc, round, say);
+    keys.replaceChildren(...lines, ...(card === null ? [] : [card]));
+    // The guide is drawn again only when its words or its marks change, so an open dialog is not rebuilt under a reader.
+    const guideNow = `${locale}|${kana}|${Object.keys(own).length}`;
+    if (guideNow !== guideFor) {
+      guideFor = guideNow;
+      guide.replaceChildren(...drawGuide(doc, say, kana));
+    }
   }
 
   /** The device's keyboard does what the one on the page does. */
   function onKey(event: KeyboardEvent) {
     if (event.ctrlKey || event.metaKey || event.altKey || game === null) return;
     const target = event.target;
-    if ((target as Element | null)?.closest?.("input, textarea, select, [contenteditable=true]")) return;
+    if ((target as Element | null)?.closest?.("input, textarea, select, [contenteditable=true], dialog")) return;
     // Enter on a control that has the focus presses that control, so a control outside the game keeps its Enter.
     if (event.key === "Enter" && (target as Element | null)?.closest?.("button, select, input, textarea")) return;
     if (event.key === "Enter") {

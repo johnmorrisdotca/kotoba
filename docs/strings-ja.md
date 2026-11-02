@@ -35,6 +35,39 @@ Names that begin `cli` are the command line's; the others are the game's.
 | `arrowTone` | wrong mark | 濁点などが違う |
 | `empty` | empty | 空 |
 | `row` | Guess {n} | {n}回目 |
+| `lostTitle` | Out of guesses. The word was | 予想を使い切りました。単語は |
+| `wonTitle` | Found it in {n}! | {n}回で正解！ |
+| `lostNote` | Good try. Now you know this word. | よくがんばりました。この単語はもう覚えましたね。 |
+| `points` | {score} points | {score}点 |
+| `guideOpen` | Colour guide | 色の見かた |
+| `guideTitle` | What the colours and arrows mean | 色と矢印の意味 |
+| `guideClose` | Close | 閉じる |
+| `guideDone` | Got it | わかった |
+| `guideBoard` | On the board | ボードの上で |
+| `guideBoardLetters` | Every guess puts a colour on each letter. The colour tells you how that letter fits the hidden word. | 予想するたびに、文字ごとに色がつきます。その色で、隠れた単語とどれくらい合っているかがわかります。 |
+| `guideBoardKana` | Every guess puts a colour on each kana. The colour tells you how that kana fits the hidden word. | 予想するたびに、かなごとに色がつきます。その色で、隠れた単語とどれくらい合っているかがわかります。 |
+| `guideGreen` | Green | 緑 |
+| `guideHitLetter` | The letter is right, and it is in the right place. | 文字が合っていて、場所も合っています。 |
+| `guideHitKana` | The kana is right, and it is in the right place. | かなが合っていて、場所も合っています。 |
+| `guideOrange` | Orange | 橙（だいだい） |
+| `guideNearLetter` | The word has this letter, but in a different place. | この文字は単語にありますが、場所がちがいます。 |
+| `guideNearKana` | The word has this kana, but in a different place. | このかなは単語にありますが、場所がちがいます。 |
+| `guideYellow` | Yellow | 黄色 |
+| `guideKin` | Not this kana, but one from the same row of the kana chart belongs here. If you play か and the word has き there, you get yellow: both are in the K row. | このかなではありませんが、ここには五十音表の同じ行のかなが入ります。「か」を入れて、単語のそこが「き」なら黄色です。どちらも「か」の行だからです。 |
+| `guideGrey` | Grey | 灰色 |
+| `guideMissLetter` | The word does not have this letter at all. | この文字は単語にまったくありません。 |
+| `guideMissKana` | The word does not have this kana, and nothing from its row belongs here. | このかなは単語になく、同じ行のかなもここには入りません。 |
+| `guideArrows` | Arrows | 矢印 |
+| `guideArrowsLead` | A small arrow on a green or orange kana means the kana is right, but it is not quite the one the word has. It is not found until the arrow is gone. | 緑や橙のかなについた小さな矢印は、かなは合っているけれど、単語のかなとは少しちがう、という意味です。矢印が消えるまでは、見つかったことになりません。 |
+| `guideArrowDownName` | Arrow down | 下向きの矢印 |
+| `guideArrowDown` | The size is wrong: big つ or small っ. The 小 key changes the size. | 大きさがちがいます。大きい「つ」と小さい「っ」のようなものです。「小」キーで大きさを変えられます。 |
+| `guideArrowUpName` | Arrow up | 上向きの矢印 |
+| `guideArrowUp` | The mark is wrong: は, ば or ぱ. The ゛゜ key changes the mark. | 点や丸の印がちがいます。「は」「ば」「ぱ」のようなものです。「゛゜」キーで印を変えられます。 |
+| `guideArrowBothName` | Both arrows | 両方の矢印 |
+| `guideArrowBoth` | The size and the mark are both wrong. | 大きさも印も、どちらもちがいます。 |
+| `guideKeyboard` | On the keyboard | キーボードの上で |
+| `guideKeyboardLead` | Each key takes the best colour any of your guesses gave that letter. A white key has not been tried yet. | それぞれのキーは、これまでの予想でその文字がもらった、いちばんよい色になります。白いキーは、まだ試していません。 |
+| `guideShapes` | Each mark also has a small shape in its corner, so the colour is never the only clue: ● green, ◐ orange, ○ grey, and ≈ yellow in the kana game. | どの印にも、すみに小さな形がついているので、色だけが手がかりにはなりません。● 緑、◐ 橙、○ 灰色、かなのゲームでは ≈ 黄色。 |
 | `cliUnknown` | unknown option {part} | 不明なオプションです: {part} |
 | `cliNeeds` | {part} needs a value | {part} には値が必要です |
 | `cliTryHelp` | Try `kotoba --help`. | `kotoba --help` をご覧ください。 |
