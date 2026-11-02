@@ -110,7 +110,7 @@ const PAGE = {
     chainTitle: "しりとり",
     chainText:
       "前の言葉の最後のかなで始まる言葉をつなぎます。「ん」で終わる言葉を言うと負けです。名詞をかなかローマ字で入力すると、コンピューターがリストから答えます。",
-    chainLabel: "あなたの言葉",
+    chainLabel: "次の言葉",
     chainSay: "言う",
     chainNew: "最初から",
     chainStart: "最初の言葉は{word}です。「{key}」で始まる言葉を言ってください。",
@@ -122,7 +122,7 @@ const PAGE = {
     chainLost: "「ん」で終わったので、あなたの負けです。{n}語続きました。",
     chainWon: "コンピューターには「{key}」で始まる言葉がもうありません。{n}語であなたの勝ちです。",
     idiomTitle: "日本語の慣用句",
-    idiomText: "決まった言い回しを、読みと英語の意味つきで載せています。三つのどれでも検索できます。",
+    idiomText: "決まった言い回しを、読みと英語の意味つきで載せています。句・読み・英語の意味のどれでも検索できます。",
     idiomLabel: "慣用句を検索",
     idiomAnother: "別の慣用句",
     idiomKindIdiom: "JMdictが慣用句と示しています。",
@@ -130,7 +130,7 @@ const PAGE = {
     idiomFound: "{all}件中{n}件です。",
     idiomNone: "当てはまる句はありません。",
     phrasesCredit:
-      "言葉はJMdict（{release}）から。Electronic Dictionary Research and Development Groupの所有で、同グループのライセンス（CC BY-SA 4.0）のもとで使っています。",
+      "言葉はJMdict（{release}）から。電子辞書研究開発グループの辞書で、そのライセンス（CC BY-SA 4.0）のもとで使っています。",
   },
 };
 const WORDS = { en: { ...KOTOBA_STRINGS.en, ...PAGE.en }, ja: { ...KOTOBA_STRINGS.ja, ...PAGE.ja } };

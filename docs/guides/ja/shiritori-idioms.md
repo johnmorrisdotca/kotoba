@@ -48,4 +48,4 @@ console.log(idioms.filter((one)=>one.kind==="idiom"&&one.elementary).length);
 
 ## 言葉の出どころ
 
-どちらのリストもJMdictから作り、`elementary`はKANJIDIC2から作っています。どちらもElectronic Dictionary Research and Development Groupの所有で、CC BY-SA 4.0と同グループの条件のもとで使っています。これらの言葉を表示するページでは、その画面に出典を示す必要があります。文例は[NOTICE.md](https://github.com/johnmorrisdotca/kotoba/blob/main/NOTICE.md)（英語）にあります。JMdictが卑語、成人向け、配慮が必要、または蔑称と示している項目は入れていません。これらのリストは子ども向けのゲームにも使われるからです。
+どちらのリストもJMdictから作り、`elementary`はKANJIDIC2から作っています。どちらも電子辞書研究開発グループの所有で、CC BY-SA 4.0と同グループの条件のもとで使っています。これらの言葉を表示するページでは、その画面に出典を示す必要があります。文例は[NOTICE.md](https://github.com/johnmorrisdotca/kotoba/blob/main/NOTICE.md)（英語）にあります。JMdictが卑語、成人向け、配慮が必要、または蔑称と示している項目は入れていません。これらのリストは子ども向けのゲームにも使われるからです。
