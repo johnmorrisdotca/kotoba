@@ -17,6 +17,7 @@ The kana word lists are made again from JMdict's release of 2026-11-02 (they wer
 - **3 kana:** the words that may be guessed go from 16,444 to 16,371 (77 left, all barred; 4 joined). The 900 easy answers: じさつ out, ないか in. The 2,000 answers: じさつ and うわき out, まねー and まーく in.
 - **4 kana:** the words that may be guessed go from 39,046 to 38,844 (224 left, all barred; 22 joined). The easy answers are unchanged. The 2,000 answers: おりもの out, ちゅうや in.
 - **5 kana:** the words that may be guessed go from 35,419 to 35,298 (151 left, all barred; 30 joined). The easy answers: しんじゅう out, ほそながい in. The 2,000 answers: しんじゅう, なんしょく and ほうきょう out, じょうすい, せばんごう and なまびーる in.
+- **Seeds:** a seed keeps its hidden word unless that word went or a new one undercuts it. Measured over 50,000 seeds, the hidden word changes for 0.22% of 3-kana easy, 0.18% of 3-kana medium and hard, none of 4-kana easy, 0.08% of 4-kana medium and hard, 0.22% of 5-kana easy and 0.31% of 5-kana medium and hard; the free grey first row changes for about one seed in 400 whose word stays. The words that may be guessed do not change a hidden word.
 - The order of the words that stayed is the same in every list, but a list that gains or loses a word deals another pack, so a day's kana word from `dailyWord` can differ from 1.3.1 (see "What the word depends on" in the README). The idioms and shiritori lists are not changed.
 
 ## [1.3.1] - 2026-11-02
