@@ -9,7 +9,7 @@ English, French, German and Japanese (kana) dictionaries for five-letter and oth
   <a href="./NOTICE.md"><img alt="Code MIT; word lists SCOWL, CC BY-SA 4.0" src="https://img.shields.io/badge/licence-MIT%20code%2C%20CC%20BY--SA%20lists-2f5d4a"></a>
   <img alt="No dependencies" src="https://img.shields.io/badge/dependencies-0-2f5d4a">
   <img alt="TypeScript" src="https://img.shields.io/badge/types-TypeScript-3178c6">
-  <a href="https://johnmorrisdotca.github.io/kotoba/docs/api/main/index.html"><img alt="10.9 kB minified and gzipped" src="https://img.shields.io/badge/min%2Bgzip-10.9%20kB-2f5d4a"></a>
+  <a href="https://johnmorrisdotca.github.io/kotoba/docs/api/main/index.html"><img alt="11.0 kB minified and gzipped" src="https://img.shields.io/badge/min%2Bgzip-11.0%20kB-2f5d4a"></a>
   <a href="https://www.npmjs.com/package/@johnmorrisdotca/kotoba#provenance"><img alt="Published with npm provenance" src="https://img.shields.io/badge/npm-provenance-2f5d4a"></a>
 </p>
 
@@ -1015,7 +1015,7 @@ never edit a list by hand. Please follow the [code of conduct](./CODE_OF_CONDUCT
 
 See [CHANGELOG.md](./CHANGELOG.md).
 
-The latest release, 1.4.0, shows the word large when a round ends, and adds a colour guide that explains every colour and arrow.
+The latest release, 1.4.1, puts a phone's keyboard back on the table, after 1.4.0 ran it past the edge.
 
 ## Licence
 

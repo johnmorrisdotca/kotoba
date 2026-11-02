@@ -6,6 +6,8 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+## [1.4.1] - 2026-11-02
+
 ### Fixed
 
 - On a phone the keyboard ran past the edge of the table in 1.4.0, cutting off the last key of each row. The board now takes the width it is given, as it did before.

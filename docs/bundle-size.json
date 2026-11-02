@@ -2,8 +2,8 @@
   "measured": "esbuild 0.28.2, bundled, minified, ES2020, gzip level 9",
   "entries": {
     ".": {
-      "minified": 33147,
-      "gzip": 10911
+      "minified": 33591,
+      "gzip": 10965
     },
     "./words-en": {
       "minified": 186499,
@@ -26,16 +26,16 @@
       "gzip": 49859
     },
     "./kana-3": {
-      "minified": 58746,
-      "gzip": 40618
+      "minified": 58527,
+      "gzip": 40455
     },
     "./kana-4": {
-      "minified": 168498,
-      "gzip": 113605
+      "minified": 167690,
+      "gzip": 113093
     },
     "./kana-5": {
-      "minified": 192309,
-      "gzip": 121048
+      "minified": 191704,
+      "gzip": 120625
     },
     "./idioms-ja": {
       "minified": 305770,
@@ -46,24 +46,24 @@
       "gzip": 106264
     },
     "./cli": {
-      "minified": 925369,
-      "gzip": 470794
+      "minified": 924181,
+      "gzip": 469792
     },
     "./load": {
-      "minified": 897742,
-      "gzip": 461203
+      "minified": 896110,
+      "gzip": 460217
     },
     "./play": {
-      "minified": 942492,
-      "gzip": 476133
+      "minified": 941356,
+      "gzip": 475250
     },
     "./element": {
-      "minified": 949793,
-      "gzip": 478537
+      "minified": 948657,
+      "gzip": 477596
     },
     "./element/define": {
-      "minified": 949798,
-      "gzip": 478546
+      "minified": 948662,
+      "gzip": 477604
     }
   }
 }
