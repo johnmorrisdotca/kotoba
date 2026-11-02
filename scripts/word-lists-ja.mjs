@@ -120,6 +120,28 @@ const NOT_AN_ANSWER = new Set([
   "なんしょく", // male homosexuality; sodomy
   "じさつ", // suicide
   "しんじゅう", // double suicide; group suicide
+  // Killing, death by violence and abuse: children play (John, 2026-11-02, default to stricter). Still words that may be guessed.
+  "ころす", // to kill; to murder
+  "たさつ", // murder
+  "さつじん", // murder; homicide
+  "ひとごろし", // murder; murderer
+  "ぎゃくさつ", // slaughter; massacre
+  "あんさつ", // assassination
+  "しけい", // death penalty
+  "しょけい", // execution
+  "せっしょう", // killing; destruction of life
+  "ぎせいしゃ", // victim (esp. someone killed)
+  "ひがいしゃ", // victim; injured party
+  "じゅうげき", // shooting; gunning down
+  "りゅうけつ", // bloodshed
+  "ぼうりょく", // violence
+  "なぐる", // to strike; to punch
+  "だぼく", // blow; hit; beating
+  "ぎゃくたい", // abuse; ill-treatment
+  "たいけい", // corporal punishment
+  "いじめ", // bullying
+  "ゆうかい", // abduction; kidnapping
+  "ひとじち", // hostage
 ]);
 /** Readings JMdict marks no differently that are left out of the lists altogether, as the barred are: new in a release, never guessable before. */
 const NOT_GUESSABLE = new Map([
