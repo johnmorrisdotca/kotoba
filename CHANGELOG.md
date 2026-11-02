@@ -6,6 +6,8 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+## [1.4.0] - 2026-11-02
+
 ### Added
 
 - A colour guide on the game itself: a labelled "Colour guide" button under the keyboard opens a dialog that shows every colour and arrow as the game draws it, each beside its name and a short sentence, with the keyboard's colours and the corner shapes that repeat them. The kana game adds yellow and the two arrows. It closes by its button, Got it, Escape or a press outside, and the game ignores the keys typed while it is open. Thirty-three new strings in `KOTOBA_STRINGS` (`guide…`, `lostTitle`, `wonTitle`, `lostNote`, `points`), English and Japanese.

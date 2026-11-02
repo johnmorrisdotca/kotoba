@@ -1015,7 +1015,7 @@ never edit a list by hand. Please follow the [code of conduct](./CODE_OF_CONDUCT
 
 See [CHANGELOG.md](./CHANGELOG.md).
 
-The latest release, 1.3.2, brings the kana lists to JMdict's release of 2026-11-02 (a few dozen guessable words added, 457 readings not for a child barred, a few answers swapped). 1.3.1 added a guide to laying your own words over the lists. 1.3.0 added shiritori and Japanese idioms.
+The latest release, 1.4.0, shows the word large when a round ends, and adds a colour guide that explains every colour and arrow.
 
 ## Licence
 
