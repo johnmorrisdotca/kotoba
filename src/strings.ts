@@ -59,6 +59,40 @@ export type KotobaStrings = {
   arrowTone: string;
   empty: string;
   row: string;
+  /** The end of a round, and the guide to the colours and arrows. */
+  lostTitle: string;
+  wonTitle: string;
+  lostNote: string;
+  points: string;
+  guideOpen: string;
+  guideTitle: string;
+  guideClose: string;
+  guideDone: string;
+  guideBoard: string;
+  guideBoardLetters: string;
+  guideBoardKana: string;
+  guideGreen: string;
+  guideHitLetter: string;
+  guideHitKana: string;
+  guideOrange: string;
+  guideNearLetter: string;
+  guideNearKana: string;
+  guideYellow: string;
+  guideKin: string;
+  guideGrey: string;
+  guideMissLetter: string;
+  guideMissKana: string;
+  guideArrows: string;
+  guideArrowsLead: string;
+  guideArrowDownName: string;
+  guideArrowDown: string;
+  guideArrowUpName: string;
+  guideArrowUp: string;
+  guideArrowBothName: string;
+  guideArrowBoth: string;
+  guideKeyboard: string;
+  guideKeyboardLead: string;
+  guideShapes: string;
   /** The command line's help, whole, and its words. */
   cliUsage: string;
   cliUnknown: string;
@@ -125,6 +159,44 @@ export const KOTOBA_STRINGS: Record<Language, KotobaStrings> = {
     arrowTone: "wrong mark",
     empty: "empty",
     row: "Guess {n}",
+    lostTitle: "Out of guesses. The word was",
+    wonTitle: "Found it in {n}!",
+    lostNote: "Good try. Now you know this word.",
+    points: "{score} points",
+    guideOpen: "Colour guide",
+    guideTitle: "What the colours and arrows mean",
+    guideClose: "Close",
+    guideDone: "Got it",
+    guideBoard: "On the board",
+    guideBoardLetters:
+      "Every guess puts a colour on each letter. The colour tells you how that letter fits the hidden word.",
+    guideBoardKana: "Every guess puts a colour on each kana. The colour tells you how that kana fits the hidden word.",
+    guideGreen: "Green",
+    guideHitLetter: "The letter is right, and it is in the right place.",
+    guideHitKana: "The kana is right, and it is in the right place.",
+    guideOrange: "Orange",
+    guideNearLetter: "The word has this letter, but in a different place.",
+    guideNearKana: "The word has this kana, but in a different place.",
+    guideYellow: "Yellow",
+    guideKin:
+      "Not this kana, but one from the same row of the kana chart belongs here. If you play か and the word has き there, you get yellow: both are in the K row.",
+    guideGrey: "Grey",
+    guideMissLetter: "The word does not have this letter at all.",
+    guideMissKana: "The word does not have this kana, and nothing from its row belongs here.",
+    guideArrows: "Arrows",
+    guideArrowsLead:
+      "A small arrow on a green or orange kana means the kana is right, but it is not quite the one the word has. It is not found until the arrow is gone.",
+    guideArrowDownName: "Arrow down",
+    guideArrowDown: "The size is wrong: big つ or small っ. The 小 key changes the size.",
+    guideArrowUpName: "Arrow up",
+    guideArrowUp: "The mark is wrong: は, ば or ぱ. The ゛゜ key changes the mark.",
+    guideArrowBothName: "Both arrows",
+    guideArrowBoth: "The size and the mark are both wrong.",
+    guideKeyboard: "On the keyboard",
+    guideKeyboardLead:
+      "Each key takes the best colour any of your guesses gave that letter. A white key has not been tried yet.",
+    guideShapes:
+      "Each mark also has a small shape in its corner, so the colour is never the only clue: ● green, ◐ orange, ○ grey, and ≈ yellow in the kana game.",
     cliUsage: `Usage: kotoba <command> [options]
 
 Word lists and the rules of word games: English, French, German and Japanese kana.
@@ -208,6 +280,46 @@ the list), 2 the command was wrong.
     arrowTone: "濁点などが違う",
     empty: "空",
     row: "{n}回目",
+    lostTitle: "予想を使い切りました。単語は",
+    wonTitle: "{n}回で正解！",
+    lostNote: "よくがんばりました。この単語はもう覚えましたね。",
+    points: "{score}点",
+    guideOpen: "色の見かた",
+    guideTitle: "色と矢印の意味",
+    guideClose: "閉じる",
+    guideDone: "わかった",
+    guideBoard: "ボードの上で",
+    guideBoardLetters:
+      "予想するたびに、文字ごとに色がつきます。その色で、隠れた単語とどれくらい合っているかがわかります。",
+    guideBoardKana:
+      "予想するたびに、かなごとに色がつきます。その色で、隠れた単語とどれくらい合っているかがわかります。",
+    guideGreen: "緑",
+    guideHitLetter: "文字が合っていて、場所も合っています。",
+    guideHitKana: "かなが合っていて、場所も合っています。",
+    guideOrange: "橙（だいだい）",
+    guideNearLetter: "この文字は単語にありますが、場所がちがいます。",
+    guideNearKana: "このかなは単語にありますが、場所がちがいます。",
+    guideYellow: "黄色",
+    guideKin:
+      "このかなではありませんが、ここには五十音表の同じ行のかなが入ります。「か」を入れて、単語のそこが「き」なら黄色です。どちらも「か」の行だからです。",
+    guideGrey: "灰色",
+    guideMissLetter: "この文字は単語にまったくありません。",
+    guideMissKana: "このかなは単語になく、同じ行のかなもここには入りません。",
+    guideArrows: "矢印",
+    guideArrowsLead:
+      "緑や橙のかなについた小さな矢印は、かなは合っているけれど、単語のかなとは少しちがう、という意味です。矢印が消えるまでは、見つかったことになりません。",
+    guideArrowDownName: "下向きの矢印",
+    guideArrowDown:
+      "大きさがちがいます。大きい「つ」と小さい「っ」のようなものです。「小」キーで大きさを変えられます。",
+    guideArrowUpName: "上向きの矢印",
+    guideArrowUp: "点や丸の印がちがいます。「は」「ば」「ぱ」のようなものです。「゛゜」キーで印を変えられます。",
+    guideArrowBothName: "両方の矢印",
+    guideArrowBoth: "大きさも印も、どちらもちがいます。",
+    guideKeyboard: "キーボードの上で",
+    guideKeyboardLead:
+      "それぞれのキーは、これまでの予想でその文字がもらった、いちばんよい色になります。白いキーは、まだ試していません。",
+    guideShapes:
+      "どの印にも、すみに小さな形がついているので、色だけが手がかりにはなりません。● 緑、◐ 橙、○ 灰色、かなのゲームでは ≈ 黄色。",
     cliUsage: `使い方: kotoba <コマンド> [オプション]
 
 単語リストと、言葉遊びのルール。英語、フランス語、ドイツ語、日本語（かな）に対応しています。

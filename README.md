@@ -9,7 +9,7 @@ English, French, German and Japanese (kana) dictionaries for five-letter and oth
   <a href="./NOTICE.md"><img alt="Code MIT; word lists SCOWL, CC BY-SA 4.0" src="https://img.shields.io/badge/licence-MIT%20code%2C%20CC%20BY--SA%20lists-2f5d4a"></a>
   <img alt="No dependencies" src="https://img.shields.io/badge/dependencies-0-2f5d4a">
   <img alt="TypeScript" src="https://img.shields.io/badge/types-TypeScript-3178c6">
-  <a href="https://johnmorrisdotca.github.io/kotoba/docs/api/main/index.html"><img alt="9.3 kB minified and gzipped" src="https://img.shields.io/badge/min%2Bgzip-9.3%20kB-2f5d4a"></a>
+  <a href="https://johnmorrisdotca.github.io/kotoba/docs/api/main/index.html"><img alt="10.9 kB minified and gzipped" src="https://img.shields.io/badge/min%2Bgzip-10.9%20kB-2f5d4a"></a>
   <a href="https://www.npmjs.com/package/@johnmorrisdotca/kotoba#provenance"><img alt="Published with npm provenance" src="https://img.shields.io/badge/npm-provenance-2f5d4a"></a>
 </p>
 
@@ -285,7 +285,7 @@ command line is built on it.
   plain functions, tested.
 - A round of a word game as plain data, so it can be kept in any framework's
   state, replayed from its guesses or played by a program.
-- A board with the keyboard of each language, the legend of the marks and
+- A board with the keyboard of each language, the colour guide for the marks and
   accessible labels, themed by CSS variables.
 - Lists that are machine output from real dictionaries, each its own file.
 - A word of the day with no state and no clock to keep.
@@ -312,7 +312,7 @@ Every TypeScript and JavaScript block here is type-checked against the built pac
 
 ### A page with nothing else
 
-Save this as a file and open it. The board, the keyboard of the language and the legend of the marks are drawn into the one element; each list is fetched when it is played.
+Save this as a file and open it. The board, the keyboard of the language and the colour guide for the marks are drawn into the one element; each list is fetched when it is played.
 
 ```html
 <!doctype html>
@@ -664,7 +664,7 @@ stays put.
 ## Play it on a page
 
 `mountKotoba(element, options)` draws a board of guesses, the keyboard of the
-language under it and the legend of the marks into one element, and plays by touch
+language under it and the colour guide for the marks into one element, and plays by touch
 or by the device's keyboard. It is the rules above with a face on them. Setting up
 (which language, how long, easy words) is yours: call `play.newGame({ … })`.
 
@@ -865,7 +865,7 @@ Linux, macOS and Windows. A time zone other than UTC for a day uses
 
 Two things here have a language, and they are chosen apart. **The words** are
 English, French, German and Japanese kana: the `words` option, or `--words`.
-**The game's own words** (its prompts, the keys and the legend of the marks, and
+**The game's own words** (its prompts, the keys and the colour guide for the marks, and
 the command line's) are English or Japanese: `locale`, or `--lang`. A French game
 can be played with Japanese prompts.
 

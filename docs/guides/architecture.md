@@ -30,6 +30,8 @@ src/
 ├── marks.ts         marking a guess: the rule every five-letter word game shares
 ├── phrases.ts       reading the Japanese idiom and shiritori lists once they are loaded, and searching the idioms
 ├── play.ts          the board you can put on a page, and its stylesheet
+├── playGuide.ts     the colour guide: its button and the dialog that explains every colour and arrow
+├── playResult.ts    the card that shows the answer when a round is over
 ├── strings.ts       every word Kotoba says, in English and Japanese
 ├── version.ts       the package's version
 ├── wordScore.ts     what a word scores, won or lost
