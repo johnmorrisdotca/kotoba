@@ -6,6 +6,8 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+## [1.3.0] - 2026-11-02
+
 ### Added
 
 - Shiritori, the Japanese word chain: `playShiritori` judges a word, `shiritoriChoices` lists what may follow from any pool of words, `shiritoriHeadKey` and `shiritoriTailKey` say what a word starts and ends on, with house rules for voicing and the long vowel mark. The entry point `/shiritori-ja` holds 6,393 everyday nouns from JMdict, commonest first.
