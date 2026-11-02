@@ -461,6 +461,23 @@ test("the idioms can be searched by what they mean, and say whose judgement put 
   await sound(page, errors);
 });
 
+test("every key is whole on the felt at a phone's width", async ({ page }) => {
+  for (const width of [320, 360, 390]) {
+    await page.setViewportSize({ width, height: 844 });
+    await open(page, "?lang=en&seed=3");
+    const past = await page.evaluate(() => {
+      const felt = document.querySelector(".fam-felt.game").getBoundingClientRect();
+      return [...document.querySelectorAll('[data-kt="keys"] button')]
+        .filter((key) => {
+          const box = key.getBoundingClientRect();
+          return box.left < felt.left || box.right > felt.right;
+        })
+        .map((key) => key.textContent);
+    });
+    expect(past, `the keys past the felt at ${width}`).toEqual([]);
+  }
+});
+
 test("the colour guide opens and closes by mouse, touch and keyboard, and Escape leaves it", async ({ page }) => {
   const errors = await open(page, "?lang=en&seed=3");
   const button = page.locator('[data-kt="guide-open"]');

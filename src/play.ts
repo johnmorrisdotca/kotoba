@@ -156,7 +156,7 @@ export const KOTOBA_PLAY_CSS = `.kt-root { ${Object.entries(KOTOBA_PLAY_VARIABLE
   .map(([name, value]) => `${name}: ${value};`)
   .join(
     " ",
-  )} box-sizing: border-box; display: grid; gap: 12px; padding: 14px; justify-items: center; background: var(--kt-board); color: var(--kt-ink); border-radius: var(--kt-radius); font-family: system-ui, sans-serif; }
+  )} box-sizing: border-box; display: grid; grid-template-columns: minmax(0, 1fr); width: 100%; gap: 12px; padding: 14px; justify-items: center; background: var(--kt-board); color: var(--kt-ink); border-radius: var(--kt-radius); font-family: system-ui, sans-serif; }
 .kt-root *, .kt-root *::before, .kt-root *::after { box-sizing: border-box; }
 .kt-status { position: relative; margin: 0; min-height: 2.8em; font-weight: 700; text-align: center; }
 .kt-grid { --size: 5; display: grid; gap: 6px; width: min(100%, calc(var(--size) * var(--kt-cell-size))); }
