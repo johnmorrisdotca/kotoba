@@ -6,6 +6,8 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+## [1.5.0] - 2026-11-02
+
 ### Added
 
 - **A guess can be tapped to see what its word means.** A new option, `meanings: (word, words) => Promise<string | null>`, lets a host that has a dictionary supply the words; Kotoba holds none and has no dependency on one. Tapping, hovering or focusing a guess's row puts the meaning in the status line, which keeps its height (the board does not change size at any width, and the page's width holds too); the line goes back on a tap elsewhere, when the pointer leaves, on Escape or when you type. A press on a row never moves the focus, so typing carries on. The hidden word's meaning is asked for only after the round is over, and goes on the end card as one small line under the tiles. A `null`, an empty line or a failure draws nothing. The colour guide says a guess can be tapped, only when the option was given; without it the game is exactly as it was. Two new strings in `KOTOBA_STRINGS` (`guideTap`, `meaningFor`), English and Japanese. The demo wires in Jisho (`@johnmorrisdotca/jisho` 1.0.0, a development dependency of the demo alone, never of Kotoba) for kana words: a reading several words share shows the commonest two or three with their written forms (`紙 paper · 神 god · 髪 hair`) in about sixty characters, from one small piece of the dictionary and none of the files for words that are not for children; English, French and German show nothing there yet. Its credit line now names Jisho and JMdict for the meanings, in both languages.

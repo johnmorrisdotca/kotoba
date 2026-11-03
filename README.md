@@ -1078,7 +1078,7 @@ never edit a list by hand. Please follow the [code of conduct](./CODE_OF_CONDUCT
 
 See [CHANGELOG.md](./CHANGELOG.md).
 
-The latest release, 1.4.1, puts a phone's keyboard back on the table, after 1.4.0 ran it past the edge.
+The latest release, 1.5.0, lets a player tap a guess to see what its word means, from a meanings function the host passes in; the demo shows kana meanings from Jisho.
 
 ## Licence
 
