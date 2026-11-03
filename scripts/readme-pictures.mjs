@@ -152,6 +152,37 @@ const board = (subject, words, size, rows, kana = false) => ({
   prepare: play(rows, kana),
 });
 
+/** A lost round: six wrong guesses, then the card that shows the word large over the keyboard's place. */
+const lost = {
+  subject: "round-lost",
+  views: ["desk"],
+  scale: 1,
+  url: address("en", 5),
+  init,
+  ready: `${GAME} .kt-row`,
+  target: GAME,
+  async prepare(page) {
+    await play(6)(page);
+    await page.waitForSelector(`${GAME} [data-kt="result"]`);
+  },
+};
+
+/** The colour guide, opened by the button under the keyboard and cropped to the dialog. */
+const guide = {
+  subject: "colour-guide",
+  views: ["desk"],
+  scale: 1,
+  url: address("en", 5),
+  init,
+  ready: `${GAME} .kt-row`,
+  target: ".kt-guide",
+  async prepare(page) {
+    await play(3)(page);
+    await page.locator(".kt-guide-open").click();
+    await page.waitForSelector(".kt-guide[open]");
+  },
+};
+
 await takePictures({
   shots: [
     // The page from the top, on a desk: English, five letters, four guesses in. On a phone, in Japanese kana, scrolled to the board.
@@ -181,5 +212,7 @@ await takePictures({
     board("kana", "ja", 4, 3, true),
     board("six-letters", "en", 6, 3),
     board("four-letters", "en", 4, 2),
+    lost,
+    guide,
   ],
 });

@@ -27,7 +27,7 @@ English, French, German and Japanese (kana) dictionaries for five-letter and oth
 <td align="center" valign="top">
 <picture>
 <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/hero-phone-dark.webp">
-<img src="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/hero-phone-light.webp" alt="The demo on a phone, in Japanese kana: three four-kana guesses marked, each mark carrying a shape as well as a colour, and the keyboard with its small-kana and voicing keys under them." width="220">
+<img src="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/hero-phone-light.webp" alt="The demo on a phone, in Japanese kana: three four-kana guesses marked, each mark carrying a shape as well as a colour, and the keyboard with its small-kana and voicing keys under them, then the Colour guide button, labelled in Japanese, at the foot of the board." width="220">
 </picture>
 <br><em>On a phone, in kana, in the device's light or dark.</em>
 </td>
@@ -111,7 +111,7 @@ Each picture is the board the package draws (`mountKotoba`), taken from [the dem
 <td align="center" valign="top" width="33%">
 <picture>
 <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/english-desk-dark.webp">
-<img src="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/english-desk-light.webp" alt="An English board of five-letter guesses: four rows marked green, orange and grey, each mark with its own shape in the corner of the cell, and the QWERTY keyboard below coloured by what the guesses showed." width="400">
+<img src="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/english-desk-light.webp" alt="An English board of five-letter guesses: four rows marked green, orange and grey, each mark with its own shape in the corner of the cell, and the QWERTY keyboard below coloured by what the guesses showed, with a Colour guide button under it." width="400">
 </picture>
 <br><em><strong>English.</strong> Four, five or six letters, on a QWERTY keyboard.</em>
 </td>
@@ -151,6 +151,22 @@ Each picture is the board the package draws (`mountKotoba`), taken from [the dem
 <img src="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/four-letters-desk-light.webp" alt="An English board of four-letter guesses, two rows marked, narrower than the five-letter board." width="400">
 </picture>
 <br><em><strong>Four letters.</strong> The shortest English, French and German lists.</em>
+</td>
+</tr>
+<tr>
+<td align="center" valign="top" width="33%">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/round-lost-desk-dark.webp">
+<img src="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/round-lost-desk-light.webp" alt="A finished English round that was lost: six rows of guesses marked, and over the keyboard's place a card that says the round is over and shows the hidden word JUDGE as five large green tiles, with a kind line and the points under it. The Colour guide button sits below." width="400">
+</picture>
+<br><em><strong>The end of a round.</strong> The word, large, where the keyboard was.</em>
+</td>
+<td align="center" valign="top" width="33%">
+<picture>
+<source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/colour-guide-desk-dark.webp">
+<img src="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/colour-guide-desk-light.webp" alt="The colour guide dialog: it says what the colours and arrows mean, with a green, an orange and a grey tile each explained, the keyboard's four key colours, the small shape each mark carries, and a Got it button." width="400">
+</picture>
+<br><em><strong>Colour guide.</strong> Every colour and mark explained, one press under the keyboard.</em>
 </td>
 </tr>
 </table>
