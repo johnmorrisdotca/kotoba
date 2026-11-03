@@ -840,13 +840,48 @@ test("with no meanings function nothing is added: no focusable guess, no line in
   await sound(page, errors);
 });
 
-test("the demo's small stand-in knows a few words and says nothing for the rest", async ({ page }) => {
+test("a real kana guess shows what Jisho says it means, from one small piece of the dictionary and none of the files for words that are not for children", async ({
+  page,
+}) => {
   const errors = await open(page, "?lang=en&seed=3");
-  const secret = await hidden(page);
-  const word = ["crane", "house"].find((one) => one !== secret);
-  await guess(page, word);
+  const fetched = [];
+  page.on("request", (request) => {
+    const { pathname } = new URL(request.url());
+    if (pathname.startsWith("/jisho/")) fetched.push(pathname);
+  });
+  await tap(page, '[data-testid="languages"] [data-lang-id="ja"]');
+  await expect.poll(() => page.evaluate(() => window.kotobaState.play.game?.language)).toBe("ja");
+  await page.evaluate(() => window.kotobaState.play.newGame({ words: "ja", size: 4, hidden: "かんぱい" }));
+  await expect(cells(page, 0)).toHaveCount(4);
+  // Nothing of Jisho is fetched until a meaning is asked for.
+  expect(fetched).toEqual([]);
+  await typeWord(page, "koufuku");
+  await tap(page, '[data-kt="keys"] [data-act="enter"]');
+  const before = await boardBox(page);
   await tap(page, rowOf(page, 0));
-  await expect(status(page)).toContainText(word.toUpperCase());
-  await expect(page.locator('[data-kt="meaning"]')).toHaveCount(1);
+  await expect(status(page)).toContainText("こうふく: 幸福 happiness");
+  await expect(status(page)).toContainText("降伏 surrender");
+  const line = await page.locator('[data-kt="meaning"]').textContent();
+  expect([...line.replace(/^[^:]*: /, "")].length, "about sixty characters at most").toBeLessThanOrEqual(60);
+  expect(await boardBox(page)).toBe(before);
+  // One small piece of the dictionary, its table of contents and the entry: not the index of written forms, nor the words that are not for children.
+  const pieces = fetched.filter((path) => /\/data\/words\/r\d+\.data\.js$/.test(path));
+  expect(pieces, "one piece of the readings").toHaveLength(1);
+  expect(
+    fetched.filter((path) => /extra|common|\/f\d+\.data/.test(path)),
+    "none of the files for everything else",
+  ).toEqual([]);
+  expect(fetched.length, `${fetched.join(" ")}`).toBeLessThanOrEqual(3);
+  // The same word again asks nobody.
+  await tap(page, "h1");
+  await tap(page, rowOf(page, 0));
+  await expect(status(page)).toContainText("幸福 happiness");
+  expect(fetched.filter((path) => /\/r\d+\.data/.test(path))).toHaveLength(1);
+  const piece = await page.evaluate(async (path) => (await fetch(path)).text().then((text) => text.length), pieces[0]);
+  expect(piece, "a piece is a few hundred kilobytes at most").toBeLessThan(400_000);
+  // The word that was hidden has its meaning on the card, once the round is over.
+  await typeWord(page, "kanpai");
+  await tap(page, '[data-kt="keys"] [data-act="enter"]');
+  await expect(page.locator('[data-kt="result"] [data-kt="meaning"]')).toContainText("完敗 utter defeat · 乾杯 cheers");
   await sound(page, errors);
 });

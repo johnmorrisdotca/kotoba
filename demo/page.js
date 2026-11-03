@@ -5,6 +5,7 @@
 import { dayKey, KOTOBA_STRINGS, kotobaSay } from "./dist/index.js";
 import { loadWordList, WORD_LIST_SIZES } from "./dist/load.js";
 import { mountKotoba } from "./dist/play.js";
+import { jishoMeanings } from "./meanings.js";
 import { mountPhrases } from "./phrases.js";
 
 const $ = (id) => document.getElementById(id);
@@ -31,7 +32,7 @@ const PAGE = {
     creditLetters:
       "The word lists were made from open dictionaries and cleaned of names, brands and subtitle noise; the package's README names each source and its licence.",
     creditKana:
-      "The Japanese words are from JMdict ({release}), the Electronic Dictionary Research and Development Group's dictionary, used under its licence (CC BY-SA 4.0).",
+      "The Japanese words, and the meanings shown when a guess is tapped (by way of the Jisho package), are from JMdict ({release}), the Electronic Dictionary Research and Development Group's dictionary, used under its licence (CC BY-SA 4.0).",
     counts: "This list: {easy} easy answers, inside {answers} answers, inside {allowed} words that may be guessed.",
     dailyNote: "Today's word is the same for everybody ({day}, UTC) and changes at midnight UTC.",
     usingTitle: "Using it",
@@ -91,7 +92,7 @@ const PAGE = {
     creditLetters:
       "単語リストは公開辞書から作り、人名・ブランド名・字幕のノイズを取り除いています。出どころとライセンスは README に書いてあります。",
     creditKana:
-      "日本語の単語は JMdict（{release}）から。電子辞書研究開発グループの辞書で、そのライセンス（CC BY-SA 4.0）のもとで使っています。",
+      "日本語の単語と、予想をタップしたときに出る意味（Jisho パッケージ経由）は、JMdict（{release}）から。電子辞書研究開発グループの辞書で、そのライセンス（CC BY-SA 4.0）のもとで使っています。",
     counts:
       "このリスト: やさしい答え{easy}語、答え{answers}語、推測できる単語{allowed}語（やさしい答えは答えの中、答えは推測できる単語の中にあります）。",
     dailyNote: "今日の単語は誰にとっても同じ（{day}、UTC）で、UTCの午前0時に変わります。",
@@ -168,35 +169,6 @@ const language = familyLanguage({
 const t = (key, values = {}) => kotobaSay(language.word(key), values);
 const phrases = mountPhrases({ t });
 const isKana = () => state.words === "ja";
-
-// A STAND-IN FOR MEANINGS, so the demo shows the tap-a-guess line and the end card's meaning. It knows a handful of words
-// and says nothing for the rest, as a real source does for a word it lacks. When Moji (@johnmorrisdotca/moji) can
-// supply them, swap these two things and nothing else: delete `STAND_IN` and `standIn`, and pass Moji's lookup as
-// `meanings` to `mountKotoba` below (it is called with the word and the list's language, and resolves a line or null).
-const STAND_IN = {
-  en: {
-    crane: "a tall bird with long legs and a long neck",
-    house: "a building where people live",
-    stone: "a small piece of rock",
-    bread: "food baked from flour and water",
-    apple: "a round fruit with red or green skin",
-    plant: "a living thing that grows in the ground",
-    water: "the clear liquid that rain is made of",
-    light: "what lets us see; not heavy",
-    sweet: "tasting like sugar",
-    train: "a line of carriages pulled along rails",
-  },
-  fr: { livre: "book", pomme: "apple", chien: "dog", maison: "house", table: "table" },
-  de: { hund: "dog", apfel: "apple", brot: "bread", haus: "house", katze: "cat" },
-  ja: {
-    さくら: "cherry tree; cherry blossom",
-    こころ: "heart; mind",
-    ひかり: "light",
-    あした: "tomorrow",
-    くるま: "car",
-  },
-};
-const standIn = async (word, words) => STAND_IN[words]?.[word] ?? null;
 
 let play = null;
 let release = "";
@@ -304,7 +276,7 @@ play = mountKotoba($("board"), {
       ? typeof window.kotobaTestMeanings === "function"
         ? window.kotobaTestMeanings
         : undefined
-      : standIn,
+      : jishoMeanings,
 });
 
 for (const button of $("languages").children) {

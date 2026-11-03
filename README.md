@@ -164,7 +164,7 @@ Each picture is the board the package draws (`mountKotoba`), taken from [the dem
 <td align="center" valign="top" width="33%">
 <picture>
 <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/colour-guide-desk-dark.webp">
-<img src="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/colour-guide-desk-light.webp" alt="The colour guide dialog: it says what the colours and arrows mean, with a green, an orange and a grey tile each explained, the keyboard's four key colours, the small shape each mark carries, and a Got it button." width="400">
+<img src="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/colour-guide-desk-light.webp" alt="The colour guide dialog: it says what the colours and arrows mean, with a green, an orange and a grey tile each explained, a line saying a guess can be tapped to see what its word means, the keyboard's four key colours, the small shape each mark carries, and a Got it button." width="400">
 </picture>
 <br><em><strong>Colour guide.</strong> Every colour and mark explained, one press under the keyboard.</em>
 </td>
@@ -748,6 +748,24 @@ mountKotoba(element, {
   exactly as it was.
 
 The meanings are the host's, and so is their licence and their credit: the package carries none.
+
+The [demo](https://johnmorrisdotca.github.io/kotoba/) shows it with [Jisho](https://github.com/johnmorrisdotca/jisho)
+(`@johnmorrisdotca/jisho`, the family's dictionary of Japanese words), a development dependency of the demo alone; Kotoba
+itself depends on nothing. A kana guess is looked up there as a reading, which fetches one small piece of the dictionary, and
+a reading several words share shows the commonest two or three with their written forms, as `紙 paper · 神 god · 髪 hair`,
+kept to about sixty characters. Jisho's default words leave out what JMdict marks as not for children, and its files for
+those are never fetched. English, French and German show nothing in the demo yet. The function in `demo/meanings.js` is the
+whole of the wiring:
+
+```ts no-check
+import { loadWords, wordsOf } from "@johnmorrisdotca/jisho/words";
+
+mountKotoba(element, {
+  words: "ja",
+  // A line of the words Jisho has for the reading, or null for another list.
+  meanings: async (word, words) => (words === "ja" ? lineOf(word, wordsOf(await loadWords(word), word)) : null),
+});
+```
 
 ## The command line
 

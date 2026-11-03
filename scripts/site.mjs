@@ -38,8 +38,17 @@ ${body}
 
 rmSync("site", { recursive: true, force: true });
 mkdirSync("site", { recursive: true });
-for (const file of ["family.css", "kotoba.css", "page.js", "phrases.js"]) cpSync(`demo/${file}`, `site/${file}`);
+for (const file of ["family.css", "kotoba.css", "page.js", "phrases.js", "meanings.js"])
+  cpSync(`demo/${file}`, `site/${file}`);
 cpSync("dist", "site/dist", { recursive: true });
+// What the demo's meanings need of Jisho: its words entry and the pieces of its dictionary a lookup by reading fetches (r…). Not the index of
+// written forms (f…), which the demo never asks, not the files for words that are not for children (extra), and not the other tables.
+const jisho = "node_modules/@johnmorrisdotca/jisho/dist";
+cpSync(`${jisho}/words.js`, "site/jisho/words.js");
+cpSync(`${jisho}/data/words`, "site/jisho/data/words", {
+  recursive: true,
+  filter: (file) => !/\.d\.ts$|(^|[\\/])(common|common-extra|extra|f\d+)\.data\.js$/.test(file),
+});
 
 writeFileSync(
   "site/index.html",

@@ -190,6 +190,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.6.4",
+    "@johnmorrisdotca/jisho": "1.0.0",
     "@playwright/test": "^1.63.0",
     "esbuild": "^0.28.0",
     "marked": "^18.0.0",

@@ -11,6 +11,9 @@ importers:
       '@biomejs/biome':
         specifier: 2.6.4
         version: 2.6.4
+      '@johnmorrisdotca/jisho':
+        specifier: 1.0.0
+        version: 1.0.0
       '@playwright/test':
         specifier: ^1.63.0
         version: 1.63.0
@@ -252,6 +255,10 @@ packages:
     engines: {node: '>=18'}
     cpu: [x64]
     os: [win32]
+
+  '@johnmorrisdotca/jisho@1.0.0':
+    resolution: {integrity: sha512-Ygn0WnnLBkekiLt5mBKJDt/DlJs2RaSAY6L/kA7m27q/NjUI4SGF9ZaWnn8M/DLzFe6Ax/8gZEkouL0V/DMYfA==}
+    engines: {node: '>=22'}
 
   '@jridgewell/resolve-uri@3.1.2':
     resolution: {integrity: sha512-bRISgCIjP20/tbWSPWMEi54QVPRZExkuD9lJL+UIxUKtwVJA8wW1Trb1jMs1RFXo1CBTNZ/5hpC9QvmKWdopKw==}
@@ -815,6 +822,8 @@ snapshots:
 
   '@esbuild/win32-x64@0.28.2':
     optional: true
+
+  '@johnmorrisdotca/jisho@1.0.0': {}
 
   '@jridgewell/resolve-uri@3.1.2': {}
 
