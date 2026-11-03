@@ -4,15 +4,25 @@ import { fileURLToPath } from "node:url";
 import { expect, test } from "@playwright/test";
 
 const site = join(dirname(fileURLToPath(import.meta.url)), "..", "site");
-async function serve(page) {
-  await page.route("http://kotoba.test/**", (route) => {
+async function serve(page, { slowLists = 0 } = {}) {
+  await page.route("http://kotoba.test/**", async (route) => {
     const { pathname } = new URL(route.request().url());
+    if (slowLists > 0 && pathname.startsWith("/dist/lists"))
+      await new Promise((resolve) => setTimeout(resolve, slowLists));
     const file = join(site, pathname.endsWith("/") ? `${pathname}index.html` : pathname);
     if (!existsSync(file)) return route.fulfill({ status: 404, body: "" });
     return route.fulfill({
       body: readFileSync(file),
       contentType: file.endsWith(".js") ? "text/javascript" : file.endsWith(".css") ? "text/css" : "text/html",
     });
+  });
+}
+/** Waits until the game holds a round: the grid is drawn first, while the word list is still coming and no round exists. */
+async function roundReady(game) {
+  await game.evaluate(async (element) => {
+    if (element.player === null) throw new Error("the <kotoba-game> has no player mounted");
+    await element.player.ready;
+    if (element.game === null) throw new Error("the <kotoba-game> is ready but holds no round");
   });
 }
 test("the shared builder covers every word-game option and host format", async ({ page }) => {
@@ -36,15 +46,28 @@ for (const words of ["en", "fr", "de", "ja"])
     await serve(page);
     await page.goto(`http://kotoba.test/embed/?words=${words}&daily=2026-10-09&size=small`);
     await expect(page.locator(".kt-cell")).toHaveCount(words === "ja" ? 24 : 30);
+    await roundReady(page.locator("kotoba-game"));
     const hidden = await page.locator("kotoba-game").evaluate((element) => element.game.hidden);
     await page.reload();
     await expect(page.locator(".kt-cell")).toHaveCount(words === "ja" ? 24 : 30);
+    await roundReady(page.locator("kotoba-game"));
     expect(await page.locator("kotoba-game").evaluate((element) => element.game.hidden)).toBe(hidden);
   });
+test("the round is read after a slow word list arrives, not when the grid is drawn", async ({ page, browserName }) => {
+  await serve(page, { slowLists: 400 });
+  await page.goto("http://kotoba.test/embed/?words=de&daily=2026-10-09&size=small");
+  await expect(page.locator(".kt-cell")).toHaveCount(30);
+  // Chromium holds the list back for the whole delay, so the grid is up with no round behind it; WebKit may not.
+  if (browserName === "chromium")
+    expect(await page.locator("kotoba-game").evaluate((element) => element.game)).toBeNull();
+  await roundReady(page.locator("kotoba-game"));
+  expect(await page.locator("kotoba-game").evaluate((element) => element.game.hidden.length)).toBe(5);
+});
 test("focused keyboard and callbacks preserve independent games and outside inputs", async ({ page }) => {
   await serve(page);
   await page.goto("http://kotoba.test/embed/?seed=7&size=small&theme=dark&label=Mine");
   await expect(page.locator(".kt-cell")).toHaveCount(30);
+  await roundReady(page.locator("kotoba-game"));
   await page.evaluate(async () => {
     const { defineGame } = await import("../dist/element.js");
     defineGame("article-word");
