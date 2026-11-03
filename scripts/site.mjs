@@ -41,13 +41,15 @@ mkdirSync("site", { recursive: true });
 for (const file of ["family.css", "kotoba.css", "page.js", "phrases.js", "meanings.js"])
   cpSync(`demo/${file}`, `site/${file}`);
 cpSync("dist", "site/dist", { recursive: true });
-// What the demo's meanings need of Jisho: its words entry and the pieces of its dictionary a lookup by reading fetches (r…). Not the index of
-// written forms (f…), which the demo never asks, not the files for words that are not for children (extra), and not the other tables.
+// What the demo's meanings need of Jisho: its words entry and the pieces of its dictionary a lookup by reading fetches (r…), in Jisho's
+// default safe mode. Not the index of written forms (f…), which the demo never asks, not the files that hold what safe mode leaves out
+// (x…, extra-manifest, common-extra), which only unfiltered mode fetches, and not the other tables.
 const jisho = "node_modules/@johnmorrisdotca/jisho/dist";
 cpSync(`${jisho}/words.js`, "site/jisho/words.js");
+cpSync(`${jisho}/words-filter.js`, "site/jisho/words-filter.js");
 cpSync(`${jisho}/data/words`, "site/jisho/data/words", {
   recursive: true,
-  filter: (file) => !/\.d\.ts$|(^|[\\/])(common|common-extra|extra|f\d+)\.data\.js$/.test(file),
+  filter: (file) => !/\.d\.ts$|(^|[\\/])(common|common-extra|extra-manifest|f\d+|x[rf]\d+)\.data\.js$/.test(file),
 });
 
 writeFileSync(

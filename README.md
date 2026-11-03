@@ -753,8 +753,8 @@ The [demo](https://johnmorrisdotca.github.io/kotoba/) shows it with [Jisho](http
 (`@johnmorrisdotca/jisho`, the family's dictionary of Japanese words), a development dependency of the demo alone; Kotoba
 itself depends on nothing. A kana guess is looked up there as a reading, which fetches one small piece of the dictionary, and
 a reading several words share shows the commonest two or three with their written forms, as `紙 paper · 神 god · 髪 hair`,
-kept to about sixty characters. Jisho's default words leave out what JMdict marks as not for children, and its files for
-those are never fetched. English, French and German show nothing in the demo yet. The function in `demo/meanings.js` is the
+kept to about sixty characters. Jisho's default, safe mode, leaves out what JMdict marks vulgar, X-rated, sensitive or derogatory and
+never fetches the files that hold it; the demo keeps a list of its own words besides, which Jisho does not supply. English, French and German show nothing in the demo yet. The function in `demo/meanings.js` is the
 whole of the wiring:
 
 ```ts no-check

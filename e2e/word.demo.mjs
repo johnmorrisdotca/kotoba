@@ -840,7 +840,7 @@ test("with no meanings function nothing is added: no focusable guess, no line in
   await sound(page, errors);
 });
 
-test("a real kana guess shows what Jisho says it means, from one small piece of the dictionary and none of the files for words that are not for children", async ({
+test("a real kana guess shows what Jisho says it means in its safe mode, from one small piece of the dictionary and none of the files that hold what safe mode leaves out", async ({
   page,
 }) => {
   const errors = await open(page, "?lang=en&seed=3");
@@ -864,14 +864,14 @@ test("a real kana guess shows what Jisho says it means, from one small piece of 
   const line = await page.locator('[data-kt="meaning"]').textContent();
   expect([...line.replace(/^[^:]*: /, "")].length, "about sixty characters at most").toBeLessThanOrEqual(60);
   expect(await boardBox(page)).toBe(before);
-  // One small piece of the dictionary, its table of contents and the entry: not the index of written forms, nor the words that are not for children.
+  // One small piece of the dictionary, its table of contents, the entry and the tool file it imports: not the index of written forms, nor the pieces of what safe mode leaves out.
   const pieces = fetched.filter((path) => /\/data\/words\/r\d+\.data\.js$/.test(path));
   expect(pieces, "one piece of the readings").toHaveLength(1);
   expect(
-    fetched.filter((path) => /extra|common|\/f\d+\.data/.test(path)),
+    fetched.filter((path) => /extra|common|\/f\d+\.data|\/x[rf]\d+\.data/.test(path)),
     "none of the files for everything else",
   ).toEqual([]);
-  expect(fetched.length, `${fetched.join(" ")}`).toBeLessThanOrEqual(3);
+  expect(fetched.length, `${fetched.join(" ")}`).toBeLessThanOrEqual(4);
   // The same word again asks nobody.
   await tap(page, "h1");
   await tap(page, rowOf(page, 0));

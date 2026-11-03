@@ -1,4 +1,5 @@
-// What a Japanese guess means, for the demo: Jisho (@johnmorrisdotca/jisho), the family's dictionary of Japanese words.
+// What a Japanese guess means, for the demo: Jisho (@johnmorrisdotca/jisho), the family's dictionary of Japanese words, in its default
+// safe mode, which leaves out what JMdict marks vulgar, X-rated, sensitive or derogatory and never fetches the files that hold it.
 // Kotoba holds no dictionary and does not depend on one: the game takes a `meanings(word, words)` function, and this is
 // the demo's. Jisho is a development dependency of the demo only, and site.mjs copies the few files this needs into site/jisho/.
 // A reading that several words share shows the commonest two or three with their written forms ("紙 paper · 神 god · 髪 hair"),
@@ -9,7 +10,7 @@ import { loadWords, wordsOf } from "./jisho/words.js";
 const LONGEST = 60;
 const EACH = 22;
 const SEPARATOR = " · ";
-/** What a game for children leaves out even where the dictionary does not mark it: a line that says one of these is not shown. */
+/** Kotoba's own word list, on top of Jisho's safe mode, which keeps no list of words: a line that says one of these is not shown, though JMdict does not mark it. */
 const NOT_FOR_CHILDREN =
   /\b(kill\w*|murder\w*|slay\w*|suicid\w*|sex\w*|rape\w*|genital\w*|prostitut\w*|abus\w*|torture\w*|massacre)\b/i;
 

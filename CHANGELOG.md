@@ -6,6 +6,10 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- The demo's meanings come from Jisho 2.0.0, in its default safe mode (it leaves out what JMdict marks vulgar, X-rated, sensitive or derogatory, and never fetches the files that hold it). Jisho keeps no list of words of its own, so the demo keeps its own in `demo/meanings.js`, as a host should. Nothing in the package changes.
+
 ## [1.5.0] - 2026-11-02
 
 ### Added
