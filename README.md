@@ -1,3 +1,5 @@
+<p align="center"><a href="https://johnmorrisdotca.github.io/kotoba/"><picture><source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/thumbnail-dark.png"><img src="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/thumbnail.png" alt="Kotoba: three rounds of the word game won, in English, Japanese kana and German, each guess marked tile by tile." width="1200"></picture></a></p>
+
 <h1 align="center">Kotoba <sub>言葉</sub> — Word lists and word-game rules</h1>
 
 <p align="center"><strong>Word lists and word-game rules for JavaScript and TypeScript.</strong><br>

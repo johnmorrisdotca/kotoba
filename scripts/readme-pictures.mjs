@@ -215,4 +215,58 @@ await takePictures({
     lost,
     guide,
   ],
+  // The family's thumbnail, dark thumbnail and icon (scripts/family-thumbnail.mjs): three rounds won, in English, in
+  // Japanese kana and in German, each board's played rows only, off the board's felt; the icon is the English board's
+  // marks without their letters.
+  thumbnail: {
+    url: address("en", 5),
+    init,
+    ready: `${GAME} .kt-row`,
+    target: "#thumbnail-stage",
+    icon: { target: "#thumbnail-icon" },
+    label: "Kotoba 言葉",
+    async prepare(page) {
+      const grids = [];
+      for (const [words, size, rows, kana] of [
+        ["en", 5, 4, false],
+        ["ja", 4, 3, true],
+        ["de", 5, 3, false],
+      ]) {
+        await page.goto(`http://kotoba.test${address(words, size, kana ? "ja" : "en")}`);
+        await page.waitForSelector(`${GAME} .kt-row`);
+        await play(rows, kana)(page);
+        const hidden = await page.evaluate(() => window.kotobaState.hidden);
+        await page.evaluate(() => document.activeElement?.blur());
+        await page.keyboard.type(kana ? romajiOf(hidden) : hidden);
+        await page.keyboard.press("Enter");
+        await page.waitForSelector(`${GAME} [data-kt="result"]`);
+        grids.push(
+          await page.locator('[data-kt="grid"]').evaluate((grid) => {
+            const copy = grid.cloneNode(true);
+            for (const row of copy.querySelectorAll(".kt-row"))
+              if (row.querySelector('.kt-cell:not([data-mark="empty"])') === null) row.remove();
+            return copy.outerHTML;
+          }),
+        );
+      }
+      await page.evaluate((grids) => {
+        const root = (grid, id = "") =>
+          `<div class="kt-root" ${id} style="background:transparent;padding:0;width:max-content;--kt-cell-size:72px">${grid}</div>`;
+        document.body.replaceChildren();
+        document.body.insertAdjacentHTML(
+          "beforeend",
+          `<div id="thumbnail-stage" style="display:flex;align-items:flex-end;gap:40px;padding:12px;width:max-content">${grids
+            .map((grid) => root(grid))
+            .join("")}</div>${root(grids[0], 'id="thumbnail-icon"')}`,
+        );
+        const icon = document.getElementById("thumbnail-icon");
+        icon.style.setProperty("--kt-cell-size", "96px");
+        for (const cell of icon.querySelectorAll(".kt-cell")) cell.textContent = "";
+        document.head.insertAdjacentHTML(
+          "beforeend",
+          "<style>.kt-root .kt-grid { width: calc(var(--size) * var(--kt-cell-size)); } .kt-root .kt-cell { font-size: calc(var(--kt-cell-size) * .46); } #thumbnail-icon .kt-cell::after { content: none; }</style>",
+        );
+      }, grids);
+    },
+  },
 });

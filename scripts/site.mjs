@@ -13,13 +13,16 @@ import {
   familyHeader,
   familyUnreviewed,
 } from "./family-template.mjs";
+import { publishThumbnails, thumbnailHead } from "./family-thumbnail.mjs";
 
 const id = "kotoba";
+const ALT =
+  "Kotoba: three rounds of the word game won, in English, Japanese kana and German, each guess marked tile by tile.";
 const icon = `data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect x='6' y='6' width='88' height='88' rx='16' fill='%232f7a4f'/%3E%3Cpath d='M30 66V34M30 50L52 34M30 50L52 66' stroke='%23fffdf8' stroke-width='9' stroke-linecap='round' fill='none'/%3E%3Ccircle cx='72' cy='66' r='7' fill='%23d9822b'/%3E%3C/svg%3E`;
-const frame = ({ title, description, links, body, scripts }) => `<!doctype html>
+const frame = ({ title, description, links, body, scripts, head = "" }) => `<!doctype html>
 <html lang="en">
   <head>
-    ${familyHead({ id, title, description, ogTitle: "Kotoba 言葉 — Word lists and word-game rules", ogDescription: "Guess the hidden word in English, French, German or Japanese kana, on the Kotoba word lists." })}
+    ${familyHead({ id, title, description, ogTitle: "Kotoba 言葉 — Word lists and word-game rules", ogDescription: "Guess the hidden word in English, French, German or Japanese kana, on the Kotoba word lists." })}${head}
     <link rel="icon" href="${icon}" />
     <link rel="stylesheet" href="family.css" />
     <link rel="stylesheet" href="kotoba.css" />
@@ -64,8 +67,11 @@ writeFileSync(
     ],
     body: readFileSync("demo/body.html", "utf8").replace("__UNREVIEWED__", familyUnreviewed({ id })).trimEnd(),
     scripts: `<script type="module" src="page.js"></script>`,
+    head: `\n    ${thumbnailHead(JSON.parse(readFileSync("package.json", "utf8")), { alt: ALT })}`,
   }),
 );
+// The family's card, dark card and icon, at <site>/thumbnail.png, thumbnail-dark.png and icon.png.
+publishThumbnails(".", "site");
 
 const api = apiBody();
 writeFileSync(
