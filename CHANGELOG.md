@@ -6,6 +6,10 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+## [1.10.0] - 2026-11-04
+
+A minor version: the children bar is narrowed so that ordinary words are not kept out of the lists (MODULES-392). Nothing that 1.9.0 gave is taken away, except that a day's word differs for English, French and German; the lists are made again, so the kana, shiritori, idiom, proverb and compound lists hold JMdict's 2026-11-04 words too.
+
 ### Fixed
 
 - The demo no longer moves its "Put it in your page" panel when the shiritori, idiom and credit lines load as the reader scrolls near them: their space is kept, so a tap lands on the button the reader aimed at (MODULES-391, a flaky WebKit phone test on CI). Demo only; the package is unchanged.
