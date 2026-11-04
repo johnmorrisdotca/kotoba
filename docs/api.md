@@ -1,10 +1,10 @@
 # API reference
 
-Every export of every entry point of `@johnmorrisdotca/kotoba`, with its signature and its doc comment. This file is made from the source by `pnpm docs:api`, and a test fails when it falls behind: 16 entry points, 120 exports.
+Every export of every entry point of `@johnmorrisdotca/kotoba`, with its signature and its doc comment. This file is made from the source by `pnpm docs:api`, and a test fails when it falls behind: 18 entry points, 126 exports.
 
 ## `@johnmorrisdotca/kotoba`
 
-[`ALPHABETS`](#main-ALPHABETS) · [`changeWordGame`](#main-changeWordGame) · [`cycleMark`](#main-cycleMark) · [`dailyIndex`](#main-dailyIndex) · [`DailyOptions`](#main-DailyOptions) · [`dailyWord`](#main-dailyWord) · [`dayKey`](#main-dayKey) · [`DayKey`](#main-DayKey) · [`dayNumber`](#main-dayNumber) · [`decodeGuesses`](#main-decodeGuesses) · [`decodeHidden`](#main-decodeHidden) · [`encodeHidden`](#main-encodeHidden) · [`eraseWordGame`](#main-eraseWordGame) · [`finishRomaji`](#main-finishRomaji) · [`foundBonus`](#main-foundBonus) · [`GomojiLanguage`](#main-GomojiLanguage) · [`guessMarks`](#main-guessMarks) · [`Idiom`](#main-Idiom) · [`IdiomKind`](#main-IdiomKind) · [`isDayKey`](#main-isDayKey) · [`isKanaGame`](#main-isKanaGame) · [`isSmall`](#main-isSmall) · [`KANA_COLUMN`](#main-KANA_COLUMN) · [`KANA_SIZES`](#main-KANA_SIZES) · [`kanaBase`](#main-kanaBase) · [`kanaFamily`](#main-kanaFamily) · [`kanaFound`](#main-kanaFound) · [`KanaMark`](#main-KanaMark) · [`KanaMarked`](#main-KanaMarked) · [`kanaScore`](#main-kanaScore) · [`KanaScore`](#main-KanaScore) · [`kanaTone`](#main-kanaTone) · [`KanaWords`](#main-KanaWords) · [`KEYBOARD_ROWS`](#main-KEYBOARD_ROWS) · [`keyMarks`](#main-keyMarks) · [`KOTOBA_STRINGS`](#main-KOTOBA_STRINGS) · [`kotobaLanguage`](#main-kotobaLanguage) · [`kotobaSay`](#main-kotobaSay) · [`KotobaStrings`](#main-KotobaStrings) · [`Language`](#main-Language) · [`LetterMark`](#main-LetterMark) · [`LONG_BAR`](#main-LONG_BAR) · [`markGuess`](#main-markGuess) · [`markKanaGuess`](#main-markKanaGuess) · [`normalizeShiritoriReading`](#main-normalizeShiritoriReading) · [`Packed`](#main-Packed) · [`PackedIdioms`](#main-PackedIdioms) · [`PlaceMark`](#main-PlaceMark) · [`playShiritori`](#main-playShiritori) · [`readIdioms`](#main-readIdioms) · [`readRomaji`](#main-readRomaji) · [`readShiritoriWords`](#main-readShiritoriWords) · [`readWordLists`](#main-readWordLists) · [`searchIdioms`](#main-searchIdioms) · [`shiritoriChoices`](#main-shiritoriChoices) · [`shiritoriDistractorScore`](#main-shiritoriDistractorScore) · [`shiritoriHeadKey`](#main-shiritoriHeadKey) · [`ShiritoriPlay`](#main-ShiritoriPlay) · [`shiritoriReadingContinues`](#main-shiritoriReadingContinues) · [`shiritoriReadingIsPlayable`](#main-shiritoriReadingIsPlayable) · [`ShiritoriRefusal`](#main-ShiritoriRefusal) · [`ShiritoriRules`](#main-ShiritoriRules) · [`shiritoriTailKey`](#main-shiritoriTailKey) · [`ShiritoriWord`](#main-ShiritoriWord) · [`startWordGame`](#main-startWordGame) · [`submitWordGame`](#main-submitWordGame) · [`toggleSize`](#main-toggleSize) · [`typeWordGame`](#main-typeWordGame) · [`unpack`](#main-unpack) · [`VERSION`](#main-VERSION) · [`WORD_GAME_ROWS`](#main-WORD_GAME_ROWS) · [`WORD_SCORE`](#main-WORD_SCORE) · [`WordData`](#main-WordData) · [`WordGame`](#main-WordGame) · [`wordGameKeys`](#main-wordGameKeys) · [`WordGameLanguage`](#main-WordGameLanguage) · [`WordGameRefusal`](#main-WordGameRefusal) · [`WordGameStatus`](#main-WordGameStatus) · [`WordGameSubmit`](#main-WordGameSubmit) · [`WordGameWords`](#main-WordGameWords) · [`WordListLanguage`](#main-WordListLanguage) · [`WordLists`](#main-WordLists) · [`wordScore`](#main-wordScore) · [`WordScore`](#main-WordScore)
+[`ALPHABETS`](#main-ALPHABETS) · [`changeWordGame`](#main-changeWordGame) · [`cycleMark`](#main-cycleMark) · [`dailyIndex`](#main-dailyIndex) · [`DailyOptions`](#main-DailyOptions) · [`dailyWord`](#main-dailyWord) · [`dayKey`](#main-dayKey) · [`DayKey`](#main-DayKey) · [`dayNumber`](#main-dayNumber) · [`decodeGuesses`](#main-decodeGuesses) · [`decodeHidden`](#main-decodeHidden) · [`encodeHidden`](#main-encodeHidden) · [`eraseWordGame`](#main-eraseWordGame) · [`finishRomaji`](#main-finishRomaji) · [`foundBonus`](#main-foundBonus) · [`GomojiLanguage`](#main-GomojiLanguage) · [`guessMarks`](#main-guessMarks) · [`Idiom`](#main-Idiom) · [`IdiomKind`](#main-IdiomKind) · [`isDayKey`](#main-isDayKey) · [`isKanaGame`](#main-isKanaGame) · [`isSmall`](#main-isSmall) · [`KANA_COLUMN`](#main-KANA_COLUMN) · [`KANA_SIZES`](#main-KANA_SIZES) · [`kanaBase`](#main-kanaBase) · [`kanaFamily`](#main-kanaFamily) · [`kanaFound`](#main-kanaFound) · [`KanaMark`](#main-KanaMark) · [`KanaMarked`](#main-KanaMarked) · [`kanaScore`](#main-kanaScore) · [`KanaScore`](#main-KanaScore) · [`kanaTone`](#main-kanaTone) · [`KanaWords`](#main-KanaWords) · [`KEYBOARD_ROWS`](#main-KEYBOARD_ROWS) · [`keyMarks`](#main-keyMarks) · [`KOTOBA_STRINGS`](#main-KOTOBA_STRINGS) · [`kotobaLanguage`](#main-kotobaLanguage) · [`kotobaSay`](#main-kotobaSay) · [`KotobaStrings`](#main-KotobaStrings) · [`Language`](#main-Language) · [`LetterMark`](#main-LetterMark) · [`LONG_BAR`](#main-LONG_BAR) · [`markGuess`](#main-markGuess) · [`markKanaGuess`](#main-markKanaGuess) · [`normalizeShiritoriReading`](#main-normalizeShiritoriReading) · [`Packed`](#main-Packed) · [`PackedIdioms`](#main-PackedIdioms) · [`PackedSayings`](#main-PackedSayings) · [`PlaceMark`](#main-PlaceMark) · [`playShiritori`](#main-playShiritori) · [`readIdioms`](#main-readIdioms) · [`readRomaji`](#main-readRomaji) · [`readSayings`](#main-readSayings) · [`readShiritoriWords`](#main-readShiritoriWords) · [`readWordLists`](#main-readWordLists) · [`Saying`](#main-Saying) · [`searchIdioms`](#main-searchIdioms) · [`searchSayings`](#main-searchSayings) · [`shiritoriChoices`](#main-shiritoriChoices) · [`shiritoriDistractorScore`](#main-shiritoriDistractorScore) · [`shiritoriHeadKey`](#main-shiritoriHeadKey) · [`ShiritoriPlay`](#main-ShiritoriPlay) · [`shiritoriReadingContinues`](#main-shiritoriReadingContinues) · [`shiritoriReadingIsPlayable`](#main-shiritoriReadingIsPlayable) · [`ShiritoriRefusal`](#main-ShiritoriRefusal) · [`ShiritoriRules`](#main-ShiritoriRules) · [`shiritoriTailKey`](#main-shiritoriTailKey) · [`ShiritoriWord`](#main-ShiritoriWord) · [`startWordGame`](#main-startWordGame) · [`submitWordGame`](#main-submitWordGame) · [`toggleSize`](#main-toggleSize) · [`typeWordGame`](#main-typeWordGame) · [`unpack`](#main-unpack) · [`VERSION`](#main-VERSION) · [`WORD_GAME_ROWS`](#main-WORD_GAME_ROWS) · [`WORD_SCORE`](#main-WORD_SCORE) · [`WordData`](#main-WordData) · [`WordGame`](#main-WordGame) · [`wordGameKeys`](#main-wordGameKeys) · [`WordGameLanguage`](#main-WordGameLanguage) · [`WordGameRefusal`](#main-WordGameRefusal) · [`WordGameStatus`](#main-WordGameStatus) · [`WordGameSubmit`](#main-WordGameSubmit) · [`WordGameWords`](#main-WordGameWords) · [`WordListLanguage`](#main-WordListLanguage) · [`WordLists`](#main-WordLists) · [`wordScore`](#main-wordScore) · [`WordScore`](#main-WordScore)
 
 <a id="main-ALPHABETS"></a>
 
@@ -520,6 +520,16 @@ type PackedIdioms = { /** The JMdict release it was made from. */ readonly relea
 
 The idiom list as it is stored: one row a phrase, the three flags as 0 or 1.
 
+<a id="main-PackedSayings"></a>
+
+### type `PackedSayings`
+
+```ts
+type PackedSayings = { /** The JMdict release it was made from. */ readonly release: string; /** Written form, reading, meanings, then elementary and common. */ readonly sayings: readonly (readonly [string, string, readonly string[], number, number])[]; };
+```
+
+The proverb and four-character compound lists as they are stored: one row an entry, the two flags as 0 or 1.
+
 <a id="main-PlaceMark"></a>
 
 ### type `PlaceMark`
@@ -560,6 +570,16 @@ readRomaji(typed: string): { kana: string[]; rest: string; }
 
 What has been typed, as kana, and what is still being typed.
 
+<a id="main-readSayings"></a>
+
+### function `readSayings`
+
+```ts
+readSayings(packed: PackedSayings): Saying[]
+```
+
+Reads a stored list of proverbs or four-character compounds into plain rows.
+
 <a id="main-readShiritoriWords"></a>
 
 ### function `readShiritoriWords`
@@ -580,6 +600,16 @@ readWordLists(data: WordData, size: number): WordLists | null
 
 One length of a list read into words, or null for a length the list does not have.
 
+<a id="main-Saying"></a>
+
+### type `Saying`
+
+```ts
+type Saying = { /** How it is written. */ readonly saying: string; /** How it is read. */ readonly reading: string; /** Its first plain English gloss, from the sense JMdict marks as a proverb or a four-character compound. */ readonly meaning: string; /** Every plain English gloss of that sense, `meaning` first. */ readonly meanings: readonly string[]; /** The kanji it is written with, once each, in the order they ap…
+```
+
+One proverb or four-character compound.
+
 <a id="main-searchIdioms"></a>
 
 ### function `searchIdioms`
@@ -589,6 +619,16 @@ searchIdioms(idioms: readonly Idiom[], text: string): Idiom[]
 ```
 
 The phrases that hold a piece of text in their written form, their reading or any of their meanings, ignoring case.
+
+<a id="main-searchSayings"></a>
+
+### function `searchSayings`
+
+```ts
+searchSayings(sayings: readonly Saying[], text: string): Saying[]
+```
+
+The proverbs or compounds that hold a piece of text in their written form, their reading or any of their meanings, ignoring case.
 
 <a id="main-shiritoriChoices"></a>
 
@@ -1197,6 +1237,54 @@ This list is derived from them and under the same licence.
 
 6393 nouns of JMdict's textbook-common list, one a reading, commonest first. Each row is
 reading, word and meaning, separated by tabs (`readShiritoriWords` reads them).
+
+## `@johnmorrisdotca/kotoba/proverbs-ja`
+
+[`JA_PROVERBS`](#proverbs-ja-JA_PROVERBS)
+
+<a id="proverbs-ja-JA_PROVERBS"></a>
+
+### const `JA_PROVERBS`
+
+```ts
+JA_PROVERBS: PackedSayings
+```
+
+THE PROVERBS. Written by `scripts/word-lists-ja-phrases.mjs` from JMdict,
+release 2026-11-04, and KANJIDIC2, 2026-11-04. Never edited by hand; the monthly refresh
+(.github/workflows/jmdict-refresh.yml) runs the script again.
+
+JMdict and KANJIDIC2 are the property of the Electronic Dictionary Research and
+Development Group (EDRDG), used under the Creative Commons Attribution-ShareAlike
+4.0 licence and the Group's conditions: https://www.edrdg.org/edrdg/licence.html.
+This list is derived from them and under the same licence.
+
+930 entries JMdict marks as proverbs, one a written form, in the order of the reading;
+409 written only in kanji taught in elementary school; 1 marked common.
+
+## `@johnmorrisdotca/kotoba/yojijukugo-ja`
+
+[`JA_YOJIJUKUGO`](#yojijukugo-ja-JA_YOJIJUKUGO)
+
+<a id="yojijukugo-ja-JA_YOJIJUKUGO"></a>
+
+### const `JA_YOJIJUKUGO`
+
+```ts
+JA_YOJIJUKUGO: PackedSayings
+```
+
+THE FOUR-CHARACTER COMPOUNDS. Written by `scripts/word-lists-ja-phrases.mjs` from JMdict,
+release 2026-11-04, and KANJIDIC2, 2026-11-04. Never edited by hand; the monthly refresh
+(.github/workflows/jmdict-refresh.yml) runs the script again.
+
+JMdict and KANJIDIC2 are the property of the Electronic Dictionary Research and
+Development Group (EDRDG), used under the Creative Commons Attribution-ShareAlike
+4.0 licence and the Group's conditions: https://www.edrdg.org/edrdg/licence.html.
+This list is derived from them and under the same licence.
+
+1831 entries JMdict marks as yojijukugo, one a written form, in the order of the reading;
+656 written only in kanji taught in elementary school; 168 marked common.
 
 ## `@johnmorrisdotca/kotoba/cli`
 

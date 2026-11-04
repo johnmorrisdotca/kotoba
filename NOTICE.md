@@ -11,7 +11,7 @@ written out in full.
 | `words-fr` | Lexique 3.83, ranked by hermitdave's FrequencyWords, checked against Wiktionary | CC BY-SA 4.0 |
 | `words-de` | LanguageTool's german-pos-dict, ranked by hermitdave's FrequencyWords, checked against Wiktionary | CC BY-SA 4.0 |
 | `kana-3`, `kana-4`, `kana-5` | JMdict, of the Electronic Dictionary Research and Development Group | CC BY-SA 4.0 and the Group's conditions |
-| `idioms-ja`, `shiritori-ja` | JMdict and KANJIDIC2, of the Electronic Dictionary Research and Development Group | CC BY-SA 4.0 and the Group's conditions |
+| `idioms-ja`, `shiritori-ja`, `proverbs-ja`, `yojijukugo-ja` | JMdict and KANJIDIC2, of the Electronic Dictionary Research and Development Group | CC BY-SA 4.0 and the Group's conditions |
 | `pop-answers` | The package's own hand-kept list | MIT |
 
 ## English: SCOWL
@@ -59,12 +59,16 @@ conditions: https://www.edrdg.org/edrdg/licence.html. These derived lists are
 shared under the same licence. The release each was made from is in its `release`
 field, and the lists are made again from the newest release every month.
 
-`idioms-ja` and `shiritori-ja` are derived from JMdict in the same way, under the same
-licence, and `idioms-ja`'s `elementary` flag from the grades in KANJIDIC2, which is the
+`idioms-ja`, `shiritori-ja`, `proverbs-ja` and `yojijukugo-ja` are derived from JMdict in the same way, under the same
+licence, and the `elementary` flag of `idioms-ja`, `proverbs-ja` and `yojijukugo-ja` from the grades in KANJIDIC2, which is the
 same Group's (https://www.edrdg.org/wiki/index.php/KANJIDIC_Project). In `idioms-ja`, the
 rows of kind `idiom` are the entries JMdict itself marks idiomatic; the rows of kind
 `expression`, and the choice of which words `shiritori-ja` holds, are this package's own
-selection from JMdict, and JMdict's editors did not make them. The Group's conditions
+selection from JMdict, and JMdict's editors did not make them. `proverbs-ja` and `yojijukugo-ja`
+hold the entries JMdict itself marks as proverbs (`proverb`) and as four-character compounds
+(`yoji`); an entry is left out when JMdict marks any sense vulgar, X-rated, sensitive or
+derogatory, or any gloss of it names sex or the sex trade, because these lists turn up in
+children's games. The Group's conditions
 (https://www.edrdg.org/edrdg/licence.html, read 2026-10-31) ask a page showing words from
 these files to acknowledge them on that screen, for example at its foot: *Words from JMdict,
 the property of the Electronic Dictionary Research and Development Group, used under the

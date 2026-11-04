@@ -129,6 +129,16 @@
       "import": "./dist/lists/shiritori-ja.data.js",
       "default": "./dist/lists/shiritori-ja.data.js"
     },
+    "./proverbs-ja": {
+      "types": "./dist/lists/proverbs-ja.data.d.ts",
+      "import": "./dist/lists/proverbs-ja.data.js",
+      "default": "./dist/lists/proverbs-ja.data.js"
+    },
+    "./yojijukugo-ja": {
+      "types": "./dist/lists/yojijukugo-ja.data.d.ts",
+      "import": "./dist/lists/yojijukugo-ja.data.js",
+      "default": "./dist/lists/yojijukugo-ja.data.js"
+    },
     "./cli": {
       "types": "./dist/cli.d.ts",
       "import": "./dist/cli.js",

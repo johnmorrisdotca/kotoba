@@ -1,8 +1,10 @@
 import { describe, expect, it } from "vitest";
 import { shiritoriChoices, shiritoriHeadKey, shiritoriTailKey } from "./kana/shiritori.ts";
 import { JA_IDIOMS } from "./lists/idioms-ja.data.ts";
+import { JA_PROVERBS } from "./lists/proverbs-ja.data.ts";
 import { JA_SHIRITORI } from "./lists/shiritori-ja.data.ts";
-import { readIdioms, readShiritoriWords, searchIdioms } from "./phrases.ts";
+import { JA_YOJIJUKUGO } from "./lists/yojijukugo-ja.data.ts";
+import { readIdioms, readSayings, readShiritoriWords, searchIdioms, searchSayings } from "./phrases.ts";
 
 const idioms = readIdioms(JA_IDIOMS);
 const words = readShiritoriWords(JA_SHIRITORI);
@@ -100,5 +102,61 @@ describe("the shiritori words", () => {
   it("offer a chain a way on", () => {
     expect(shiritoriChoices(words, ["さくら"]).length).toBeGreaterThan(10);
     expect(shiritoriChoices(words, ["さくら"]).every((one) => shiritoriTailKey(one.reading) !== null)).toBe(true);
+  });
+});
+
+describe("the proverbs and the four-character compounds", () => {
+  const proverbs = readSayings(JA_PROVERBS);
+  const yoji = readSayings(JA_YOJIJUKUGO);
+  const of = (list: ReturnType<typeof readSayings>, written: string) => list.find((one) => one.saying === written);
+
+  it("hold what JMdict marks as proverbs and as yojijukugo, less what it bars, one a written form", () => {
+    expect(proverbs.length).toBeGreaterThan(900);
+    expect(yoji.length).toBeGreaterThan(1800);
+    for (const list of [proverbs, yoji]) {
+      expect(new Set(list.map((one) => one.saying)).size).toBe(list.length);
+      for (const one of list) {
+        expect(one.reading, one.saying).toMatch(/^[ぁ-ゖァ-ヶー、・\s]+$/u);
+        expect(one.meaning, one.saying).not.toBe("");
+        expect(one.meanings[0], one.saying).toBe(one.meaning);
+      }
+    }
+    expect(yoji.filter((one) => [...one.saying].length === 4).length).toBeGreaterThan(yoji.length * 0.99);
+  });
+
+  it("give the plain English of the sense that is the saying", () => {
+    expect(of(proverbs, "猿も木から落ちる")?.reading).toBe("さるもきからおちる");
+    expect(of(proverbs, "猿も木から落ちる")?.meanings.join(" ")).toContain("monkey");
+    expect(of(yoji, "七転八起")?.reading).toBe("しちてんはっき");
+    expect(of(yoji, "一石二鳥")?.meanings.join(" ")).toContain("two birds");
+    expect(of(yoji, "一石二鳥")?.elementary).toBe(true);
+    expect(of(yoji, "一石二鳥")?.kanji).toEqual(["一", "石", "二", "鳥"]);
+  });
+
+  it("leave out what JMdict marks vulgar, X-rated, sensitive or derogatory, and what names sex or the sex trade, because children play", () => {
+    for (const written of [
+      "盲蛇に怖じず",
+      "群盲象を撫でる",
+      "朝マラの立たぬ男に金貸すな",
+      "一盗二婢三妾四妓五妻",
+      "陰裏の豆もはじけ時",
+    ])
+      expect(of(proverbs, written), written).toBeUndefined();
+    for (const written of ["三百代言", "無学文盲", "朝雲暮雨", "巫山雲雨", "精力絶倫"])
+      expect(of(yoji, written), written).toBeUndefined();
+    const adult =
+      /\b(sex|sexual|sexually|erection|genital\w*|penis|vagina|prostitut\w*|whore|brothel|mistress|concubine|courtesan|adulter\w*|lustful|nipple)\b/i;
+    for (const one of [...proverbs, ...yoji]) expect(adult.test(one.meanings.join(" ")), one.saying).toBe(false);
+  });
+
+  it("can be searched by what is written, read or meant, whatever the case", () => {
+    const found = (list: ReturnType<typeof readSayings>, text: string) =>
+      searchSayings(list, text).map((one) => one.saying);
+    expect(found(proverbs, "猿も木")).toContain("猿も木から落ちる");
+    expect(found(proverbs, "さるもきから")).toContain("猿も木から落ちる");
+    expect(found(proverbs, "MONKEY")).toContain("猿も木から落ちる");
+    expect(found(yoji, "two birds")).toContain("一石二鳥");
+    expect(found(yoji, "  ")).toHaveLength(yoji.length);
+    expect(found(yoji, "no such saying anywhere")).toEqual([]);
   });
 });

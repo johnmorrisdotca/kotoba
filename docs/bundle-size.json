@@ -2,8 +2,8 @@
   "measured": "esbuild 0.28.2, bundled, minified, ES2020, gzip level 9",
   "entries": {
     ".": {
-      "minified": 33878,
-      "gzip": 11034
+      "minified": 34270,
+      "gzip": 11085
     },
     "./words-en": {
       "minified": 186499,
@@ -44,6 +44,14 @@
     "./shiritori-ja": {
       "minified": 331111,
       "gzip": 106264
+    },
+    "./proverbs-ja": {
+      "minified": 194508,
+      "gzip": 51759
+    },
+    "./yojijukugo-ja": {
+      "minified": 260103,
+      "gzip": 81295
     },
     "./cli": {
       "minified": 924468,

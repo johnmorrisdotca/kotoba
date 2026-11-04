@@ -1,6 +1,6 @@
 /**
- * Reading the Japanese idiom and shiritori lists once they are loaded. Each list is
- * an entry point of its own (`/idioms-ja`, `/shiritori-ja`), so a page fetches only
+ * Reading the Japanese idiom, shiritori, proverb and four-character compound lists once they are loaded. Each list is
+ * an entry point of its own (`/idioms-ja`, `/shiritori-ja`, `/proverbs-ja`, `/yojijukugo-ja`), so a page fetches only
  * what it uses.
  */
 
@@ -111,6 +111,99 @@ export function searchIdioms(idioms: readonly Idiom[], text: string): Idiom[] {
   if (needle === "") return [...idioms];
   return idioms.filter((one) =>
     `${one.idiom}\n${one.reading}\n${one.meanings.join("\n").toLowerCase()}`.includes(needle),
+  );
+}
+
+/**
+ * One proverb or four-character compound.
+ *
+ * @example
+ * ```ts
+ * import type { Saying } from "@johnmorrisdotca/kotoba";
+ *
+ * const one: Saying = { saying: "七転八起", reading: "しちてんはっき", meaning: "falling seven times, getting up eight", meanings: ["falling seven times, getting up eight"], kanji: ["七", "転", "八", "起"], elementary: true, common: false };
+ * console.log(one.saying);
+ * ```
+ */
+export type Saying = {
+  /** How it is written. */
+  readonly saying: string;
+  /** How it is read. */
+  readonly reading: string;
+  /** Its first plain English gloss, from the sense JMdict marks as a proverb or a four-character compound. */
+  readonly meaning: string;
+  /** Every plain English gloss of that sense, `meaning` first. */
+  readonly meanings: readonly string[];
+  /** The kanji it is written with, once each, in the order they appear. */
+  readonly kanji: readonly string[];
+  /** Every kanji in it is taught in Japanese elementary school, or it has none. */
+  readonly elementary: boolean;
+  /** JMdict marks it as common. */
+  readonly common: boolean;
+};
+
+/**
+ * The proverb and four-character compound lists as they are stored: one row an entry, the two flags as 0 or 1.
+ *
+ * @example
+ * ```ts
+ * import type { PackedSayings } from "@johnmorrisdotca/kotoba";
+ *
+ * const packed: PackedSayings = { release: "2026-11-04", sayings: [["七転八起", "しちてんはっき", ["falling seven times, getting up eight"], 1, 0]] };
+ * console.log(packed.release);
+ * ```
+ */
+export type PackedSayings = {
+  /** The JMdict release it was made from. */
+  readonly release: string;
+  /** Written form, reading, meanings, then elementary and common. */
+  readonly sayings: readonly (readonly [string, string, readonly string[], number, number])[];
+};
+
+/**
+ * Reads a stored list of proverbs or four-character compounds into plain rows.
+ *
+ * @param packed - `JA_PROVERBS`, from `@johnmorrisdotca/kotoba/proverbs-ja`, or `JA_YOJIJUKUGO`, from `@johnmorrisdotca/kotoba/yojijukugo-ja`.
+ * @returns Every entry, in the order of its reading.
+ * @example
+ * ```ts
+ * import { readSayings } from "@johnmorrisdotca/kotoba";
+ * import { JA_PROVERBS } from "@johnmorrisdotca/kotoba/proverbs-ja";
+ *
+ * console.log(readSayings(JA_PROVERBS).length);
+ * ```
+ */
+export function readSayings(packed: PackedSayings): Saying[] {
+  return packed.sayings.map(([saying, reading, meanings, elementary, common]) => ({
+    saying,
+    reading,
+    meaning: meanings[0] ?? "",
+    meanings,
+    kanji: [...new Set([...saying].filter((character) => /\p{Script=Han}/u.test(character)))],
+    elementary: elementary === 1,
+    common: common === 1,
+  }));
+}
+
+/**
+ * The proverbs or compounds that hold a piece of text in their written form, their reading or any of their meanings, ignoring case.
+ *
+ * @param sayings - The entries to search, from `readSayings`.
+ * @param text - What was typed; blank text matches every entry.
+ * @returns The entries that match, in the order given.
+ * @example
+ * ```ts
+ * import { readSayings, searchSayings } from "@johnmorrisdotca/kotoba";
+ * import { JA_YOJIJUKUGO } from "@johnmorrisdotca/kotoba/yojijukugo-ja";
+ *
+ * console.log(searchSayings(readSayings(JA_YOJIJUKUGO), "two birds")[0]?.saying);
+ * ```
+ */
+export function searchSayings(sayings: readonly Saying[], text: string): Saying[] {
+  const needle = text.trim().toLowerCase();
+  if (needle === "") return [...sayings];
+  return sayings.filter((one) =>
+    `${one.saying}\n${one.reading}\n${one.meanings.join("\n").toLowerCase()}`.includes(needle),
   );
 }
 

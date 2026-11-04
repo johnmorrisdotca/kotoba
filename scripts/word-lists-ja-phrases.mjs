@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
- * WRITES THE JAPANESE IDIOMS AND THE SHIRITORI WORDS from JMdict, so both lists
- * are machine output anybody can make again, never hand-kept tables.
+ * WRITES THE JAPANESE IDIOMS, THE SHIRITORI WORDS, THE PROVERBS AND THE FOUR-CHARACTER
+ * COMPOUNDS from JMdict, so every list is machine output anybody can make again, never
+ * hand-kept tables.
  *
  *   curl -sL -o JMdict_e.gz http://ftp.edrdg.org/pub/Nihongo/JMdict_e.gz
  *   curl -sL -o kanjidic2.xml.gz http://ftp.edrdg.org/pub/Nihongo/kanjidic2.xml.gz
@@ -35,9 +36,16 @@
  * textbook-common list (ichi1), one row a reading, commonest first by the
  * newspaper frequency bands. JMdict decides what is a word; the bands only rank.
  *
- * Both lists leave out what JMdict marks vulgar, X-rated, sensitive or derogatory:
- * these lists turn up in children's games. An idiom is left out for such a mark on
- * any of its senses, a shiritori word for one on its first sense.
+ * THE PROVERBS (src/lists/proverbs-ja.data.ts) are the entries JMdict marks as proverbs
+ * (misc `&proverb;`) and THE FOUR-CHARACTER COMPOUNDS (src/lists/yojijukugo-ja.data.ts) the
+ * entries it marks as yojijukugo (misc `&yoji;`). JMdict decides what is one; this package
+ * adds nothing. The meanings are the plain glosses of the sense that carries the mark.
+ *
+ * Every list leaves out what JMdict marks vulgar, X-rated, sensitive or derogatory:
+ * these lists turn up in children's games. An idiom, proverb or compound is left out for
+ * such a mark on any of its senses, a shiritori word for one on its first sense. A proverb or
+ * compound is also left out when any gloss of its entry names sex or the sex trade, which
+ * JMdict does not always mark (朝雲暮雨 is "sexual liaison", unmarked).
  */
 import { existsSync, readFileSync } from "node:fs";
 import { gunzipSync } from "node:zlib";
@@ -55,6 +63,8 @@ for (const file of [JMDICT, KANJIDIC])
   }
 
 const NOT_FOR_EVERYONE = /&(vulg|X|sens|derog);/;
+const ADULT_GLOSS =
+  /\b(sex|sexual|sexually|erection|genital\w*|penis|vagina|prostitut\w*|whore|brothel|mistress|concubine|courtesan|adulter\w*|lustful|nipple)\b/i;
 const HAN = /\p{Script=Han}/u;
 const KATAKANA = /\p{Script=Katakana}/u;
 const ONLY_KANA = /^[ぁ-ゖァ-ヶー]+$/u;
@@ -206,7 +216,8 @@ if (taught.size !== 1026) throw new Error(`KANJIDIC2 gives ${taught.size} elemen
 
 const idioms = new Map();
 const words = new Map();
-const leftOut = { idioms: [], words: 0 };
+const sayings = { proverb: new Map(), yoji: new Map() };
+const leftOut = { idioms: [], words: 0, proverb: [], yoji: [] };
 
 for (const match of jmdict.matchAll(/<entry>[\s\S]*?<\/entry>/g)) {
   const entry = match[0];
@@ -243,6 +254,27 @@ for (const match of jmdict.matchAll(/<entry>[\s\S]*?<\/entry>/g)) {
     }
   }
 
+  for (const [kind, mark] of [
+    ["proverb", "&proverb;"],
+    ["yoji", "&yoji;"],
+  ]) {
+    const carrying = senses.find((sense) => sense.includes(mark));
+    const glosses = carrying === undefined ? [] : glossesOf(carrying);
+    if (glosses.length === 0 || sayings[kind].has(word)) continue;
+    if (barred || ADULT_GLOSS.test(all(entry, "gloss").join(" "))) {
+      leftOut[kind].push(word);
+      continue;
+    }
+    const kanji = [...word].filter((character) => HAN.test(character));
+    sayings[kind].set(word, {
+      text: word,
+      reading,
+      meanings: glosses,
+      elementary: kanji.every((character) => taught.has(character)),
+      common: /<(?:ke|re)_pri>/.test(entry),
+    });
+  }
+
   // A shiritori word: an everyday noun, its first sense a plain noun.
   const first = senses[0] ?? "";
   if (!/<(?:ke|re)_pri>ichi1</.test(entry) || !first.includes("<pos>&n;</pos>")) continue;
@@ -273,8 +305,18 @@ const counts = {
   elementary: idiomRows.filter((row) => row.elementary).length,
   common: idiomRows.filter((row) => row.common).length,
 };
+const sayingRows = Object.fromEntries(
+  Object.entries(sayings).map(([kind, rows]) => [kind, [...rows.values()].sort(byReading)]),
+);
+const sayingCounts = Object.fromEntries(
+  Object.entries(sayingRows).map(([kind, rows]) => [
+    kind,
+    { elementary: rows.filter((row) => row.elementary).length, common: rows.filter((row) => row.common).length },
+  ]),
+);
 const wordRows = [...words.values()].sort((a, b) => a.band - b.band || byReading(a, b));
-if (counts.idiom < 1000 || wordRows.length < 3000) throw new Error("JMdict gave far too few rows: read the source.");
+if (counts.idiom < 1000 || wordRows.length < 3000 || sayingRows.proverb.length < 800 || sayingRows.yoji.length < 1500)
+  throw new Error("JMdict gave far too few rows: read the source.");
 for (const row of wordRows)
   if (/[\t\n]/.test(row.word + row.reading + row.meaning)) throw new Error(`A separator in the row for ${row.word}.`);
 
@@ -331,6 +373,45 @@ export const JA_SHIRITORI = {
 };
 `,
 );
+
+const SAYINGS = [
+  ["proverb", "proverbs-ja", "JA_PROVERBS", "THE PROVERBS", "entries JMdict marks as proverbs"],
+  ["yoji", "yojijukugo-ja", "JA_YOJIJUKUGO", "THE FOUR-CHARACTER COMPOUNDS", "entries JMdict marks as yojijukugo"],
+];
+for (const [kind, entry, name, title, what] of SAYINGS) {
+  const rows = sayingRows[kind];
+  writeWordList(
+    `src/lists/${entry}.data.ts`,
+    `import type { PackedSayings } from "../phrases.ts";
+
+/**
+ * ${title}. Written by \`scripts/word-lists-ja-phrases.mjs\` from JMdict,
+ * release ${release}, and KANJIDIC2, ${kanjidicRelease}. Never edited by hand; the monthly refresh
+ * (.github/workflows/jmdict-refresh.yml) runs the script again.
+ *
+${NOTICE("This list is")}
+ *
+ * ${rows.length} ${what}, one a written form, in the order of the reading;
+ * ${sayingCounts[kind].elementary} written only in kanji taught in elementary school; ${sayingCounts[kind].common} marked common.
+ */
+export const ${name}: PackedSayings = {
+  release: ${JSON.stringify(release)},
+  sayings: ${JSON.stringify(
+    rows.map(({ text, reading, meanings, elementary, common }) => [
+      text,
+      reading,
+      meanings,
+      elementary ? 1 : 0,
+      common ? 1 : 0,
+    ]),
+  )},
+};
+`,
+  );
+  console.log(
+    `${kind}: ${rows.length} (${sayingCounts[kind].elementary} elementary, ${sayingCounts[kind].common} common); left out as not for everyone: ${leftOut[kind].join(" ")}`,
+  );
+}
 
 console.log(`JMdict ${release}, KANJIDIC2 ${kanjidicRelease}: ${taught.size} elementary kanji`);
 console.log(

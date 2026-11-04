@@ -15,6 +15,8 @@ const entries = {
   "kana-5.data.ts": "kana-5",
   "idioms-ja.data.ts": "idioms-ja",
   "shiritori-ja.data.ts": "shiritori-ja",
+  "proverbs-ja.data.ts": "proverbs-ja",
+  "yojijukugo-ja.data.ts": "yojijukugo-ja",
 };
 export function withWordExamples(source, entry) {
   let text = source;

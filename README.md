@@ -11,7 +11,7 @@ English, French, German and Japanese (kana) dictionaries for five-letter and oth
   <a href="./NOTICE.md"><img alt="Code MIT; word lists SCOWL, CC BY-SA 4.0" src="https://img.shields.io/badge/licence-MIT%20code%2C%20CC%20BY--SA%20lists-2f5d4a"></a>
   <img alt="No dependencies" src="https://img.shields.io/badge/dependencies-0-2f5d4a">
   <img alt="TypeScript" src="https://img.shields.io/badge/types-TypeScript-3178c6">
-  <a href="https://johnmorrisdotca.github.io/kotoba/docs/api/main/index.html"><img alt="11.0 kB minified and gzipped" src="https://img.shields.io/badge/min%2Bgzip-11.0%20kB-2f5d4a"></a>
+  <a href="https://johnmorrisdotca.github.io/kotoba/docs/api/main/index.html"><img alt="11.1 kB minified and gzipped" src="https://img.shields.io/badge/min%2Bgzip-11.1%20kB-2f5d4a"></a>
   <a href="https://www.npmjs.com/package/@johnmorrisdotca/kotoba#provenance"><img alt="Published with npm provenance" src="https://img.shields.io/badge/npm-provenance-2f5d4a"></a>
 </p>
 
@@ -96,8 +96,7 @@ npx @johnmorrisdotca/kotoba check crane
   before any comes round again.
 - **Shiritori**, the Japanese word chain: what a word starts and ends on, house
   rules, a judge for each word, and a list of 6,393 everyday nouns to play from.
-- **Japanese idioms**: 2,021 set phrases from JMdict with their readings and
-  English meanings, each saying whose judgement put it on the list.
+- **Japanese idioms, proverbs and four-character compounds**: 2,021 set phrases, 930 proverbs and 1,831 compounds from JMdict with their readings and English meanings, nothing vulgar or derogatory.
 - **A board you can put on a page** (`/play`), with the keyboards of English,
   French (AZERTY), German (QWERTZ, with ä ö ü) and kana typed in romaji; marks that never rely on colour alone; and CSS variables to theme it.
 - **A command line**: look a word up, list a list, mark a guess, give the word
@@ -475,6 +474,18 @@ const [found] = searchIdioms(idioms, "油を売");
 console.log(found.idiom, found.reading, found.kind); // 油を売る あぶらをうる idiom
 ```
 
+### Japanese proverbs and four-character compounds: read and search
+
+```ts
+import { readSayings, searchSayings } from "@johnmorrisdotca/kotoba";
+import { JA_YOJIJUKUGO } from "@johnmorrisdotca/kotoba/yojijukugo-ja";
+
+const [found] = searchSayings(readSayings(JA_YOJIJUKUGO), "two birds");
+console.log(found.saying, found.reading); // 一石二鳥 いっせきにちょう
+```
+
+`JA_PROVERBS`, from `@johnmorrisdotca/kotoba/proverbs-ja`, is read the same way.
+
 ### A hidden word and guesses in a link
 
 A puzzle written down as text, and read back with the language's alphabet checked: `null` is anything that is not that many letters of it.
@@ -598,6 +609,7 @@ may be guessed.
 | `@johnmorrisdotca/kotoba/kana-3`, `/kana-4`, `/kana-5` | `JA_WORDS_3`, `JA_WORDS_4`, `JA_WORDS_5` | Japanese words of three, four and five kana, packed; read with `unpack` |
 | `@johnmorrisdotca/kotoba/idioms-ja` | `JA_IDIOMS` | 2,021 Japanese set phrases: written form, reading, English meanings, and whose judgement put each there; read with `readIdioms` |
 | `@johnmorrisdotca/kotoba/shiritori-ja` | `JA_SHIRITORI` | 6,393 everyday Japanese nouns, one a reading, commonest first, for a word chain; read with `readShiritoriWords` |
+| `@johnmorrisdotca/kotoba/proverbs-ja`, `/yojijukugo-ja` | `JA_PROVERBS`, `JA_YOJIJUKUGO` | 930 proverbs and 1,831 four-character compounds, each with its reading and English meanings; read with `readSayings` |
 
 `readWordLists(data, size)` reads one length of an alphabet list; `unpack(packed,
 size)` reads a kana list; `loadWordList(language, size)` (`/load`) does either by
@@ -861,6 +873,7 @@ The [API reference](https://johnmorrisdotca.github.io/kotoba/api.html) (also kep
 | `wordScore`, `kanaScore` | Points for a finished round |
 | `playShiritori(played, reading, rules)`, `shiritoriChoices(pool, played, rules)` | A word chain: judge a word, and list what may follow |
 | `readIdioms(JA_IDIOMS)`, `searchIdioms(idioms, text)` | The Japanese idioms as plain rows, and a search over them |
+| `readSayings(JA_PROVERBS)`, `searchSayings(sayings, text)` | The proverbs or four-character compounds as plain rows, and a search over them |
 | `mountKotoba(element, options)` | The board, on a page |
 | `runCli(args)` | The command line as a function |
 
@@ -973,7 +986,7 @@ The code is MIT. The lists are data under their sources' terms, set out in full 
 - **Japanese**: JMdict, the property of the Electronic Dictionary Research and
   Development Group: CC BY-SA 4.0 and the Group's conditions. Refreshed from
   JMdict's newest release every month (`.github/workflows/jmdict-refresh.yml`).
-- **Japanese idioms and shiritori words**: JMdict too, with the `elementary` flag
+- **Japanese idioms, proverbs, compounds and shiritori words**: JMdict too, with the `elementary` flag
   from KANJIDIC2, the same Group's: CC BY-SA 4.0 and the Group's conditions, on
   the same monthly refresh. A page showing these words must say so on that screen;
   [NOTICE.md](./NOTICE.md) has wording to use.

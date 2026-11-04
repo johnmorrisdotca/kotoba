@@ -461,6 +461,27 @@ test("the idioms can be searched by what they mean, and say whose judgement put 
   await sound(page, errors);
 });
 
+test("the proverbs and the four-character compounds are lists of their own, kept in the address", async ({ page }) => {
+  const errors = await open(page);
+  await page.getByTestId("idioms").scrollIntoViewIfNeeded();
+  await tap(page, page.getByTestId("kind-proverbs"));
+  await expect(page).toHaveURL(/phrases=proverbs/);
+  await page.getByTestId("idiom-search").fill("monkey");
+  await expect(page.getByTestId("idiom-list")).toContainText("猿も木から落ちる");
+  await tap(page, page.getByTestId("kind-compounds"));
+  await expect(page).toHaveURL(/phrases=compounds/);
+  await page.getByTestId("idiom-search").fill("two birds");
+  await expect(page.getByTestId("idiom-list")).toContainText("一石二鳥");
+  await tap(page, page.getByTestId("kind-idioms"));
+  await expect(page).not.toHaveURL(/phrases=/);
+  await expect(page.getByTestId("kind-idioms")).toHaveAttribute("aria-pressed", "true");
+  await sound(page, errors);
+  await open(page, "?lang=en&phrases=compounds");
+  await expect(page.getByTestId("kind-compounds")).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator("#idiom-title")).toHaveText("Four-character compounds");
+  await sound(page, errors);
+});
+
 test("every key is whole on the felt at a phone's width", async ({ page }) => {
   for (const width of [320, 360, 390]) {
     await page.setViewportSize({ width, height: 844 });

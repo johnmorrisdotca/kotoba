@@ -73,6 +73,14 @@
     "./shiritori-ja": {
       "en": "Shiritori words",
       "ja": "しりとりの単語"
+    },
+    "./proverbs-ja": {
+      "en": "Japanese proverbs",
+      "ja": "日本語のことわざ"
+    },
+    "./yojijukugo-ja": {
+      "en": "Four-character compounds",
+      "ja": "四字熟語"
     }
   }
 }

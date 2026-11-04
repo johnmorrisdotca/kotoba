@@ -47,10 +47,12 @@ src/
     ├── kana-5.data.ts       the five-kana words
     ├── pop-answers.data.ts  the pop-culture answers
     ├── pop-guesses.data.ts  the pop-culture guesses accepted at three and seven letters
+    ├── proverbs-ja.data.ts  the Japanese proverbs
     ├── shiritori-ja.data.ts the shiritori words
     ├── words-de.data.ts     the German words
     ├── words-en.data.ts     the English words
-    └── words-fr.data.ts     the French words
+    ├── words-fr.data.ts     the French words
+    └── yojijukugo-ja.data.ts the four-character compounds
 ```
 
 Tests sit beside the code they test (`*.test.ts`), `src/wordLists.coverage.test.ts`

@@ -40,12 +40,17 @@
         </form>
       </section>
       <section class="more phrases" aria-labelledby="idiom-title" data-testid="idioms">
-        <h2 id="idiom-title" data-say="idiomTitle"></h2>
-        <p data-say="idiomText"></p>
+        <h2 id="idiom-title"></h2>
+        <p id="idiom-text"></p>
+        <div class="fam-seg" id="phrase-kinds" role="group" data-say-label="phraseKinds" data-testid="phrase-kinds">
+          <button type="button" data-kind="idioms" data-testid="kind-idioms"></button>
+          <button type="button" data-kind="proverbs" data-testid="kind-proverbs"></button>
+          <button type="button" data-kind="compounds" data-testid="kind-compounds"></button>
+        </div>
         <div class="fam-row">
-          <label class="fam-label" for="idiom-search" data-say="idiomLabel"></label>
+          <label class="fam-label" for="idiom-search"></label>
           <input class="phrase-input" id="idiom-search" data-testid="idiom-search" type="search" autocomplete="off" spellcheck="false">
-          <button type="button" class="fam-button" id="idiom-another" data-testid="idiom-another" data-say="idiomAnother"></button>
+          <button type="button" class="fam-button" id="idiom-another" data-testid="idiom-another"></button>
         </div>
         <p class="fam-muted" id="idiom-count" data-testid="idiom-count" aria-live="polite"></p>
         <ul class="idioms" id="idiom-list" data-testid="idiom-list"></ul>

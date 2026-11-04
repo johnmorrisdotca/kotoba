@@ -1,8 +1,8 @@
 ---
-title: "しりとりと日本語の慣用句"
+title: "しりとり、慣用句、ことわざ、四字熟語"
 section: how-to
 order: 11
-description: "しりとりをハウスルールつきで判定し、慣用句のリストを読み、検索します。"
+description: "しりとりをハウスルールつきで判定し、慣用句、ことわざ、四字熟語のリストを読み、検索します。"
 ---
 
 ## しりとりを判定する
@@ -46,6 +46,21 @@ console.log(idioms.filter((one)=>one.kind==="idiom"&&one.elementary).length);
 
 `meaning`は、慣用句にあたる語義の最初の英語訳です。その前に文字どおりの語義があっても、そちらは使いません。訳が一つだけだと誤解を招くことがあるので、`meanings`にはすべての訳が入っています。`elementary`は、句の中の漢字がすべて日本の小学校で習う漢字であることを示します。これは漢字についての事実であり、学校の慣用句リストではありません。リストはそれぞれ独立したエントリポイントです。必要になったときだけ読み込むには、`await import("@johnmorrisdotca/kotoba/idioms-ja")`と書きます。
 
+## ことわざと四字熟語を読む、検索する
+
+```ts
+import {readSayings,searchSayings} from "@johnmorrisdotca/kotoba";
+import {JA_PROVERBS} from "@johnmorrisdotca/kotoba/proverbs-ja";
+import {JA_YOJIJUKUGO} from "@johnmorrisdotca/kotoba/yojijukugo-ja";
+const proverbs=readSayings(JA_PROVERBS);
+const compounds=readSayings(JA_YOJIJUKUGO);
+console.log(searchSayings(proverbs,"monkey")[0]?.saying);
+console.log(searchSayings(compounds,"two birds")[0]);
+console.log(compounds.filter((one)=>one.elementary).length);
+```
+
+どちらも独立したエントリポイント（`proverbs-ja`と`yojijukugo-ja`）なので、ページは使うリストだけを取り込みます。JMdictがことわざ（930件）と四字熟語（1,831件）と示している項目を収め、それぞれに読み、英語の平易な訳、慣用句と同じ`elementary`と`common`の印が付きます。何がことわざや四字熟語かはJMdictが決めていて、このパッケージは何も足しません。`kind`もありません。JMdictが、どれかの語義を下品、成人向け、配慮が必要、または軽蔑的と示している項目は載せません。また、JMdictが印を付けていなくても、訳のどれかが性や性産業に触れている項目（朝雲暮雨は「sexual liaison」）も載せません。これらのリストは子どもの遊びに使われるからです。ただし、子ども向けに完全なリストはありません。子ども向けのサイトは、表示する行に目を通してください。
+
 ## 自分のサイトに言葉を足す
 
 リストは読み込んだあとはただのデータです。サイトに合わせる方法の一つは、パッケージをそのまま使い、サイト側のコードで、そのリストの上に独自の行を重ねることです。パッケージには手を加えないので、新しい版が出れば、増えた言葉もそのまま使えます。
@@ -70,4 +85,4 @@ console.log(shiritoriChoices(words,["さくら"]).some((one)=>one.word==="ラム
 
 ## 言葉の出どころ
 
-どちらのリストもJMdictから作り、`elementary`はKANJIDIC2から作っています。どちらも電子辞書研究開発グループの所有で、CC BY-SA 4.0と同グループの条件のもとで使っています。これらの言葉を表示するページでは、その画面に出典を示す必要があります。文例は[NOTICE.md](https://github.com/johnmorrisdotca/kotoba/blob/main/NOTICE.md)（英語）にあります。JMdictが卑語、成人向け、配慮が必要、または蔑称と示している項目は入れていません。これらのリストは子ども向けのゲームにも使われるからです。
+どのリストもJMdictから作り、`elementary`はKANJIDIC2から作っています。どちらも電子辞書研究開発グループの所有で、CC BY-SA 4.0と同グループの条件のもとで使っています。これらの言葉を表示するページでは、その画面に出典を示す必要があります。文例は[NOTICE.md](https://github.com/johnmorrisdotca/kotoba/blob/main/NOTICE.md)（英語）にあります。JMdictが卑語、成人向け、配慮が必要、または蔑称と示している項目は入れていません。これらのリストは子ども向けのゲームにも使われるからです。

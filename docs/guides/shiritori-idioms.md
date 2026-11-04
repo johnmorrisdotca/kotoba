@@ -1,8 +1,8 @@
 ---
-title: "Shiritori and Japanese idioms"
+title: "Shiritori, idioms, proverbs and compounds"
 section: how-to
 order: 11
-description: "Judge a word chain with house rules, and read and search the idiom list."
+description: "Judge a word chain with house rules, and read and search the idiom, proverb and four-character compound lists."
 ---
 
 ## Judge a word chain
@@ -46,6 +46,21 @@ Every row says whose judgement put it there. `"idiom"` is an entry JMdict itself
 
 `meaning` is the first plain gloss of the sense that is the idiom, not of a literal sense before it, and `meanings` holds them all, because one alone can mislead. `elementary` says every kanji in the phrase is taught in Japanese elementary school, which is a fact about its kanji: nothing here is a school's list of idioms. Each list is its own entry point: to fetch one only when it is needed, `await import("@johnmorrisdotca/kotoba/idioms-ja")`.
 
+## Read and search the proverbs and the four-character compounds
+
+```ts
+import {readSayings,searchSayings} from "@johnmorrisdotca/kotoba";
+import {JA_PROVERBS} from "@johnmorrisdotca/kotoba/proverbs-ja";
+import {JA_YOJIJUKUGO} from "@johnmorrisdotca/kotoba/yojijukugo-ja";
+const proverbs=readSayings(JA_PROVERBS);
+const compounds=readSayings(JA_YOJIJUKUGO);
+console.log(searchSayings(proverbs,"monkey")[0]?.saying);
+console.log(searchSayings(compounds,"two birds")[0]);
+console.log(compounds.filter((one)=>one.elementary).length);
+```
+
+Each is an entry point of its own, `proverbs-ja` and `yojijukugo-ja`, so a page fetches only the list it uses. They hold the entries JMdict marks as proverbs (930) and as four-character compounds, yojijukugo (1,831), each with its reading, its plain English glosses and the same `elementary` and `common` flags as an idiom. JMdict decides what is one: this package adds nothing and has no `kind`. An entry is left out when JMdict marks any of its senses vulgar, X-rated, sensitive or derogatory, and also when any gloss of it names sex or the sex trade, which JMdict does not always mark (朝雲暮雨, "sexual liaison"), because these lists turn up in children's games. No list of words is perfect for children: a site for them should read the rows it shows.
+
 ## Add your own words for your own site
 
 The lists are plain data once they are read, so one way to fit them to a site is to keep using the package and lay your own rows over its list, in your site's code. The package stays as it is, and a new version still brings its new words.
@@ -70,4 +85,4 @@ On a row you write, `kind`, `kanji`, `elementary` and `common` are your own stat
 
 ## Where the words come from
 
-Both lists are made from JMdict, and `elementary` from KANJIDIC2, the property of the Electronic Dictionary Research and Development Group, under CC BY-SA 4.0 and the Group's conditions. A page that shows these words must say so on that screen; [NOTICE.md](https://github.com/johnmorrisdotca/kotoba/blob/main/NOTICE.md) has wording to use. Anything JMdict marks vulgar, X-rated, sensitive or derogatory is left out, because these lists turn up in children's games.
+Every list is made from JMdict, and `elementary` from KANJIDIC2, the property of the Electronic Dictionary Research and Development Group, under CC BY-SA 4.0 and the Group's conditions. A page that shows these words must say so on that screen; [NOTICE.md](https://github.com/johnmorrisdotca/kotoba/blob/main/NOTICE.md) has wording to use. Anything JMdict marks vulgar, X-rated, sensitive or derogatory is left out, because these lists turn up in children's games.

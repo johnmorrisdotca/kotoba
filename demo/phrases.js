@@ -1,12 +1,15 @@
-// The demo's two panels below the game: a word chain against the computer, and the idioms. Both lists are fetched only
-// when somebody reaches for them. The rules and the lists are the package's; this page only shows them.
+// The demo's two panels below the game: a word chain against the computer, and the idioms, proverbs and four-character
+// compounds. Each list is fetched only when somebody reaches for it. The rules and the lists are the package's; this page
+// only shows them.
 import {
   finishRomaji,
   normalizeShiritoriReading,
   playShiritori,
   readIdioms,
+  readSayings,
   readShiritoriWords,
   searchIdioms,
+  searchSayings,
   shiritoriChoices,
   shiritoriTailKey,
 } from "./dist/index.js";
@@ -17,6 +20,32 @@ const SHOWN_IDIOMS = 6;
 const COMPUTER_CHOOSES_FROM = 40;
 
 const pick = (list) => list[Math.floor(Math.random() * list.length)];
+
+/** The three lists of the second panel: where each is fetched from, how it is read and searched, and the page's words for it. */
+const KINDS = {
+  idioms: {
+    fetch: () => import("./dist/lists/idioms-ja.data.js").then((one) => one.JA_IDIOMS),
+    read: readIdioms,
+    search: searchIdioms,
+    head: (one) => one.idiom,
+    note: (t, one) => t(one.kind === "idiom" ? "idiomKindIdiom" : "idiomKindExpression"),
+  },
+  proverbs: {
+    fetch: () => import("./dist/lists/proverbs-ja.data.js").then((one) => one.JA_PROVERBS),
+    read: readSayings,
+    search: searchSayings,
+    head: (one) => one.saying,
+    note: (t) => t("sayingNote"),
+  },
+  compounds: {
+    fetch: () => import("./dist/lists/yojijukugo-ja.data.js").then((one) => one.JA_YOJIJUKUGO),
+    read: readSayings,
+    search: searchSayings,
+    head: (one) => one.saying,
+    note: (t) => t("sayingNote"),
+  },
+};
+const askedKind = new URLSearchParams(location.search).get("phrases");
 
 function row(head, reading, ...notes) {
   const item = document.createElement("li");
@@ -45,8 +74,9 @@ export function mountPhrases({ t }) {
   let release = "";
   let chain = [];
   let status = null;
-  let idioms = null;
-  let shownIdiom = null;
+  let kind = Object.hasOwn(KINDS, askedKind) ? askedKind : "idioms";
+  const lists = {};
+  const shown = {};
 
   /** Kana as typed, or romaji read into kana. */
   const reading = (typed) => {
@@ -64,27 +94,32 @@ export function mountPhrases({ t }) {
     drawIdioms();
   }
 
+  function drawKinds() {
+    for (const button of $("phrase-kinds").children) {
+      button.textContent = t(`kind_${button.dataset.kind}`);
+      button.setAttribute("aria-pressed", String(button.dataset.kind === kind));
+    }
+    $("idiom-title").textContent = t(`phraseTitle_${kind}`);
+    $("idiom-text").textContent = t(`phraseText_${kind}`);
+    $("idiom-search").labels[0].textContent = t(`phraseLabel_${kind}`);
+    $("idiom-another").textContent = t(`phraseAnother_${kind}`);
+  }
+
   function drawIdioms() {
-    if (idioms === null) return;
+    drawKinds();
+    const rows = lists[kind];
+    if (rows === undefined) return;
+    const { search, head, note } = KINDS[kind];
     const text = $("idiom-search").value;
-    const found = text.trim() === "" ? (shownIdiom === null ? [] : [shownIdiom]) : searchIdioms(idioms, text);
+    const found = text.trim() === "" ? (shown[kind] === undefined ? [] : [shown[kind]]) : search(rows, text);
     $("idiom-count").textContent =
       text.trim() === ""
         ? ""
         : found.length === 0
           ? t("idiomNone")
-          : t("idiomFound", { n: found.length, all: idioms.length });
+          : t("idiomFound", { n: found.length, all: rows.length });
     $("idiom-list").replaceChildren(
-      ...found
-        .slice(0, SHOWN_IDIOMS)
-        .map((one) =>
-          row(
-            one.idiom,
-            one.reading,
-            one.meanings.join("; "),
-            t(one.kind === "idiom" ? "idiomKindIdiom" : "idiomKindExpression"),
-          ),
-        ),
+      ...found.slice(0, SHOWN_IDIOMS).map((one) => row(head(one), one.reading, one.meanings.join("; "), note(t, one))),
     );
   }
 
@@ -102,11 +137,11 @@ export function mountPhrases({ t }) {
   }
 
   async function loadIdiomsOnce() {
-    if (idioms !== null) return;
-    const { JA_IDIOMS } = await import("./dist/lists/idioms-ja.data.js");
-    idioms = readIdioms(JA_IDIOMS);
-    release = JA_IDIOMS.release;
-    shownIdiom = pick(idioms.filter((one) => one.elementary));
+    if (lists[kind] !== undefined) return;
+    const packed = await KINDS[kind].fetch();
+    lists[kind] = KINDS[kind].read(packed);
+    release = packed.release;
+    shown[kind] = pick(lists[kind].filter((one) => one.elementary));
   }
 
   function say(event) {
@@ -156,11 +191,21 @@ export function mountPhrases({ t }) {
   $("idiom-search").addEventListener("input", () => void loadIdiomsOnce().then(draw));
   $("idiom-another").addEventListener("click", () => {
     void loadIdiomsOnce().then(() => {
-      shownIdiom = pick(idioms.filter((one) => one.elementary));
+      shown[kind] = pick(lists[kind].filter((one) => one.elementary));
       $("idiom-search").value = "";
       draw();
     });
   });
+  for (const button of $("phrase-kinds").children)
+    button.addEventListener("click", () => {
+      kind = button.dataset.kind;
+      const query = new URLSearchParams(location.search);
+      if (kind === "idioms") query.delete("phrases");
+      else query.set("phrases", kind);
+      history.replaceState(history.state, "", `${location.pathname}?${query}${location.hash}`);
+      $("idiom-search").value = "";
+      void loadIdiomsOnce().then(draw);
+    });
 
   // Fetch each list when its panel comes near the screen, not when the page opens.
   const near = (id, load) => {
@@ -176,6 +221,7 @@ export function mountPhrases({ t }) {
   };
   near("chain-title", startChain);
   near("idiom-title", () => loadIdiomsOnce().then(draw));
+  drawKinds();
 
   return { draw };
 }
