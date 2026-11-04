@@ -6,12 +6,17 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+## [1.7.0] - 2026-11-04
+
+A minor version: nothing that 1.6.0 gave is taken away. English meanings, for the English game.
+
 ### Added
 
 - **English word meanings, in the package** (MODULES-187). `englishMeaning(word, words)` from `@johnmorrisdotca/kotoba/meanings-en` has the shape of the board's `meanings` option, so `meanings: englishMeaning` shows what a guess and the hidden word mean in the English game, and a program can ask it directly. It answers one short line (70 characters at most) from Open English WordNet 2025 (CC BY 4.0, derived from Princeton WordNet 3.1; NOTICE.md carries both licences' notices): 16,841 of the 20,334 words of the 4, 5 and 6-letter lists and 97% of the answers, with a regular plural or past form shown after its word (`plural of farm: …`). A word WordNet has no entry for (`from`), any other list, and a word whose first sense or whose own self is not for children (vulgar, offensive, sexual, violent, drink) answer `null`. Made by `scripts/word-meanings-en.mjs`; the files `meanings-en-4`, `-5` and `-6` are entry points of their own (56, 117 and 193 kB gzipped), and only the length asked about is fetched. French, German and kana still have none. The demo uses it for English, with its credit line; the guide "Show what an English word means" (and its Japanese twin) says what it does and leaves out.
 
 ### Changed
 
+- The package is 1.03 MB bigger unpacked (2.20 to 3.23 MB) and 378 kB bigger packed (906 to 1,284 kB): the three meaning files, each fetched only for the length asked about. The core entry point is unchanged.
 - The package no longer says it holds no dictionary: README "What a word means" says the English meanings are the one it carries. The Japanese meanings in the demo are still Jisho's.
 
 ## [1.6.0] - 2026-11-04
