@@ -1128,7 +1128,7 @@ JA_WORDS_3: { release: string; alphabet: string; codes: string; easy: string; an
 ```
 
 THE 3-KANA WORDS FOR GOMOJI. Written by `scripts/word-lists-ja.mjs` from
-JMdict, release 2026-11-02. Never edited by hand; the monthly refresh
+JMdict, release 2026-11-04. Never edited by hand; the monthly refresh
 (.github/workflows/jmdict-refresh.yml) runs the script again.
 
 JMdict is the property of the Electronic Dictionary Research and Development
@@ -1136,7 +1136,7 @@ Group (EDRDG), used under the Creative Commons Attribution-ShareAlike 4.0
 licence and the Group's conditions: https://www.edrdg.org/edrdg/licence.html.
 This list is derived from it and is under the same licence.
 
-900 easy answers, 2000 answers at medium and hard, 16371 words that may be guessed.
+900 easy answers, 2000 answers at medium and hard, 16296 words that may be guessed.
 Each word is written one character a kana through `alphabet` and `codes`,
 the words run together with nothing between them (`kanaWords.ts` reads them).
 
@@ -1153,7 +1153,7 @@ JA_WORDS_4: { release: string; alphabet: string; codes: string; easy: string; an
 ```
 
 THE 4-KANA WORDS FOR GOMOJI. Written by `scripts/word-lists-ja.mjs` from
-JMdict, release 2026-11-02. Never edited by hand; the monthly refresh
+JMdict, release 2026-11-04. Never edited by hand; the monthly refresh
 (.github/workflows/jmdict-refresh.yml) runs the script again.
 
 JMdict is the property of the Electronic Dictionary Research and Development
@@ -1161,7 +1161,7 @@ Group (EDRDG), used under the Creative Commons Attribution-ShareAlike 4.0
 licence and the Group's conditions: https://www.edrdg.org/edrdg/licence.html.
 This list is derived from it and is under the same licence.
 
-900 easy answers, 2000 answers at medium and hard, 38844 words that may be guessed.
+900 easy answers, 2000 answers at medium and hard, 38647 words that may be guessed.
 Each word is written one character a kana through `alphabet` and `codes`,
 the words run together with nothing between them (`kanaWords.ts` reads them).
 
@@ -1178,7 +1178,7 @@ JA_WORDS_5: { release: string; alphabet: string; codes: string; easy: string; an
 ```
 
 THE 5-KANA WORDS FOR GOMOJI. Written by `scripts/word-lists-ja.mjs` from
-JMdict, release 2026-11-02. Never edited by hand; the monthly refresh
+JMdict, release 2026-11-04. Never edited by hand; the monthly refresh
 (.github/workflows/jmdict-refresh.yml) runs the script again.
 
 JMdict is the property of the Electronic Dictionary Research and Development
@@ -1186,7 +1186,7 @@ Group (EDRDG), used under the Creative Commons Attribution-ShareAlike 4.0
 licence and the Group's conditions: https://www.edrdg.org/edrdg/licence.html.
 This list is derived from it and is under the same licence.
 
-900 easy answers, 2000 answers at medium and hard, 35298 words that may be guessed.
+900 easy answers, 2000 answers at medium and hard, 35155 words that may be guessed.
 Each word is written one character a kana through `alphabet` and `codes`,
 the words run together with nothing between them (`kanaWords.ts` reads them).
 
@@ -1203,7 +1203,7 @@ JA_IDIOMS: PackedIdioms
 ```
 
 THE JAPANESE IDIOMS. Written by `scripts/word-lists-ja-phrases.mjs` from JMdict,
-release 2026-10-31, and KANJIDIC2, 2026-10-31. Never edited by hand; the monthly refresh
+release 2026-11-04, and KANJIDIC2, 2026-11-04. Never edited by hand; the monthly refresh
 (.github/workflows/jmdict-refresh.yml) runs the script again.
 
 JMdict and KANJIDIC2 are the property of the Electronic Dictionary Research and
@@ -1211,8 +1211,8 @@ Development Group (EDRDG), used under the Creative Commons Attribution-ShareAlik
 4.0 licence and the Group's conditions: https://www.edrdg.org/edrdg/licence.html.
 This list is derived from them and under the same licence.
 
-1404 that JMdict marks idiomatic and 617 expressions taken by this package's own rule;
-1055 written only in kanji taught in elementary school; 41 marked common.
+1397 that JMdict marks idiomatic and 612 expressions taken by this package's own rule;
+1051 written only in kanji taught in elementary school; 41 marked common.
 
 ## `@johnmorrisdotca/kotoba/shiritori-ja`
 
@@ -1227,7 +1227,7 @@ JA_SHIRITORI: { release: string; rows: string; }
 ```
 
 THE SHIRITORI WORDS. Written by `scripts/word-lists-ja-phrases.mjs` from JMdict,
-release 2026-10-31. Never edited by hand; the monthly refresh
+release 2026-11-04. Never edited by hand; the monthly refresh
 (.github/workflows/jmdict-refresh.yml) runs the script again.
 
 JMdict and KANJIDIC2 are the property of the Electronic Dictionary Research and
@@ -1235,7 +1235,7 @@ Development Group (EDRDG), used under the Creative Commons Attribution-ShareAlik
 4.0 licence and the Group's conditions: https://www.edrdg.org/edrdg/licence.html.
 This list is derived from them and under the same licence.
 
-6393 nouns of JMdict's textbook-common list, one a reading, commonest first. Each row is
+6388 nouns of JMdict's textbook-common list, one a reading, commonest first. Each row is
 reading, word and meaning, separated by tabs (`readShiritoriWords` reads them).
 
 ## `@johnmorrisdotca/kotoba/proverbs-ja`
@@ -1259,7 +1259,7 @@ Development Group (EDRDG), used under the Creative Commons Attribution-ShareAlik
 4.0 licence and the Group's conditions: https://www.edrdg.org/edrdg/licence.html.
 This list is derived from them and under the same licence.
 
-930 entries JMdict marks as proverbs, one a written form, in the order of the reading;
+929 entries JMdict marks as proverbs, one a written form, in the order of the reading;
 409 written only in kanji taught in elementary school; 1 marked common.
 
 ## `@johnmorrisdotca/kotoba/yojijukugo-ja`
@@ -1376,7 +1376,7 @@ distribution of the software and/or database. Title to copyright in this softwar
 shall at all times remain with Princeton University and LICENSEE agrees to preserve same. This list is derived from it, under
 the same licence.
 
-2635 of the 3168 words of the 4-letter English lists have a meaning; each row is the word, a tab and a short line.
+2528 of the 3168 words of the 4-letter English lists have a meaning; each row is the word, a tab and a short line.
 
 ## `@johnmorrisdotca/kotoba/meanings-en-5`
 
@@ -1404,7 +1404,7 @@ distribution of the software and/or database. Title to copyright in this softwar
 shall at all times remain with Princeton University and LICENSEE agrees to preserve same. This list is derived from it, under
 the same licence.
 
-5372 of the 6421 words of the 5-letter English lists have a meaning; each row is the word, a tab and a short line.
+5215 of the 6421 words of the 5-letter English lists have a meaning; each row is the word, a tab and a short line.
 
 ## `@johnmorrisdotca/kotoba/meanings-en-6`
 
@@ -1432,7 +1432,7 @@ distribution of the software and/or database. Title to copyright in this softwar
 shall at all times remain with Princeton University and LICENSEE agrees to preserve same. This list is derived from it, under
 the same licence.
 
-8834 of the 10742 words of the 6-letter English lists have a meaning; each row is the word, a tab and a short line.
+8574 of the 10742 words of the 6-letter English lists have a meaning; each row is the word, a tab and a short line.
 
 ## `@johnmorrisdotca/kotoba/meanings-en`
 

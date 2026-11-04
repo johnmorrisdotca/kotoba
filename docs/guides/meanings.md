@@ -23,13 +23,13 @@ A page passes it as it is: `mountKotoba(element, { words: "en", meanings: englis
 
 - **One short line** of at most 70 characters: the first definition of the word's first entry (a noun before a verb) in Open English WordNet, cut at the first semicolon.
 - **A form of a word** shows the word's line after what it is: `plural of farm: …`, `past form of walk: …`, `comparative of tall: …`, and `form of eat: …` for an irregular one.
-- **Nothing (`null`)** for a word WordNet has no entry for (`from`, `that`: it holds no function words), for any list but English, and for a word that is not for children. A word is left out when its line, or the word, is vulgar, offensive, derogatory, sexual, violent or about drink; the first definition decides, so a word with a rude sense further down (`blue`) keeps its first. No filter is perfect, and a site for children should read what it shows.
+- **Nothing (`null`)** for a word WordNet has no entry for (`from`, `that`: it holds no function words), for any list but English, and for a word that is not for children. A word is left out when it is one the package never hides as an answer (a slur, vulgarity, anything sexual, drink, drugs, killing), or its line, or the word, is vulgar, offensive, derogatory, sexual, violent, about weapons, drink or drugs; the first definition decides, so a word with a rude sense further down (`blue`) keeps its first. No filter is perfect, and a site for children should read what it shows.
 
-It covers 16,841 of the 20,334 words of the 4, 5 and 6-letter lists, and 97% of the answers.
+It covers 16,317 of the 20,331 words of the 4, 5 and 6-letter lists, and 96% of the answers.
 
 ## Only what is asked for
 
-Each length of word has a file of its own (`meanings-en-4`, `meanings-en-5`, `meanings-en-6`, 56 to 193 kB gzipped), fetched the first time a word of that length is asked about and kept. A page that never asks fetches nothing. `readMeanings` turns a file into a map from word to line, for a program that reads the files itself.
+Each length of word has a file of its own (`meanings-en-4`, `meanings-en-5`, `meanings-en-6`, 54 to 187 kB gzipped), fetched the first time a word of that length is asked about and kept. A page that never asks fetches nothing. `readMeanings` turns a file into a map from word to line, for a program that reads the files itself.
 
 ```ts
 import {readMeanings} from "@johnmorrisdotca/kotoba/meanings-en";

@@ -4,18 +4,13 @@
  * A word that may be guessed stays so: a game somebody played, kept or half way through, was checked against the list
  * as it was, so a word JMdict stops listing (やまま, ふかいきり in the release of 2026-11) is never taken away from the
  * lists. The one way out is the bar: a reading no ordinary meaning is left for, because every entry that spells it has
- * JMdict's mark for vulgar, X-rated, sensitive or derogatory on its first sense, the rule the shiritori words use
- * (scripts/word-lists-ja-phrases.mjs). Children play these games.
+ * JMdict's mark for vulgar, X-rated, sensitive or derogatory on its first sense, or a first-sense gloss that names sex or
+ * the sex trade, the rule every list uses (scripts/children-bar.mjs). Children play these games.
  */
+import { japaneseBar } from "./children-bar.mjs";
 
-/** JMdict's marks for a sense that is not for everyone, the same four the idioms and the shiritori words leave out. */
-export const NOT_FOR_EVERYONE = /<misc>&(vulg|X|sens|derog);<\/misc>/;
-
-/** Whether an entry's first sense carries one of those marks: its main meaning is the unfit one. */
-export function firstSenseNotForEveryone(entry) {
-  const first = /<sense>[\s\S]*?<\/sense>/.exec(entry);
-  return first !== null && NOT_FOR_EVERYONE.test(first[0]);
-}
+/** Whether an entry's first sense is not for children: its main meaning is the unfit one (`children-bar.mjs`). */
+export const firstSenseNotForEveryone = (entry) => japaneseBar(entry, "first") !== null;
 
 /** The words a kana list file may guess, read back from the file the last build wrote. */
 export function readAllowed(text, length) {

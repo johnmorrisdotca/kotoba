@@ -94,6 +94,7 @@
  */
 import { createReadStream, readFileSync } from "node:fs";
 import { createInterface } from "node:readline";
+import { barredWords } from "./children-bar.mjs";
 import { writeWordList } from "./word-list-docs.mjs";
 
 const [frPath, dePath, frDictPath, deDictPath, frWiktPath, deWiktPath] = process.argv.slice(2);
@@ -136,31 +137,14 @@ jimmy kevin laila larry laura manon maria marie marta peter petra regis robin ro
 steve tommy audi polen mars
 barbie boeing toyota michel buddha genfer prager berner
 `;
-/**
- * Vulgar, sexual and slur words actually present at these lengths — found by scanning the candidate lists, not guessed
- * blind — and a French word an English reader sees as one ("rape", a grater).
- */
-const FR_VULGAR = `anal baise bite cocu conne cons fesse merde negre negro nique penis pute putes salop seins vagin zizi homo porno hymen
-pede pine bitte etron beuh tapin rape boche ducon clito fion caca pipi vomi fatma nazi teton chier garce sucer viol sexe idiot
-bander bordel chiant chieur encule foutre gerber gouine niquer nichon pisser putain salaud salope sperme nympho gigolo libido
-luxure sexuel suceur gammee fuhrer hetero pubien uretre uriner fesser fessee lecher violer verole herpes puceau vierge salace
-extase toxico debile cretin abruti batard tocard ignare neuneu crotte ordure soutif capote voyeur degueu rectum gyneco youpin
-ricain romano`;
-/** The words a slur is most often made of: a real word to guess, not a puzzle's answer. */
-const FR_PEOPLES = `juif juive eskimo`;
 /** A contraction's stem, split from its apostrophe by the source's own tokeniser (jusqu'à → "jusqu" + "à") — not a word of its own. */
 const FR_FRAGMENTS = `jusqu`;
-const DE_VULGAR = `arsch fick fickt fotze geil geile hure huren kacke kotze mist neger nutte pisse milf after lesbe porno penis vulva titte
-ficke dirne tunte puff popo zicke luder depp busen tussi idiot
-bumsen ficken vögeln muschi pimmel nippel pissen pisser kotzen furzen koitus kondom erotik libido vagina voyeur domina inzest
-geilen kiffen kiffer koksen kokain heroin psycho prolet lusche penner fatzke dussel zicken zickig fresse schwul pfaffe suizid
-tampon saufen säufer schiss pinkel poppen eunuch`;
-const DE_PEOPLES = `jude arier moslem türken eskimo`;
 
 const NOT_AN_ANSWER = {
-  fr: new Set(`${FR_NAMES} ${FR_VULGAR} ${FR_PEOPLES} ${FR_FRAGMENTS}`.split(/\s+/).filter(Boolean)),
-  de: new Set(`${DE_NAMES} ${DE_VULGAR} ${DE_PEOPLES}`.split(/\s+/).filter(Boolean)),
+  fr: new Set(`${FR_NAMES} ${FR_FRAGMENTS}`.split(/\s+/).filter(Boolean)),
+  de: new Set(DE_NAMES.split(/\s+/).filter(Boolean)),
 };
+for (const lang of ["fr", "de"]) for (const word of barredWords(lang)) NOT_AN_ANSWER[lang].add(word);
 
 const FOLD_FR = {
   é: "e",

@@ -41,14 +41,14 @@
  * entries it marks as yojijukugo (misc `&yoji;`). JMdict decides what is one; this package
  * adds nothing. The meanings are the plain glosses of the sense that carries the mark.
  *
- * Every list leaves out what JMdict marks vulgar, X-rated, sensitive or derogatory:
- * these lists turn up in children's games. An idiom, proverb or compound is left out for
- * such a mark on any of its senses, a shiritori word for one on its first sense. A proverb or
- * compound is also left out when any gloss of its entry names sex or the sex trade, which
- * JMdict does not always mark (朝雲暮雨 is "sexual liaison", unmarked).
+ * Every list leaves out what is not for children (`scripts/children-bar.mjs`, the one rule every list script uses): an
+ * entry JMdict marks vulgar, X-rated, sensitive or derogatory, or one whose gloss names sex or the sex trade, which JMdict
+ * does not always mark (朝雲暮雨 is "sexual liaison", unmarked). An idiom, proverb or compound is left out for either on
+ * any of its senses, a shiritori word on its first sense.
  */
 import { existsSync, readFileSync } from "node:fs";
 import { gunzipSync } from "node:zlib";
+import { japaneseBar, sensesOf } from "./children-bar.mjs";
 import { writeWordList } from "./word-list-docs.mjs";
 
 const [JMDICT, KANJIDIC] = process.argv.slice(2);
@@ -62,9 +62,6 @@ for (const file of [JMDICT, KANJIDIC])
     process.exit(1);
   }
 
-const NOT_FOR_EVERYONE = /&(vulg|X|sens|derog);/;
-const ADULT_GLOSS =
-  /\b(sex|sexual|sexually|erection|genital\w*|penis|vagina|prostitut\w*|whore|brothel|mistress|concubine|courtesan|adulter\w*|lustful|nipple)\b/i;
 const HAN = /\p{Script=Han}/u;
 const KATAKANA = /\p{Script=Katakana}/u;
 const ONLY_KANA = /^[ぁ-ゖァ-ヶー]+$/u;
@@ -184,8 +181,6 @@ function glossesOf(sense) {
   return first === undefined ? [] : [first, ...kept.filter((text) => text !== first)];
 }
 
-const sensesOf = (entry) => [...entry.matchAll(/<sense>[\s\S]*?<\/sense>/g)].map((match) => match[0]);
-
 function takenAsExpression(entry, written, meaning) {
   if (!entry.includes("&exp;") || !PREDICATE.test(entry)) return false;
   const characters = [...written];
@@ -217,7 +212,14 @@ if (taught.size !== 1026) throw new Error(`KANJIDIC2 gives ${taught.size} elemen
 const idioms = new Map();
 const words = new Map();
 const sayings = { proverb: new Map(), yoji: new Map() };
-const leftOut = { idioms: [], words: 0, proverb: [], yoji: [] };
+const leftOut = { idioms: [], words: [], proverb: [], yoji: [] };
+/** Why each entry was left out ("mark" or "gloss", `children-bar.mjs`), by list. */
+const why = {
+  idioms: { mark: 0, gloss: 0 },
+  words: { mark: 0, gloss: 0 },
+  proverb: { mark: 0, gloss: 0 },
+  yoji: { mark: 0, gloss: 0 },
+};
 
 for (const match of jmdict.matchAll(/<entry>[\s\S]*?<\/entry>/g)) {
   const entry = match[0];
@@ -226,7 +228,7 @@ for (const match of jmdict.matchAll(/<entry>[\s\S]*?<\/entry>/g)) {
   if (reading === null || reading === undefined) continue;
   const word = written ?? reading;
   const senses = sensesOf(entry);
-  const barred = NOT_FOR_EVERYONE.test(entry);
+  const barred = japaneseBar(entry);
 
   const marked = senses.find((sense) => sense.includes("&id;"));
   const meanings = glossesOf(marked ?? senses[0] ?? "");
@@ -239,8 +241,10 @@ for (const match of jmdict.matchAll(/<entry>[\s\S]*?<\/entry>/g)) {
           ? "expression"
           : null;
     if (kind !== null) {
-      if (barred) leftOut.idioms.push(word);
-      else if (!idioms.has(word)) {
+      if (barred !== null) {
+        leftOut.idioms.push(word);
+        why.idioms[barred] += 1;
+      } else if (!idioms.has(word)) {
         const kanji = [...word].filter((character) => HAN.test(character));
         idioms.set(word, {
           idiom: word,
@@ -261,8 +265,9 @@ for (const match of jmdict.matchAll(/<entry>[\s\S]*?<\/entry>/g)) {
     const carrying = senses.find((sense) => sense.includes(mark));
     const glosses = carrying === undefined ? [] : glossesOf(carrying);
     if (glosses.length === 0 || sayings[kind].has(word)) continue;
-    if (barred || ADULT_GLOSS.test(all(entry, "gloss").join(" "))) {
+    if (barred !== null) {
       leftOut[kind].push(word);
+      why[kind][barred] += 1;
       continue;
     }
     const kanji = [...word].filter((character) => HAN.test(character));
@@ -280,8 +285,12 @@ for (const match of jmdict.matchAll(/<entry>[\s\S]*?<\/entry>/g)) {
   if (!/<(?:ke|re)_pri>ichi1</.test(entry) || !first.includes("<pos>&n;</pos>")) continue;
   if (first.includes("&exp;") || first.includes("&n-pr;")) continue;
   // The first sense decides here: 犬 is a dog, whatever else JMdict says it can be called.
-  if (NOT_FOR_EVERYONE.test(first) || /&(arch|obs|rare|hist);/.test(first)) {
-    leftOut.words += 1;
+  const unfit = japaneseBar(entry, "first");
+  if (unfit !== null || /&(arch|obs|rare|hist);/.test(first)) {
+    if (unfit !== null) {
+      leftOut.words.push(word);
+      why.words[unfit] += 1;
+    }
     continue;
   }
   if (
@@ -409,7 +418,7 @@ export const ${name}: PackedSayings = {
 `,
   );
   console.log(
-    `${kind}: ${rows.length} (${sayingCounts[kind].elementary} elementary, ${sayingCounts[kind].common} common); left out as not for everyone: ${leftOut[kind].join(" ")}`,
+    `${kind}: ${rows.length} (${sayingCounts[kind].elementary} elementary, ${sayingCounts[kind].common} common); left out as not for children: ${leftOut[kind].length} (${why[kind].mark} marked, ${why[kind].gloss} by gloss): ${leftOut[kind].join(" ")}`,
   );
 }
 
@@ -417,5 +426,9 @@ console.log(`JMdict ${release}, KANJIDIC2 ${kanjidicRelease}: ${taught.size} ele
 console.log(
   `idioms: ${idiomRows.length} (${counts.idiom} idiom, ${counts.expression} expression, ${counts.elementary} elementary, ${counts.common} common)`,
 );
-console.log(`left out as not for everyone: ${leftOut.idioms.join(" ")}`);
-console.log(`shiritori words: ${wordRows.length} (${leftOut.words} left out by JMdict's marks)`);
+console.log(
+  `idioms left out as not for children: ${leftOut.idioms.length} (${why.idioms.mark} marked, ${why.idioms.gloss} by gloss): ${leftOut.idioms.join(" ")}`,
+);
+console.log(
+  `shiritori words: ${wordRows.length}; left out as not for children: ${leftOut.words.length} (${why.words.mark} marked, ${why.words.gloss} by gloss): ${leftOut.words.join(" ")}`,
+);

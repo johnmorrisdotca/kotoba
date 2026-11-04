@@ -19,13 +19,15 @@
  *   still long, at a word.
  * - A word that is not an entry itself but is a regular form of one (arms, walked, taller) or one of the entry's irregular
  *   forms (ate) shows the entry's line after "plural of arm:", "past form of walk:" and so on.
- * - Children play: a word is left out when it or its line says it is vulgar, offensive, derogatory, obscene or a slur, or names
- *   sex, killing, violence or the body parts and functions a child's dictionary skips. The line is the first sense only, so a
+ * - Children play: a word is left out when it is one the bar names (`wordBar`) or it or its line (`lineBar`, both in `scripts/children-bar.mjs`) says it is vulgar, offensive,
+ *   derogatory, obscene or a slur, or names sex, killing, violence, weapons, drink, drugs or the body parts and functions a
+ *   child's dictionary skips. The line is the first sense only, so a
  *   word with a rude sense further down (blue, screw) keeps its first.
  */
 import { readFileSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 import { gunzipSync } from "node:zlib";
+import { lineBar, wordBar } from "./children-bar.mjs";
 import { writeWordList } from "./word-list-docs.mjs";
 
 const [FILE] = process.argv.slice(2);
@@ -70,8 +72,6 @@ for (const match of xml.matchAll(
   }
 }
 
-const NOT_FOR_CHILDREN =
-  /\b(vulgar|obscene|offensive|derogatory|disparag\w*|slur|pejorative|sexual\w*|sex appeal|has sex|have sex|having sex|sex cells|gigolo\w*|damn\w*|expletive\w*|hells?|drunk\w*|inebriat\w*|intoxicat\w*|erotic\w*|genital\w*|penis|vagina|testicle\w*|breast\w*|buttock\w*|anus|excrement\w*|feces|faeces|urinat\w*|urine|fornicat\w*|prostitut\w*|whore\w*|rape\w*|kill\w*|murder\w*|slay\w*|suicid\w*|tortur\w*|massacre\w*|lust\w*|nude|naked|pornograph\w*|orgasm\w*|masturbat\w*|intercourse|copulat\w*|mistress|concubine|brothel)\b/i;
 const LONGEST = 70;
 
 /** The line for a definition: up to the first semicolon, and a word's end if that is still long. */
@@ -90,8 +90,7 @@ function commonest(list) {
 function ownLine(list) {
   const entry = commonest(list);
   const first = definitions.get(entry.senses[0]);
-  if (first === undefined || first === "" || NOT_FOR_CHILDREN.test(first) || NOT_FOR_CHILDREN.test(entry.word))
-    return null;
+  if (first === undefined || first === "" || lineBar(first) || lineBar(entry.word)) return null;
   return lineOf(first);
 }
 
@@ -117,6 +116,7 @@ const RULES = [
 ];
 
 function lineFor(word) {
+  if (wordBar(word, "en") || lineBar(word)) return null;
   const own = entries.get(word);
   if (own !== undefined) return ownLine(own);
   for (const entry of irregular.get(word) ?? []) {

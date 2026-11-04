@@ -6,6 +6,26 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+A minor version: nothing that 1.7.0 gave is taken away except what children should not have been handed. Every list now keeps out what is not for them, by one rule.
+
+### Changed
+
+- **One bar for every list** (MODULES-386). `scripts/children-bar.mjs` holds it, and every script that writes a list calls it: the JMdict scripts (`word-lists-ja-phrases.mjs`, `word-lists-ja.mjs`, which the monthly refresh runs), the English, French, German and pop-culture lists and the English meanings. For JMdict it is two things: a sense JMdict marks vulgar, X-rated, sensitive or derogatory, and a gloss that names sex or the sex trade, which JMdict does not always mark. The proverbs and compounds had it since 1.6.0; the idioms, the shiritori words and the kana lists had only the marks (the shiritori words and the kana readings, on the first sense). The monthly refresh now also runs `src/childrenBar.test.js` before it leaves a branch, so a JMdict release that lets a known bad word through fails there, and it commits `scripts/kana-barred.json` with the lists. A test (`src/childrenBar.test.js`) holds the known bad words out of every list the package ships and says what only looks like them (rapeseed, sperm whales, "social intercourse", "mistress of a house").
+- **Japanese lists, entries lost to the bar** (the lists are made again from JMdict 2026-11-04; the idioms and shiritori words were from 2026-10-31):
+  - Idioms 2,021 to 2,009 (12 out): 股を開く, 闇の女, 籠の鳥, お茶を挽く, 気をやる, 鼻の下を伸ばす, 身を沈める, 手が付く, 口を掛ける, 尻が軽い, 金玉が上がったり下がったり, 命の水.
+  - Shiritori words 6,393 to 6,388 (6 words out, 異性 replaced by 威勢 for the reading いせい): セックス, 売春, 浮気, 異性, 性別, 挿入.
+  - Proverbs 930 to 929 (猫にまたたびお女郎に小判). Compounds 1,831, none lost.
+  - Kana words that may be guessed, 3 kana 16,371 to 16,296, 4 kana 38,844 to 38,647, 5 kana 35,298 to 35,155: 75, 199 and 146 readings are newly barred (えろい, おなに, ぽるの, ふりん, れいぷ, あいじん, ちくび, せっくす, ばいしゅん, いんらん, せいどれい, ふぇらちお ...), each with its English in `scripts/kana-barred.json`, and a few join with the newer JMdict. A reading another, ordinary entry also spells stays (うわき is also 上木, a printing term; it was never an answer). The answers lose せいてき, せいべつ (4 kana) and そうにゅう (5 kana); a gloss now bars an answer only on the entry's first sense, because おんな, だんな, むすこ and できる have a sexual sense further down.
+- **English answers, entries lost** (the words that may be guessed are not changed: refusing a real word is the one thing a word puzzle must not do). Slurs and vulgarity were out already; drink, drugs, killing, weapons, and insults a player could read as aimed at them are now out as well:
+  - 4 letters 1,463 to 1,447: beer, bomb, brew, drug, dumb, dung, gore, jerk, kill, rump, slay, snot, stab, teat, ugly, wine.
+  - 5 letters 2,036 to 2,016: abuse, blood, cider, cigar, drunk, fatty, feces, groin, lager, loser, naked, opium, rifle, shoot, slain, slave, tipsy, udder, urine, vodka.
+  - 6 letters 2,965 to 2,951: addict, bloody, brandy, bullet, corpse, dagger, kidnap, liquor, manure, murder, pistol, sherry, smoker, weapon.
+  - The easy answers lose 8, 8 and 9 (786 to 778, 880 to 872, 1,043 to 1,034).
+- **French and German answers, entries lost** (the dictionaries are not at hand to make them again, so these were taken out of the lists as they stood; the script now drops the same words, and the easy half may move by a word when it next runs). French 4 letters 613 to 608 (ivre, rhum, sang, sein, tuer), 5 letters 1,319 to 1,311 (biere, boire, bombe, fumer, fusil, saoul, tabac, vodka), 6 letters 1,810 to 1,806 (alcool, cigare, drogue, whisky); German 4 letters 677 to 673 (bier, blut, mord, wein), 5 letters 1,139 to 1,132 (bombe, brust, droge, nackt, tabak, töten, waffe), 6 letters 1,702 to 1,701 (whisky). The pop-culture answers lose none.
+- **English meanings, 16,841 to 16,317** (524 fewer words with a line; 96% of the answers). The meaning of a word the bar names (`slut`, `cunt`, `piss`, `tits`, `rapes`, `beer`, `wine`, `vodka`, `kill`, `pistol`) is no longer shown, nor a line that names drink, drugs, weapons or killing; 1.7.0 showed `beer: a general name for alcoholic beverages` and `pistol: a firearm that is held and fired with one hand`. A line that only mentions blood (`lungs`, `vein`) is kept.
+- A list that loses a word deals another pack, so a day's word from `dailyWord` differs from 1.7.0 for English, French, German and kana (the README's example for 2026-10-01 is now `idler`, not `elect`; see "What the word depends on"). Pin the version, or keep your own copy of a list, for a word that stays put.
+- The package is a little smaller: the lists lost entries and the bundle sizes in `docs/bundle-size.json` are measured again.
+
 ## [1.7.0] - 2026-11-04
 
 A minor version: nothing that 1.6.0 gave is taken away. English meanings, for the English game.

@@ -19,8 +19,8 @@
  * stays), and stays so: the lists before are kept whole (a game somebody played was
  * checked against them), less the readings barred below. THE BAR: a reading is barred
  * from the whole list, answers and guesses alike, when every entry that spells it has
- * JMdict's mark for vulgar, X-rated, sensitive or derogatory on its first sense (the
- * rule the shiritori words use), so it has no ordinary meaning left; the barred words
+ * JMdict's mark for vulgar, X-rated, sensitive or derogatory, or a gloss naming sex or
+ * the sex trade, on its first sense (`scripts/children-bar.mjs`, the rule every list uses), so it has no ordinary meaning left; the barred words
  * and their English are written to scripts/kana-barred.json for a person to read. The answers are the COMMONEST readings, ranked by a rule rather than
  * picked by hand, and about as many as English has (John, 2026-09-25: "a
  * programmatic way to narrow down words to best words… shouldn't be too much
@@ -47,6 +47,7 @@
  */
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { gunzipSync } from "node:zlib";
+import { japaneseBar } from "./children-bar.mjs";
 import { firstSenseNotForEveryone, keepGuessable, readAllowed } from "./kana-keep.mjs";
 import { writeWordList } from "./word-list-docs.mjs";
 
@@ -225,7 +226,10 @@ for (const entry of xml.split("<entry>").slice(1)) {
   const pos = [...entry.matchAll(/<pos>&([^;]+);<\/pos>/g)].map((match) => match[1]);
   const misc = [...entry.matchAll(/<misc>&([^;]+);<\/misc>/g)].map((match) => match[1]);
   // A word is fit to hide when some sense is a kind of word a puzzle hides and nothing marks it unfit.
-  const fit = pos.some((each) => !NOT_ANSWER_POS.has(each)) && !misc.some((each) => NOT_ANSWER_MISC.has(each));
+  const fit =
+    pos.some((each) => !NOT_ANSWER_POS.has(each)) &&
+    !misc.some((each) => NOT_ANSWER_MISC.has(each)) &&
+    japaneseBar(entry, "first") === null;
   for (const [, element] of entry.matchAll(/<r_ele>([\s\S]*?)<\/r_ele>/g)) {
     const reading = toHiragana(/<reb>([^<]+)<\/reb>/.exec(element)[1]);
     if (!HIRAGANA.test(reading)) continue;

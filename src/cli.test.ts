@@ -101,8 +101,8 @@ describe("the command line", () => {
   it("gives the word of a day, the same one the package gives", async () => {
     const answers = readWordLists(EN_WORDS, 5)!.answers;
     const ran = await runCli(["daily", "--date", "2026-10-01"]);
-    expect(ran).toEqual({ code: 0, out: "2026-10-01  elect\n", err: "" });
-    expect(dailyWord(answers, "2026-10-01", { salt: "en-5-answers" })).toBe("elect");
+    expect(ran).toEqual({ code: 0, out: "2026-10-01  idler\n", err: "" });
+    expect(dailyWord(answers, "2026-10-01", { salt: "en-5-answers" })).toBe("idler");
     const json = JSON.parse((await runCli(["daily", "--date", "2026-10-01", "--json"])).out);
     expect(json).toMatchObject({
       day: "2026-10-01",
@@ -110,9 +110,9 @@ describe("the command line", () => {
       size: 5,
       tier: "answers",
       salt: "en-5-answers",
-      word: "elect",
+      word: "idler",
     });
-    expect(answers[json.index]).toBe("elect");
+    expect(answers[json.index]).toBe("idler");
     const easy = JSON.parse((await runCli(["daily", "--date", "2026-10-01", "--tier", "easy", "--json"])).out);
     expect(readWordLists(EN_WORDS, 5)!.easy).toContain(easy.word);
     expect(easy.salt).toBe("en-5-easy");

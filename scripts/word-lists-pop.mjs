@@ -28,6 +28,7 @@
  */
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { barredWords } from "./children-bar.mjs";
 import { writeWordList } from "./word-list-docs.mjs";
 
 const FINAL = process.argv[2];
@@ -43,17 +44,10 @@ const LENGTHS = [3, 4, 5, 6, 7];
 const OWN_GUESS_LENGTHS = [3, 7];
 
 /**
- * Never an answer: Gomoji's own list of such words (`word-lists.mjs`), and the
+ * Never an answer: the shared list of such words (`children-bar.mjs`), and the
  * pop-culture words a children's site keeps out, John's examples first.
  */
-const NEVER = new Set(
-  `gyatt twerk twerking arse bitch boner boobs booby butt crap damn dick dildo fart fuck hell piss shit slut tits turd twat
-  wank whore pussy prick horny porn rape sexy penis semen anal anus nazi queer skank nude lust booty thong coke dope moron
-  idiot scum weed booze vodka beer wine sake rum poker casino bet vape drugs kill murder blood gore uranus
-  bugger condom erotic heroin incest nipple orgasm vagina virgin junkie racist stupid retard breast`
-    .split(/\s+/)
-    .filter(Boolean),
-);
+const NEVER = new Set([...barredWords("en"), ...`gyatt twerk twerking sake poker casino bet uranus`.split(/\s+/)]);
 
 const problems = [];
 const categories = [];

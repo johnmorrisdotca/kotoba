@@ -18,8 +18,8 @@
  * An answer is a word anybody would be glad to see. Plurals and past tenses
  * whose stem is itself a word are left out of the answers (a puzzle whose
  * answer is "cats" is a puzzle about "cat"), as are slurs, vulgarity,
- * anything sexual, drugs and insults a player could read as aimed at them, by
- * the list below. All of them may still be GUESSED: the allowed list is every
+ * anything sexual, drink, drugs, killing and insults a player could read as aimed at them,
+ * by the list in `scripts/children-bar.mjs`. All of them may still be GUESSED: the allowed list is every
  * word, because refusing a real word is the one thing a word puzzle must not
  * do.
  *
@@ -29,6 +29,7 @@
  */
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { wordBar } from "./children-bar.mjs";
 import { writeWordList } from "./word-list-docs.mjs";
 
 const FINAL = process.argv[2];
@@ -38,19 +39,6 @@ if (FINAL === undefined) {
 }
 const OUT = "src/lists/words-en.data.ts";
 const LENGTHS = [4, 5, 6];
-
-const NOT_AN_ANSWER = new Set(
-  `arse arsed bitch boner boobs booby boob butt butts crap cunt damn dick dicks dildo dyke fag fags fart farts fuck
-  fucks gook hell piss pissy shit slut sluts spic tits titty turd twat wank whore pussy prick horny bimbo homo negro
-  kike pimp porn rape raped rapes sexy penis semen sperm anal anus coon dago gypsy honky jizz kinky nazi queer skank
-  slag spunk tramp wench wop bong booze crack weed pee poop puke vomit pubic nude nudes lust lusty balls ballsy bust
-  busty strip chink lynch noose orgy lewd smut hump booty thong puss coke dope moron idiot scum
-  bugger condom erotic faggot harlot heroin incest molest nipple orgasm raping rapist sexing sexism sexist sexual sodomy
-  vagina rectum rectal testis herpes fetish pantie hooter crotch nudity virgin virile carnal seduce lewder sadism sadist
-  junkie puking racism racist stupid dumber sucker cretin midget retard weirdo nitwit breast abuser`
-    .split(/\s+/)
-    .filter(Boolean),
-);
 
 function wordsAt(sizes) {
   const found = new Set();
@@ -100,7 +88,7 @@ const copyright = readFileSync(join(FINAL, "..", "Copyright"), "latin1")
 const parts = [];
 for (const length of LENGTHS) {
   const answers = [...common]
-    .filter((word) => word.length === length && !inflected(word) && !NOT_AN_ANSWER.has(word))
+    .filter((word) => word.length === length && !inflected(word) && !wordBar(word, "en"))
     .sort();
   const easyAnswers = answers.filter((word) => easy.has(word));
   const allowed = [...wide].filter((word) => word.length === length).sort();

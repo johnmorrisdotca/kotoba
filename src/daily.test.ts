@@ -104,4 +104,4 @@ function dayOf(number: number): string {
   return dayKey(new Date(number * 86_400_000));
 }
 
-const PINNED = ["atone", "chose", "tenth"];
+const PINNED = ["windy", "messy", "state"];

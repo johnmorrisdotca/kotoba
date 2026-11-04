@@ -13,7 +13,7 @@ const LENGTHS = [3, 4, 5];
 const barred = JSON.parse(readFileSync(new URL("../scripts/kana-barred.json", import.meta.url), "utf8"));
 
 /** The least each list may hold: what it held when the lists were last made, so a build that drops words fails here. A list that grows raises it. */
-const FLOOR = { 3: 16371, 4: 38844, 5: 35298 };
+const FLOOR = { 3: 16296, 4: 38647, 5: 35155 };
 /** Words JMdict's release of 2026-11 stopped listing, which a game may have used: they stay. */
 const GONE_FROM_JMDICT = { 3: ["やまま"], 5: ["ふかいきり", "うまふぶき"] };
 
@@ -50,11 +50,12 @@ describe("the words that may be guessed stay so", () => {
 });
 
 describe("the bar on what is not for a child", () => {
-  it("is a reading every entry of which has a vulgar, X-rated, sensitive or derogatory first sense", () => {
+  it("is a reading every entry of which has a vulgar, X-rated, sensitive or derogatory first sense, or a first-sense gloss that names sex or the sex trade", () => {
     const entry = (misc) =>
       `<entry><sense><misc>&${misc};</misc><gloss>a</gloss></sense><sense><gloss>b</gloss></sense></entry>`;
     for (const mark of ["vulg", "X", "sens", "derog"]) expect(firstSenseNotForEveryone(entry(mark))).toBe(true);
     expect(firstSenseNotForEveryone(entry("col"))).toBe(false);
+    expect(firstSenseNotForEveryone("<entry><sense><gloss>prostitution</gloss></sense></entry>")).toBe(true);
     expect(
       firstSenseNotForEveryone(
         "<entry><sense><gloss>a</gloss></sense><sense><misc>&vulg;</misc><gloss>b</gloss></sense></entry>",

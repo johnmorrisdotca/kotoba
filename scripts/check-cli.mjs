@@ -54,7 +54,7 @@ check("a guess marked", ["mark", "crane", "react"], {
   err: "",
   out: "c r a n e\n◐ ◐ ● ○ ◐\n● right place, ◐ elsewhere in the word, ○ not in the word\n",
 });
-check("the word of a day", ["daily", "--date", "2026-10-01"], { code: 0, err: "", out: "2026-10-01  elect\n" });
+check("the word of a day", ["daily", "--date", "2026-10-01"], { code: 0, err: "", out: "2026-10-01  idler\n" });
 check("the word of a day by a place's midnight", ["daily", "--zone", "Asia/Tokyo"], {
   code: 0,
   err: "",

@@ -27,9 +27,11 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
       - uses: actions/setup-node@v7
         with:
           node-version: 24
+          cache: pnpm
       - name: Fetch the newest JMdict
         run: |
           curl -sSfL -o "$RUNNER_TEMP/JMdict_e.gz" http://ftp.edrdg.org/pub/Nihongo/JMdict_e.gz
@@ -39,9 +41,15 @@ jobs:
         run: node scripts/word-lists-ja.mjs "$RUNNER_TEMP/JMdict_e.gz"
       - name: Write the idioms, the proverbs, the compounds and the shiritori words
         run: node scripts/word-lists-ja-phrases.mjs "$RUNNER_TEMP/JMdict_e.gz" "$RUNNER_TEMP/kanjidic2.xml.gz"
+      # Both scripts leave out what is not for children through scripts/children-bar.mjs, the one rule every list uses;
+      # this holds the known bad words out of what they wrote, so a release that lets one through fails here.
+      - name: Hold the bar on what is not for children
+        run: |
+          pnpm install --frozen-lockfile
+          pnpm exec vitest run src/childrenBar.test.js src/kanaAllowed.test.js
       - name: Leave the new lists on a branch, and say so by failing
         run: |
-          if git diff --quiet -- src/lists; then
+          if git diff --quiet -- src/lists scripts/kana-barred.json; then
             echo "The Japanese word and tile data are what JMdict's newest release makes. Nothing to land."
             exit 0
           fi
@@ -49,7 +57,7 @@ jobs:
           git config user.name "$GITHUB_ACTOR"
           git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
           git checkout -b "$branch"
-          git add src/lists
+          git add src/lists scripts/kana-barred.json
           git commit -m "The kana word lists from JMdict's newest release"
           git push --force origin "$branch"
           echo "::error::JMdict changed the kana lists. Land $branch on main with a new version in CHANGELOG.md and a tag, then delete the branch; itsutsu.com takes the new version as a dependency."

@@ -77,10 +77,10 @@ describe("the README in 30 seconds", () => {
 describe("the README on the rules alone", () => {
   it("the word of the day, and a round through a guess, come to what the comments say", async () => {
     says(
-      'dailyWord(five.answers, "2026-10-01", { salt: "en-5-answers" });   // "elect": the same on every machine, for everybody',
+      'dailyWord(five.answers, "2026-10-01", { salt: "en-5-answers" });   // "idler": the same on every machine, for everybody',
     );
     const five = await english(5);
-    expect(dailyWord(five.answers, "2026-10-01", { salt: "en-5-answers" })).toBe("elect");
+    expect(dailyWord(five.answers, "2026-10-01", { salt: "en-5-answers" })).toBe("idler");
     let round = startWordGame("en", 5, "crane");
     for (const key of "react") round = typeWordGame(round, key);
     const sent = submitWordGame(round, five);
@@ -91,7 +91,7 @@ describe("the README on the rules alone", () => {
 
   it("the daily lines come to what they say", async () => {
     const five = await english(5);
-    says('dailyWord(five.answers, "2026-10-01", { salt: "en-5-answers" });   // "elect"');
+    says('dailyWord(five.answers, "2026-10-01", { salt: "en-5-answers" });   // "idler"');
     says('dayKey(new Date("2026-10-01T23:30:00Z"), "Asia/Tokyo");            // "2026-10-02"');
     expect(dayKey(new Date("2026-10-01T23:30:00Z"), "Asia/Tokyo")).toBe("2026-10-02");
     expect(

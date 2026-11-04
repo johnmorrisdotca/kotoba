@@ -95,8 +95,8 @@ npx @johnmorrisdotca/kotoba check crane
 - **A word of the day** (`dailyWord`), the same for everybody, every word once
   before any comes round again.
 - **Shiritori**, the Japanese word chain: what a word starts and ends on, house
-  rules, a judge for each word, and a list of 6,393 everyday nouns to play from.
-- **Japanese idioms, proverbs and four-character compounds**: 2,021 set phrases, 930 proverbs and 1,831 compounds from JMdict with their readings and English meanings, nothing vulgar or derogatory.
+  rules, a judge for each word, and a list of 6,388 everyday nouns to play from.
+- **Japanese idioms, proverbs and four-character compounds**: 2,009 set phrases, 929 proverbs and 1,831 compounds from JMdict with their readings and English meanings, nothing vulgar, derogatory or about sex.
 - **A board you can put on a page** (`/play`), with the keyboards of English,
   French (AZERTY), German (QWERTZ, with ä ö ü) and kana typed in romaji; marks that never rely on colour alone; and CSS variables to theme it.
 - **A command line**: look a word up, list a list, mark a guess, give the word
@@ -221,7 +221,7 @@ import { dailyWord, markGuess, readWordLists, startWordGame, submitWordGame, typ
 const { EN_WORDS } = await import("@johnmorrisdotca/kotoba/words-en");
 const five = readWordLists(EN_WORDS, 5)!;
 
-dailyWord(five.answers, "2026-10-01", { salt: "en-5-answers" });   // "elect": the same on every machine, for everybody
+dailyWord(five.answers, "2026-10-01", { salt: "en-5-answers" });   // "idler": the same on every machine, for everybody
 
 let round = startWordGame("en", 5, "crane");          // a round is plain data
 for (const key of "react") round = typeWordGame(round, key);
@@ -393,7 +393,7 @@ import { loadWordList } from "@johnmorrisdotca/kotoba/load";
 
 const five = (await loadWordList("en", 5))!;
 const salt = "en-5-answers";
-console.log(dailyWord(five.answers, "2026-10-01", { salt }));          // → elect
+console.log(dailyWord(five.answers, "2026-10-01", { salt }));          // → idler
 const instant = new Date("2026-10-01T23:30:00Z");
 console.log(dayKey(instant, "Asia/Tokyo"), dayKey(instant));           // → 2026-10-02 2026-10-01
 console.log(dailyWord(five.answers, instant, { zone: "Asia/Tokyo", salt }) === dailyWord(five.answers, "2026-10-02", { salt }));  // → true
@@ -607,11 +607,11 @@ may be guessed.
 | `@johnmorrisdotca/kotoba/pop-answers` | `POP_ANSWERS`, `POP_CATEGORIES` | Pop-culture answers, each with its category as a clue |
 | `@johnmorrisdotca/kotoba/pop-guesses` | `POP_GUESSES` | Dictionary guesses at three and seven letters for the pop list |
 | `@johnmorrisdotca/kotoba/kana-3`, `/kana-4`, `/kana-5` | `JA_WORDS_3`, `JA_WORDS_4`, `JA_WORDS_5` | Japanese words of three, four and five kana, packed; read with `unpack` |
-| `@johnmorrisdotca/kotoba/idioms-ja` | `JA_IDIOMS` | 2,021 Japanese set phrases: written form, reading, English meanings, and whose judgement put each there; read with `readIdioms` |
-| `@johnmorrisdotca/kotoba/shiritori-ja` | `JA_SHIRITORI` | 6,393 everyday Japanese nouns, one a reading, commonest first, for a word chain; read with `readShiritoriWords` |
+| `@johnmorrisdotca/kotoba/idioms-ja` | `JA_IDIOMS` | 2,009 Japanese set phrases: written form, reading, English meanings, and whose judgement put each there; read with `readIdioms` |
+| `@johnmorrisdotca/kotoba/shiritori-ja` | `JA_SHIRITORI` | 6,388 everyday Japanese nouns, one a reading, commonest first, for a word chain; read with `readShiritoriWords` |
 | `@johnmorrisdotca/kotoba/meanings-en` | `englishMeaning`, `readMeanings` | What an English word means, one short line, from Open English WordNet: `englishMeaning(word, words)` fetches the file for the word's length |
 | `@johnmorrisdotca/kotoba/meanings-en-4`, `/meanings-en-5`, `/meanings-en-6` | `EN_MEANINGS_4`, `EN_MEANINGS_5`, `EN_MEANINGS_6` | Those files: 2,635, 5,372 and 8,834 words, each a line; read with `readMeanings` |
-| `@johnmorrisdotca/kotoba/proverbs-ja`, `/yojijukugo-ja` | `JA_PROVERBS`, `JA_YOJIJUKUGO` | 930 proverbs and 1,831 four-character compounds, each with its reading and English meanings; read with `readSayings` |
+| `@johnmorrisdotca/kotoba/proverbs-ja`, `/yojijukugo-ja` | `JA_PROVERBS`, `JA_YOJIJUKUGO` | 929 proverbs and 1,831 four-character compounds, each with its reading and English meanings; read with `readSayings` |
 
 `readWordLists(data, size)` reads one length of an alphabet list; `unpack(packed,
 size)` reads a kana list; `loadWordList(language, size)` (`/load`) does either by
@@ -620,18 +620,18 @@ the lists):
 
 | List | Size | Easy | Answers | Allowed |
 | --- | --- | --- | --- | --- |
-| English | 4 | 786 | 1463 | 3168 |
-| English | 5 | 880 | 2036 | 6421 |
-| English | 6 | 1043 | 2965 | 10742 |
-| Français | 4 | 307 | 613 | 1731 |
-| Français | 5 | 660 | 1319 | 4489 |
-| Français | 6 | 905 | 1810 | 8773 |
-| Deutsch | 4 | 339 | 677 | 1976 |
-| Deutsch | 5 | 570 | 1139 | 5032 |
-| Deutsch | 6 | 851 | 1702 | 10608 |
-| かな | 3 | 900 | 2000 | 16371 |
-| かな | 4 | 900 | 2000 | 38844 |
-| かな | 5 | 900 | 2000 | 35298 |
+| English | 4 | 778 | 1447 | 3168 |
+| English | 5 | 872 | 2016 | 6421 |
+| English | 6 | 1034 | 2951 | 10742 |
+| Français | 4 | 302 | 608 | 1731 |
+| Français | 5 | 652 | 1311 | 4489 |
+| Français | 6 | 901 | 1806 | 8773 |
+| Deutsch | 4 | 335 | 673 | 1976 |
+| Deutsch | 5 | 564 | 1132 | 5032 |
+| Deutsch | 6 | 850 | 1701 | 10608 |
+| かな | 3 | 900 | 2000 | 16296 |
+| かな | 4 | 900 | 2000 | 38647 |
+| かな | 5 | 900 | 2000 | 35155 |
 
 ## The rules
 
@@ -673,7 +673,7 @@ import { loadWordList } from "@johnmorrisdotca/kotoba/load";
 
 const five = (await loadWordList("en", 5))!;
 
-dailyWord(five.answers, "2026-10-01", { salt: "en-5-answers" });   // "elect"
+dailyWord(five.answers, "2026-10-01", { salt: "en-5-answers" });   // "idler"
 dailyWord(five.answers, new Date(), { zone: "Asia/Tokyo", salt: "en-5-answers" });   // today's word at Tokyo's midnight
 dayKey(new Date("2026-10-01T23:30:00Z"), "Asia/Tokyo");            // "2026-10-02"
 ```
@@ -767,10 +767,10 @@ The meanings are the host's, and so is their licence and their credit, except th
 
 **English meanings are in the package.** `englishMeaning(word, words)` from `@johnmorrisdotca/kotoba/meanings-en` has the
 shape of the option, so `meanings: englishMeaning` is all it takes. It answers one short line from Open English WordNet
-(CC BY 4.0, derived from Princeton WordNet 3.1; see [NOTICE.md](./NOTICE.md), which a page showing them must carry): 16,841
-of the 20,334 words of the 4, 5 and 6-letter lists and 97% of the answers, such as `crane: lifts and moves heavy objects`, and `plural of farm: …` for a regular plural or past form. A word WordNet lacks (`from`, `that`), or that is not for
-children (a rude, violent or sexual first sense), answers `null`. Only the file for the length asked about is fetched, 56 to
-193 kB gzipped; French, German and kana answer `null`.
+(CC BY 4.0, derived from Princeton WordNet 3.1; see [NOTICE.md](./NOTICE.md), which a page showing them must carry): 16,317
+of the 20,331 words of the 4, 5 and 6-letter lists and 96% of the answers, such as `crane: lifts and moves heavy objects`, and `plural of farm: …` for a regular plural or past form. A word WordNet lacks (`from`, `that`), or that is not for
+children (a rude, violent, sexual, drink or drug word or first sense), answers `null`. Only the file for the length asked about is fetched, 54 to
+187 kB gzipped; French, German and kana answer `null`.
 
 The [demo](https://johnmorrisdotca.github.io/kotoba/) shows it with [Jisho](https://github.com/johnmorrisdotca/jisho)
 (`@johnmorrisdotca/jisho`, the family's dictionary of Japanese words), a development dependency of the demo alone; Kotoba
@@ -838,7 +838,7 @@ c r a n e
 ◐ ◐ ● ○ ◐
 ● right place, ◐ elsewhere in the word, ○ not in the word
 $ kotoba daily --words en --size 5 --date 2026-10-01
-2026-10-01  elect
+2026-10-01  idler
 ```
 
 The language follows `--lang`, then `LC_ALL`, `LC_MESSAGES` and `LANG`, then the

@@ -127,7 +127,7 @@ for (const name of Object.keys(pkg.bin ?? {})) {
     process.exit(1);
   }
   const daily = run(command, ["daily", "--date", "2026-10-01"], project, true).replace(/\r\n/g, "\n");
-  if (daily !== "2026-10-01  elect\n") {
+  if (daily !== "2026-10-01  idler\n") {
     console.error(`FAIL ${name} gave the word of the day as ${JSON.stringify(daily)}`);
     process.exit(1);
   }
