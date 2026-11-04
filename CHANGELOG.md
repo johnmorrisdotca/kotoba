@@ -6,6 +6,10 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+## [1.6.0] - 2026-11-04
+
+A minor version: nothing that 1.5.1 gave is taken away. Two new lists and the demo's picker for them.
+
 ### Added
 
 - **Japanese proverbs and four-character compounds** (MODULES-58). Two entry points, `@johnmorrisdotca/kotoba/proverbs-ja` (`JA_PROVERBS`, 930 entries JMdict marks as proverbs) and `@johnmorrisdotca/kotoba/yojijukugo-ja` (`JA_YOJIJUKUGO`, 1,831 it marks as yojijukugo), made by `scripts/word-lists-ja-phrases.mjs` from JMdict (release 2026-11-04) with the idioms and the shiritori words, and kept current by the same monthly refresh. Read them with `readSayings(packed)` and search with `searchSayings(sayings, text)`; a row has `saying`, `reading`, `meaning`, `meanings`, `kanji`, `elementary` and `common`, as an idiom does, and no `kind`: JMdict decides what is one. Children play: an entry is left out when JMdict marks any sense vulgar, X-rated, sensitive or derogatory (7 proverbs and 3 compounds) or any gloss names sex or the sex trade (4 and 6 more; JMdict does not always mark them, 朝雲暮雨 is "sexual liaison").
@@ -13,8 +17,7 @@ All notable changes to this project are written here. The format follows
 
 ### Changed
 
-- The package is 0.2 MB bigger packed (the two lists: 50.6 kB and 79.4 kB gzipped, in entry points a page fetches only when it uses them). The core entry point grows 0.4 kB minified.
-
+- The package is 360 kB bigger unpacked (1.84 to 2.20 MB): the two lists are 51.8 kB and 81.3 kB gzipped, each in an entry point a page fetches only when it uses it. The core entry point grows 0.4 kB minified.
 - The README opens with the package's thumbnail, and the demo carries it as its link preview (og:image) and publishes the card, a dark card and an icon on Pages at `thumbnail.png`, `thumbnail-dark.png` and `icon.png`.
 - The demo's embed tests wait for the game to hold a round before they read it (the grid is drawn while the word list is still loading), which ended an occasional "Cannot read properties of null (reading 'hidden')" in CI, and a test slows the list down to hold that.
 
