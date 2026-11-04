@@ -22,7 +22,7 @@ English, French, German and Japanese (kana) dictionaries for five-letter and oth
 <td align="center" valign="top">
 <picture>
 <source media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/hero-desk-dark.webp">
-<img src="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/hero-desk-light.webp" alt="The demo on a desk, in English: the page's header with its language chooser, Docs link and cloth swatches, the words and length to choose, a grid of five-letter guesses marked green where the letter is right, orange where it is elsewhere and grey where it is not in the word, and the keyboard coloured by what the guesses showed." width="720">
+<img src="https://raw.githubusercontent.com/johnmorrisdotca/kotoba/main/docs/images/hero-desk-light.webp" alt="The demo on a desk, in English: the page's header with its language and theme switches, Docs link and cloth swatches, the words and length to choose, a grid of five-letter guesses marked green where the letter is right, orange where it is elsewhere and grey where it is not in the word, and the keyboard coloured by what the guesses showed." width="720">
 </picture>
 <br><em>The demo on a desk, four guesses into a five-letter English word.</em>
 </td>
@@ -296,6 +296,10 @@ const kana = await loadWordList("ja", 4);   // { easy, answers, allowed, release
 `loadWordList` reads one list by language and size and fetches nothing else. The
 command line is built on it.
 
+### 7. A tag, Vite, webpack and an iframe
+
+`<kotoba-game>` is the board as a tag, for a page, a bundler or a framework: `import "@johnmorrisdotca/kotoba/element/define"` once, then `<kotoba-game words="en" letters="5" daily="today"></kotoba-game>`. A page that cannot run script frames the embed page in an `<iframe>`; its address names the same choices as the tag's attributes. Each way (jsDelivr, unpkg, Vite, webpack, React with a server render, Vue, Svelte, Angular, TypeScript, Node) is a file in [`examples/`](examples) that `pnpm test:usage` runs against the package as npm packs it, and the guides hold word for word: [plain HTML and CDNs](docs/guides/html-and-cdn.md), [embed in an iframe](docs/guides/embed-in-an-iframe.md), [Vite and webpack](docs/guides/bundlers.md), [React, Vue, Svelte and Angular](docs/guides/frameworks.md), [TypeScript and Node](docs/guides/typescript-and-node.md).
+
 ### What a developer gets
 
 - The marking, the scores, the keyboard rows, kana marks and romaji input as
@@ -311,7 +315,7 @@ The cookbook, with the output of each example, is under [Examples](#examples).
 
 ### Embed builder
 
-[Build a word game](https://johnmorrisdotca.github.io/kotoba/builder.html), preview it and copy element, iframe, module, React 19, Vue, Svelte, Angular, HTML or URL code. Choices stay in the URL; the embed reads no browser storage. `<kotoba-game words="en" letters="5" daily="2026-10-09" size="medium">` plays the existing UTC daily word. `letters` selects word length; `size` always selects the display width (small 320px, medium 480px, large 640px). See [the embed guide](docs/embeds.md).
+The demo's "Put it in your page" writes the code for the game you choose, with the game beside it. [Build a word game](https://johnmorrisdotca.github.io/kotoba/builder.html), preview it and copy element, iframe, module, React 19, Vue, Svelte, Angular, HTML or URL code. Choices stay in the URL; the embed reads no browser storage. `<kotoba-game words="en" letters="5" daily="2026-10-09" size="medium">` plays the existing UTC daily word. `letters` selects word length; `size` always selects the display width (small 320px, medium 480px, large 640px). See [the embed guide](docs/embeds.md).
 
 For Svelte, import the registration in the browser; the custom element keeps the same attributes.
 
@@ -1017,7 +1021,7 @@ kana. Using it somewhere? [Tell us](https://github.com/johnmorrisdotca/kotoba/is
 ### The family
 
 <!-- family:start (made by scripts/family-readme.mjs from scripts/family-template.mjs; change those, not this) -->
-Kotoba is one of thirty-two packages, each made for the same site, each at
+Kotoba is one of thirty-three packages, each made for the same site, each at
 [github.com/johnmorrisdotca](https://github.com/johnmorrisdotca) or [github.com/spxis](https://github.com/spxis). The code of every one is MIT.
 
 **Games — board**
@@ -1061,6 +1065,7 @@ Kotoba is one of thirty-two packages, each made for the same site, each at
 **Geography & data**
 
 - [address-plus](https://github.com/johnmorrisdotca/address-plus) (アドレスプラス): parse and format addresses in the United States, Canada, Japan, Australia, France, Germany and the United Kingdom. [Demo](https://johnmorrisdotca.github.io/address-plus/).
+- [Chikyu Earth](https://github.com/johnmorrisdotca/chikyu-earth) (地球): a line-drawn globe that turns at the Earth's own rate, with an optional realistic Earth from space and markers for any place. [Demo](https://johnmorrisdotca.github.io/chikyu-earth/).
 - [Chizu](https://github.com/johnmorrisdotca/chizu) (地図): maps of the world and of countries' regions, in English and Japanese, with a quiz and callouts. [Demo](https://johnmorrisdotca.github.io/chizu/).
 - [Hata](https://github.com/johnmorrisdotca/hata) (旗): country and regional flags as SVG, at their true proportions and keyed by ISO code. [Demo](https://johnmorrisdotca.github.io/hata/).
 - [Kuni](https://github.com/johnmorrisdotca/kuni) (国): countries and their regions, with ISO codes and names in English and Japanese. [Demo](https://johnmorrisdotca.github.io/kuni/).
@@ -1077,7 +1082,7 @@ Kotoba is one of thirty-two packages, each made for the same site, each at
 - [REST in Pieces](https://github.com/spxis/rest-in-pieces) (レスト・イン・ピーシーズ): seeded test data and REST APIs for frontend development, with latency and error drills. [Demo](https://spxis.github.io/rest-in-pieces/).
 
 
-**This package is Kotoba.** The demos of all thirty-two share one header and footer, so each links the rest.
+**This package is Kotoba.** The demos of all thirty-three share one header and footer, so each links the rest.
 <!-- family:end -->
 
 ## Development

@@ -121,7 +121,7 @@ async function guess(page, rows, kana) {
     await page.waitForFunction(
       (row) =>
         document
-          .querySelectorAll('[data-kt="grid"] .kt-row')
+          .querySelectorAll('[data-testid="game"] [data-kt="grid"] .kt-row')
           [row].querySelector(".kt-cell[data-mark]:not([data-mark='typed']):not([data-mark='empty'])") !== null,
       row,
     );
@@ -175,11 +175,11 @@ const guide = {
   url: address("en", 5),
   init,
   ready: `${GAME} .kt-row`,
-  target: ".kt-guide",
+  target: `${GAME} .kt-guide`,
   async prepare(page) {
     await play(3)(page);
-    await page.locator(".kt-guide-open").click();
-    await page.waitForSelector(".kt-guide[open]");
+    await page.locator(`${GAME} .kt-guide-open`).click();
+    await page.waitForSelector(`${GAME} .kt-guide[open]`);
   },
 };
 
@@ -241,7 +241,7 @@ await takePictures({
         await page.keyboard.press("Enter");
         await page.waitForSelector(`${GAME} [data-kt="result"]`);
         grids.push(
-          await page.locator('[data-kt="grid"]').evaluate((grid) => {
+          await page.locator(`${GAME} [data-kt="grid"]`).evaluate((grid) => {
             const copy = grid.cloneNode(true);
             for (const row of copy.querySelectorAll(".kt-row"))
               if (row.querySelector('.kt-cell:not([data-mark="empty"])') === null) row.remove();

@@ -21,6 +21,6 @@ The handle exists immediately; `game` is `null` while loading or if setup cannot
 
 ## Element and frame
 
-Import `/element/define` for `<kotoba-game words="en" letters="5" daily="today"></kotoba-game>`. The [builder](https://johnmorrisdotca.github.io/kotoba/builder.html) previews controls and emits framework/module/element/frame code. `letters` selects word length; `size` chooses display width. Callback, language and display changes preserve play, while construction-option changes may remount.
+Import `/element/define` for `<kotoba-game words="en" letters="5" daily="today"></kotoba-game>`. The demo's "Put it in your page" panel and the [builder](https://johnmorrisdotca.github.io/kotoba/builder.html) preview the choices and emit framework/module/element/frame code. `letters` selects word length; `size` chooses display width. Callback, language and display changes preserve play, while construction-option changes may remount.
 
 Change/finish detail includes the answer, so use it in trusted host code. Frames forward JSON-safe events; validate origin and sending window. Frames store no guesses. [The complete contract](../embeds.md) lists precedence, events and reflected properties.

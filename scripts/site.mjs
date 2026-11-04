@@ -2,6 +2,7 @@
 // from the family's shared header and footer (scripts/family-template.mjs, which every package shares unchanged)
 // and this package's own body, the two stylesheets, and the compiled library.
 import { cpSync, mkdirSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { build } from "esbuild";
 
 import { apiBody } from "./api.mjs";
 import {
@@ -55,21 +56,56 @@ cpSync(`${jisho}/data/words`, "site/jisho/data/words", {
   filter: (file) => !/\.d\.ts$|(^|[\\/])(common|common-extra|extra-manifest|f\d+|x[rf]\d+)\.data\.js$/.test(file),
 });
 
-writeFileSync(
-  "site/index.html",
-  frame({
+// The page is demo/index.html; each <!-- family:key --> in it is replaced by the text below.
+const pageParts = {
+  head: familyHead({
+    id,
     title: "Kotoba 言葉 — Word lists and word-game rules",
     description:
       "Guess the hidden word in six tries in English, French, German or Japanese kana, on the cleaned dictionaries of the Kotoba package, with its marking, romaji input and score. In English and Japanese. Free and open source.",
+    ogTitle: "Kotoba 言葉 — Word lists and word-game rules",
+    ogDescription: "Guess the hidden word in English, French, German or Japanese kana, on the Kotoba word lists.",
+  }),
+  thumbnail: thumbnailHead(JSON.parse(readFileSync("package.json", "utf8")), { alt: ALT }),
+  icon,
+  header: familyHeader({
+    id,
     links: [
       { href: "docs/index.html", say: "pageDocs" },
       { href: "api.html", say: "pageApi" },
     ],
-    body: readFileSync("demo/body.html", "utf8").replace("__UNREVIEWED__", familyUnreviewed({ id })).trimEnd(),
-    scripts: `<script type="module" src="page.js"></script>`,
-    head: `\n    ${thumbnailHead(JSON.parse(readFileSync("package.json", "utf8")), { alt: ALT })}`,
   }),
+  unreviewed: familyUnreviewed({ id }),
+  footer: familyFooter({ id }),
+  script: `<script>${FAMILY_SCRIPT}</script>\n    <script type="module" src="kazoku-parts.js"></script>\n    <script type="module" src="embed-panel.js"></script>\n    <script type="module" src="page.js"></script>`,
+};
+writeFileSync(
+  "site/index.html",
+  readFileSync("demo/index.html", "utf8").replace(/<!-- family:([A-Za-z]+) -->/g, (_match, key) => pageParts[key]),
 );
+// The family header's language picker and theme switch, as one small module for every page of the site (the demo, the builder, the API reference and the docs).
+await build({
+  stdin: {
+    contents:
+      'import "@johnmorrisdotca/kazoku-ui/language-picker/define";\nimport "@johnmorrisdotca/kazoku-ui/theme-switch/define";\n',
+    resolveDir: process.cwd(),
+  },
+  outfile: "site/kazoku-parts.js",
+  bundle: true,
+  format: "esm",
+  minify: true,
+  logLevel: "silent",
+});
+// The demo's "Put it in your page": kazoku-ui's embed panel, filled with this game's choices and code.
+await build({
+  entryPoints: ["demo/embed-panel.js"],
+  outfile: "site/embed-panel.js",
+  external: ["./dist/*"],
+  bundle: true,
+  format: "esm",
+  minify: true,
+  logLevel: "silent",
+});
 // The family's card, dark card and icon, at <site>/thumbnail.png, thumbnail-dark.png and icon.png.
 publishThumbnails(".", "site");
 
@@ -82,7 +118,8 @@ writeFileSync(
       "The API reference of the Kotoba package: every export of every entry point, with its signature and its documentation, made from the source.",
     links: [{ href: "./", say: "pageBack" }],
     body: `      ${api.html}\n      ${familyUnreviewed({ id })}`,
-    scripts: `<script type="module">
+    scripts: `<script type="module" src="kazoku-parts.js"></script>
+    <script type="module">
       const words = (pitch, back, name, nameLink, foot) => ({ pitch, pageBack: back, name, nameLink, foot });
       familyLanguage({
         id: "kotoba",
@@ -116,7 +153,7 @@ const builderParts = {
   }),
   unreviewed: familyUnreviewed({ id }),
   footer: familyFooter({ id }),
-  script: `<script>${FAMILY_SCRIPT}</script>`,
+  script: `<script>${FAMILY_SCRIPT}</script>\n    <script type="module" src="kazoku-parts.js"></script>`,
 };
 writeFileSync(
   "site/builder.html",

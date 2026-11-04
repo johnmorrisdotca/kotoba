@@ -37,14 +37,12 @@ const PAGE = {
       "The Japanese words, and the meanings shown when a guess is tapped (by way of the Jisho package), are from JMdict ({release}), the Electronic Dictionary Research and Development Group's dictionary, used under its licence (CC BY-SA 4.0).",
     counts: "This list: {easy} easy answers, inside {answers} answers, inside {allowed} words that may be guessed.",
     dailyNote: "Today's word is the same for everybody ({day}, UTC) and changes at midnight UTC.",
-    usingTitle: "Using it",
+    usingTitle: "Put it in your page",
     usingText:
-      "The game above is this package: the board, the keys, the rules of a round, the marking and the score all come from it. This is all it takes to put the game you are looking at on your own page.",
-    usingCode: "In code",
+      "The game above is this package: the board, the keys, the rules of a round, the marking and the score all come from it. Pick a list and a length, and the code for your page is below, with the game it makes.",
     usingCli: "From a terminal",
     usingCliText:
       "The same lists from the command line, with nothing to install; the language follows your system, or --lang ja.",
-    usingCopy: "Copy the code",
     usingCopyLink: "Copy link to this game",
     usingCopied: "Copied",
     usingCopyFailed: "Copy it by hand",
@@ -116,14 +114,12 @@ const PAGE = {
     counts:
       "このリスト: やさしい答え{easy}語、答え{answers}語、推測できる単語{allowed}語（やさしい答えは答えの中、答えは推測できる単語の中にあります）。",
     dailyNote: "今日の単語は誰にとっても同じ（{day}、UTC）で、UTCの午前0時に変わります。",
-    usingTitle: "使い方",
+    usingTitle: "自分のページに入れる",
     usingText:
-      "上のゲームは、このパッケージそのものです。盤面、キー、ラウンドのルール、判定、得点はすべてパッケージのものです。いま見ているゲームは、下のコードだけで自分のページに置けます。",
-    usingCode: "コードで",
+      "上のゲームは、このパッケージそのものです。盤面、キー、ラウンドのルール、判定、得点はすべてパッケージのものです。一覧と長さを選ぶと、自分のページに置くコードと、そのコードが作るゲームが下に出ます。",
     usingCli: "ターミナルで",
     usingCliText:
       "同じリストをコマンドラインで。インストールは不要です。言語はシステムに従います（--lang ja でも指定できます）。",
-    usingCopy: "コードをコピー",
     usingCopyLink: "このゲームのリンクをコピー",
     usingCopied: "コピーしました",
     usingCopyFailed: "手でコピーしてください",
@@ -243,23 +239,8 @@ async function deal(fresh) {
   draw();
 }
 
-/** The code that puts this game on a page: made from the choices on the page, so it is always the game on the table. */
-function usingCode() {
-  const options = [
-    `words: "${state.words}"`,
-    `size: ${state.size}`,
-    ...(state.easy ? ["easy: true"] : []),
-    state.daily ? "daily: true" : `seed: ${state.seed}`,
-    `locale: "${language.lang}"`,
-  ];
-  return `import { mountKotoba } from "@johnmorrisdotca/kotoba/play";
-
-const play = mountKotoba(document.getElementById("game"), { ${options.join(", ")} });
-await play.ready;            // the list is fetched, and the round dealt
-play.game.hidden;            // the word to find (a round is plain data: guesses, typed, status, score)
-await play.newGame({ seed: 7 });   // another round, the same choices`;
-}
-
+/** What the embed panel was last told the game on the table is. */
+let told = "";
 function draw() {
   const sizes = WORD_LIST_SIZES[state.words];
   const holder = $("sizes");
@@ -291,7 +272,11 @@ function draw() {
     ? `${t("dailyNote", { day: dayKey(Date.now()) })} ${t(creditKey(), { release })}`
     : t(creditKey(), { release });
   $("counts").textContent = counts === null ? "" : t("counts", counts);
-  $("using-code").textContent = usingCode();
+  const chosen = { words: state.words, size: state.size, easy: state.easy, daily: state.daily, seed: state.seed };
+  if (JSON.stringify(chosen) !== told) {
+    told = JSON.stringify(chosen);
+    document.dispatchEvent(new CustomEvent("kotoba-demo-game", { detail: chosen }));
+  }
   $("cli-code").textContent = state.daily
     ? `npx @johnmorrisdotca/kotoba daily --words ${state.words} --size ${state.size}${state.easy ? " --tier easy" : ""}`
     : `npx @johnmorrisdotca/kotoba lists --words ${state.words}`;
@@ -355,7 +340,6 @@ async function copy(button, text, label) {
     delete button.dataset.said;
   }, 1500);
 }
-$("copy-code").addEventListener("click", () => copy($("copy-code"), $("using-code").textContent, "usingCopy"));
 $("copy-link").addEventListener("click", () => copy($("copy-link"), location.href, "usingCopyLink"));
 
 // A test may look at the round: only where the page is told it is under test.

@@ -1,3 +1,15 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- family:head -->
+    <!-- family:thumbnail -->
+    <link rel="icon" href="<!-- family:icon -->" />
+    <link rel="stylesheet" href="family.css" />
+    <link rel="stylesheet" href="kotoba.css" />
+  </head>
+  <body>
+    <main>
+      <!-- family:header -->
       <section class="setup" aria-labelledby="setup-title">
         <h2 id="setup-title" class="fam-sr" data-say="pageSetup"></h2>
         <div class="fam-row" data-help-en="Which language the secret word is in: English, French, German, or Japanese kana. Choosing one loads its words and starts a new word." data-help-ja="秘密の単語の言語です（英語、フランス語、ドイツ語、日本語のかな）。選ぶとその言語の単語を読み込み、新しい単語を始めます。">
@@ -21,7 +33,7 @@
       <section class="fam-felt game" aria-label="Game" data-testid="game">
         <div id="board" data-testid="board"></div>
       </section>
-      __UNREVIEWED__
+      <!-- family:unreviewed -->
       <section class="credits" aria-labelledby="credits-title">
         <h2 id="credits-title" data-say="pageCredits"></h2>
         <p class="fam-muted" id="credit" data-testid="credit"></p>
@@ -59,15 +71,27 @@
       <section class="more" aria-labelledby="using-title">
         <h2 id="using-title" data-say="usingTitle"></h2>
         <p data-say="usingText"></p>
-        <div class="fam-row" data-help-en="Copy the address of this exact game: the list, the length, and the seed (or today's word). Whoever opens it plays the same word." data-help-ja="このゲームそのもののアドレス（リスト、長さ、シード、または今日の単語）をコピーします。開いた人も同じ単語で遊べます。">
-          <button type="button" class="fam-button" id="copy-link" data-testid="copy-link" data-say="usingCopyLink"></button>
-        </div>
-        <h3 data-say="usingCode"></h3>
-        <pre class="snippet" id="using-code" data-testid="using-code" tabindex="0"></pre>
-        <div class="fam-row" data-help-en="Copy the code above, to paste into your own page." data-help-ja="上のコードをコピーして、自分のページに貼り付けられます。">
-          <button type="button" class="fam-button" id="copy-code" data-testid="copy-code" data-say="usingCopy"></button>
+        <div class="fam-panels">
+          <div class="fam-panel">
+            <kazoku-embed-panel id="embed-panel" data-testid="embed-panel" kinds="html module react vue angular svelte iframe code" sizes="320 480 640" size="480" open-href="embed/" docs-href="docs/">
+              <div slot="picker" class="embed-picker" data-testid="embed-picker">
+                <div class="fam-seg" id="embed-lists" role="group" data-testid="embed-lists"></div>
+                <div class="fam-seg" id="embed-letters" role="group" data-testid="embed-letters"></div>
+              </div>
+              <div slot="options" class="embed-options">
+                <button class="fam-button" id="embed-easy" data-testid="embed-easy" type="button" aria-pressed="false"></button>
+                <button class="fam-button" id="embed-daily" data-testid="embed-daily" type="button" aria-pressed="false"></button>
+              </div>
+              <button slot="actions" type="button" class="fam-button" id="copy-link" data-testid="copy-link" data-say="usingCopyLink"></button>
+            </kazoku-embed-panel>
+          </div>
         </div>
         <h3 data-say="usingCli"></h3>
         <p data-say="usingCliText"></p>
         <pre class="snippet" id="cli-code" data-testid="cli-code" tabindex="0"></pre>
       </section>
+      <!-- family:footer -->
+    </main>
+    <!-- family:script -->
+  </body>
+</html>

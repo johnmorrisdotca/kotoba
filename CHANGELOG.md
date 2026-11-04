@@ -6,6 +6,20 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+A minor version: nothing that 1.8.0 gave is taken away, and the package's code and lists are unchanged. Kotoba adopts the family's must-have list for a package (MODULES-385): every way of using it is an example that a test runs, and the demo's "Put it in your page" is the family's panel.
+
+### Added
+
+- **Every way of using the package, tested.** `examples/` holds a page with a script tag from jsDelivr and one from unpkg, an iframe of the embed page, Vite, webpack, React (with a server render), Vue, Svelte, Angular, TypeScript and Node. `pnpm test:usage` (`scripts/check-usage.mjs`) packs the package as npm does, installs it beside the examples, builds, type-checks or runs each one and opens each page in a browser, which must draw the game; CI runs it as a job of its own. Five new guides hold the examples word for word, in English and Japanese: "Plain HTML and CDNs", "Embed in an iframe", "Vite and webpack", "React, Vue, Svelte and Angular" and "TypeScript and Node". The README has a section that points at them.
+- **The family's check.** `scripts/check-standard.mjs` is kazoku-ui's, copied unchanged and held to its hash by `src/standard.test.js`; `pnpm check:standard` prints `ok` when every item of the must-have list is there, and `pnpm check` fails when one goes.
+- **The demo's "Put it in your page" is kazoku-ui's `<kazoku-embed-panel>`** (kazoku-ui 0.15). Its tabs are HTML, ES module, React, Vue, Angular, Svelte and iframe, the code for the `<kotoba-game>` tag, and the demo's own `mountKotoba` tab; its sizes are 320, 480 and 640 (`size="small"` and `"large"` in the code, nothing at 480); its picker is the demo's own buttons in the panel's `picker` slot (a word list and a length), with Easy words and Today's word beside it, and "Copy link to this game" beside Copy; the game it makes is shown beside the code, and it follows the game on the table. Nothing the old section had is lost: the code of the game on the table, Copy, the link to the game, and the command line (which stays under the panel).
+- The demo's header has kazoku-ui's language picker and theme switch (light, dark, auto), as the rest of the family does, and the demo, the builder, the API reference and the documentation site share them.
+
+### Changed
+
+- The family's shared files are the current ones: `scripts/family-template.mjs` (2026-11-02b), `scripts/family-readme.mjs`, `scripts/docs-site.mjs` and `demo/family.css`, with the README's "The family" block written again. The demo page is `demo/index.html` (it was `demo/body.html`); `scripts/site.mjs` fills in the family's parts, as the other packages' do.
+- `@johnmorrisdotca/kazoku-ui` (0.15.1) and the frameworks the examples build with are development dependencies. The package has no dependencies, and what it ships is as it was.
+
 ## [1.8.0] - 2026-11-04
 
 A minor version: nothing that 1.7.0 gave is taken away except what children should not have been handed. Every list now keeps out what is not for them, by one rule.

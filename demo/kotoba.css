@@ -206,3 +206,24 @@ header nav a[data-say="pageDocs"] {
   justify-content: center;
   flex: none;
 }
+
+/* The embed panel's own choices: a word list and a length, then easy and today's word. */
+.embed-options {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+.embed-options .fam-button,
+kazoku-embed-panel > .fam-button {
+  min-height: 48px;
+}
+.embed-picker {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  margin: 0 0 12px;
+}
+.embed-picker button {
+  min-height: 48px;
+}
