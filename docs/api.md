@@ -1136,7 +1136,7 @@ Group (EDRDG), used under the Creative Commons Attribution-ShareAlike 4.0
 licence and the Group's conditions: https://www.edrdg.org/edrdg/licence.html.
 This list is derived from it and is under the same licence.
 
-900 easy answers, 2000 answers at medium and hard, 16296 words that may be guessed.
+900 easy answers, 2000 answers at medium and hard, 16298 words that may be guessed.
 Each word is written one character a kana through `alphabet` and `codes`,
 the words run together with nothing between them (`kanaWords.ts` reads them).
 
@@ -1161,7 +1161,7 @@ Group (EDRDG), used under the Creative Commons Attribution-ShareAlike 4.0
 licence and the Group's conditions: https://www.edrdg.org/edrdg/licence.html.
 This list is derived from it and is under the same licence.
 
-900 easy answers, 2000 answers at medium and hard, 38647 words that may be guessed.
+900 easy answers, 2000 answers at medium and hard, 38661 words that may be guessed.
 Each word is written one character a kana through `alphabet` and `codes`,
 the words run together with nothing between them (`kanaWords.ts` reads them).
 
@@ -1186,7 +1186,7 @@ Group (EDRDG), used under the Creative Commons Attribution-ShareAlike 4.0
 licence and the Group's conditions: https://www.edrdg.org/edrdg/licence.html.
 This list is derived from it and is under the same licence.
 
-900 easy answers, 2000 answers at medium and hard, 35155 words that may be guessed.
+900 easy answers, 2000 answers at medium and hard, 35179 words that may be guessed.
 Each word is written one character a kana through `alphabet` and `codes`,
 the words run together with nothing between them (`kanaWords.ts` reads them).
 
@@ -1235,7 +1235,7 @@ Development Group (EDRDG), used under the Creative Commons Attribution-ShareAlik
 4.0 licence and the Group's conditions: https://www.edrdg.org/edrdg/licence.html.
 This list is derived from them and under the same licence.
 
-6388 nouns of JMdict's textbook-common list, one a reading, commonest first. Each row is
+6390 nouns of JMdict's textbook-common list, one a reading, commonest first. Each row is
 reading, word and meaning, separated by tabs (`readShiritoriWords` reads them).
 
 ## `@johnmorrisdotca/kotoba/proverbs-ja`
@@ -1283,7 +1283,7 @@ Development Group (EDRDG), used under the Creative Commons Attribution-ShareAlik
 4.0 licence and the Group's conditions: https://www.edrdg.org/edrdg/licence.html.
 This list is derived from them and under the same licence.
 
-1831 entries JMdict marks as yojijukugo, one a written form, in the order of the reading;
+1832 entries JMdict marks as yojijukugo, one a written form, in the order of the reading;
 656 written only in kanji taught in elementary school; 168 marked common.
 
 ## `@johnmorrisdotca/kotoba/cli`
@@ -1376,7 +1376,7 @@ distribution of the software and/or database. Title to copyright in this softwar
 shall at all times remain with Princeton University and LICENSEE agrees to preserve same. This list is derived from it, under
 the same licence.
 
-2528 of the 3168 words of the 4-letter English lists have a meaning; each row is the word, a tab and a short line.
+2614 of the 3168 words of the 4-letter English lists have a meaning; each row is the word, a tab and a short line.
 
 ## `@johnmorrisdotca/kotoba/meanings-en-5`
 
@@ -1404,7 +1404,7 @@ distribution of the software and/or database. Title to copyright in this softwar
 shall at all times remain with Princeton University and LICENSEE agrees to preserve same. This list is derived from it, under
 the same licence.
 
-5215 of the 6421 words of the 5-letter English lists have a meaning; each row is the word, a tab and a short line.
+5363 of the 6421 words of the 5-letter English lists have a meaning; each row is the word, a tab and a short line.
 
 ## `@johnmorrisdotca/kotoba/meanings-en-6`
 
@@ -1432,7 +1432,7 @@ distribution of the software and/or database. Title to copyright in this softwar
 shall at all times remain with Princeton University and LICENSEE agrees to preserve same. This list is derived from it, under
 the same licence.
 
-8574 of the 10742 words of the 6-letter English lists have a meaning; each row is the word, a tab and a short line.
+8845 of the 10742 words of the 6-letter English lists have a meaning; each row is the word, a tab and a short line.
 
 ## `@johnmorrisdotca/kotoba/meanings-en`
 

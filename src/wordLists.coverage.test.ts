@@ -146,7 +146,7 @@ const EVERYDAY: Record<"fr" | "de", readonly string[]> = {
  * and are never hidden, as the shorter lengths' are.
  */
 const NOT_AN_ANSWER_AT_SIX: Record<"en" | "fr" | "de", readonly string[]> = {
-  en: ["raping", "faggot", "orgasm", "heroin", "stupid", "retard"],
+  en: ["raping", "faggot", "orgasm", "heroin", "retard", "sexual"],
   fr: ["putain", "salope", "encule", "youpin", "gouine", "sperme"],
   de: ["ficken", "vögeln", "muschi", "kokain", "schwul", "türken"],
 };

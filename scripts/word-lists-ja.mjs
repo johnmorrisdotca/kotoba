@@ -19,8 +19,10 @@
  * stays), and stays so: the lists before are kept whole (a game somebody played was
  * checked against them), less the readings barred below. THE BAR: a reading is barred
  * from the whole list, answers and guesses alike, when every entry that spells it has
- * JMdict's mark for vulgar, X-rated, sensitive or derogatory, or a gloss naming sex or
- * the sex trade, on its first sense (`scripts/children-bar.mjs`, the rule every list uses), so it has no ordinary meaning left; the barred words
+ * JMdict's mark for vulgar, X-rated, sensitive or derogatory, or a gloss naming a sex act,
+ * a sex organ or the sex trade, on its first sense (`scripts/children-bar.mjs`, the rule every list uses; a gloss that only
+ * mentions sex, as 性別 does, never bars), so it has no ordinary meaning left, or when it is on the short list of readings
+ * obscene in themselves (`VULGAR_READINGS`, まんこ among them, though 万古 is spelt the same); the barred words
  * and their English are written to scripts/kana-barred.json for a person to read. The answers are the COMMONEST readings, ranked by a rule rather than
  * picked by hand, and about as many as English has (John, 2026-09-25: "a
  * programmatic way to narrow down words to best words… shouldn't be too much
@@ -50,7 +52,7 @@
  */
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { gunzipSync } from "node:zlib";
-import { japaneseBar } from "./children-bar.mjs";
+import { japaneseBar, VULGAR_READINGS } from "./children-bar.mjs";
 import { firstSenseNotForEveryone, keepGuessable, readAllowed, readTileWords } from "./kana-keep.mjs";
 import { writeWordList } from "./word-list-docs.mjs";
 
@@ -151,6 +153,7 @@ const NOT_AN_ANSWER = new Set([
 const NOT_GUESSABLE = new Map([
   ["じょそこ", "male-to-female crossdresser; femboy"],
   ["ひどうてい", "non-virgin man; man with sexual experience"],
+  ...VULGAR_READINGS,
 ]);
 
 const HIRAGANA = /^[ぁ-ゖー]+$/u;
@@ -357,6 +360,7 @@ if (tileWords.size === 0) throw new Error("JMdict produced no Japanese Kumimoji 
 const tileBarred = new Set([
   ...[...tileUnfit.keys()].filter((tiles) => !tileOrdinary.has(tiles)),
   ...[...NOT_GUESSABLE.keys()].map(tileKanaOf).filter((tiles) => tiles !== null && !tileOrdinary.has(tiles)),
+  ...[...VULGAR_READINGS.keys()].map(tileKanaOf).filter((tiles) => tiles !== null),
 ]);
 const tileBefore = existsSync(TILE_WORDS_OUT) ? readTileWords(readFileSync(TILE_WORDS_OUT, "utf8")) : new Set();
 const tileKept = keepGuessable({ before: tileBefore, fresh: tileWords, barred: tileBarred });
