@@ -15,6 +15,9 @@ const entries = {
   "kana-5.data.ts": "kana-5",
   "idioms-ja.data.ts": "idioms-ja",
   "shiritori-ja.data.ts": "shiritori-ja",
+  "meanings-en-4.data.ts": "meanings-en-4",
+  "meanings-en-5.data.ts": "meanings-en-5",
+  "meanings-en-6.data.ts": "meanings-en-6",
   "proverbs-ja.data.ts": "proverbs-ja",
   "yojijukugo-ja.data.ts": "yojijukugo-ja",
 };

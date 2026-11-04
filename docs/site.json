@@ -74,6 +74,22 @@
       "en": "Shiritori words",
       "ja": "しりとりの単語"
     },
+    "./meanings-en-4": {
+      "en": "Meanings of 4-letter English words",
+      "ja": "4文字の英単語の意味"
+    },
+    "./meanings-en-5": {
+      "en": "Meanings of 5-letter English words",
+      "ja": "5文字の英単語の意味"
+    },
+    "./meanings-en-6": {
+      "en": "Meanings of 6-letter English words",
+      "ja": "6文字の英単語の意味"
+    },
+    "./meanings-en": {
+      "en": "What an English word means",
+      "ja": "英単語の意味"
+    },
     "./proverbs-ja": {
       "en": "Japanese proverbs",
       "ja": "日本語のことわざ"

@@ -144,6 +144,26 @@
       "import": "./dist/cli.js",
       "default": "./dist/cli.js"
     },
+    "./meanings-en-4": {
+      "types": "./dist/lists/meanings-en-4.data.d.ts",
+      "import": "./dist/lists/meanings-en-4.data.js",
+      "default": "./dist/lists/meanings-en-4.data.js"
+    },
+    "./meanings-en-5": {
+      "types": "./dist/lists/meanings-en-5.data.d.ts",
+      "import": "./dist/lists/meanings-en-5.data.js",
+      "default": "./dist/lists/meanings-en-5.data.js"
+    },
+    "./meanings-en-6": {
+      "types": "./dist/lists/meanings-en-6.data.d.ts",
+      "import": "./dist/lists/meanings-en-6.data.js",
+      "default": "./dist/lists/meanings-en-6.data.js"
+    },
+    "./meanings-en": {
+      "types": "./dist/meaningsEn.d.ts",
+      "import": "./dist/meaningsEn.js",
+      "default": "./dist/meaningsEn.js"
+    },
     "./load": {
       "types": "./dist/load.d.ts",
       "import": "./dist/load.js",

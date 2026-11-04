@@ -1,6 +1,6 @@
 # API reference
 
-Every export of every entry point of `@johnmorrisdotca/kotoba`, with its signature and its doc comment. This file is made from the source by `pnpm docs:api`, and a test fails when it falls behind: 18 entry points, 126 exports.
+Every export of every entry point of `@johnmorrisdotca/kotoba`, with its signature and its doc comment. This file is made from the source by `pnpm docs:api`, and a test fails when it falls behind: 22 entry points, 132 exports.
 
 ## `@johnmorrisdotca/kotoba`
 
@@ -1349,6 +1349,126 @@ runCli(args: readonly string[], around?: CliSurroundings): Promise<CliResult>
 ```
 
 Run the command line. See `kotoba --help` for what it takes.
+
+## `@johnmorrisdotca/kotoba/meanings-en-4`
+
+[`EN_MEANINGS_4`](#meanings-en-4-EN_MEANINGS_4)
+
+<a id="meanings-en-4-EN_MEANINGS_4"></a>
+
+### const `EN_MEANINGS_4`
+
+```ts
+EN_MEANINGS_4: { release: string; rows: string; }
+```
+
+THE ENGLISH MEANINGS OF 4-LETTER WORDS. Written by `scripts/word-meanings-en.mjs` from Open English WordNet 2025.
+Never edited by hand; run the script again instead.
+
+Open English WordNet 2025 (https://en-word.net/), Copyright the Open English WordNet team, is licensed under the
+Creative Commons Attribution 4.0 International License (https://creativecommons.org/licenses/by/4.0/). It is derived from
+WordNet 3.1, Copyright 2011 by Princeton University. All rights reserved. THIS SOFTWARE AND DATABASE IS PROVIDED "AS IS" AND
+PRINCETON UNIVERSITY MAKES NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED. BY WAY OF EXAMPLE, BUT NOT LIMITATION,
+PRINCETON UNIVERSITY MAKES NO REPRESENTATIONS OR WARRANTIES OF MERCHANTABILITY OR FITNESS FOR ANY PARTICULAR PURPOSE OR THAT
+THE USE OF THE LICENSED SOFTWARE, DATABASE OR DOCUMENTATION WILL NOT INFRINGE ANY THIRD PARTY PATENTS, COPYRIGHTS, TRADEMARKS
+OR OTHER RIGHTS. The name of Princeton University or Princeton may not be used in advertising or publicity pertaining to
+distribution of the software and/or database. Title to copyright in this software, database and any associated documentation
+shall at all times remain with Princeton University and LICENSEE agrees to preserve same. This list is derived from it, under
+the same licence.
+
+2635 of the 3168 words of the 4-letter English lists have a meaning; each row is the word, a tab and a short line.
+
+## `@johnmorrisdotca/kotoba/meanings-en-5`
+
+[`EN_MEANINGS_5`](#meanings-en-5-EN_MEANINGS_5)
+
+<a id="meanings-en-5-EN_MEANINGS_5"></a>
+
+### const `EN_MEANINGS_5`
+
+```ts
+EN_MEANINGS_5: { release: string; rows: string; }
+```
+
+THE ENGLISH MEANINGS OF 5-LETTER WORDS. Written by `scripts/word-meanings-en.mjs` from Open English WordNet 2025.
+Never edited by hand; run the script again instead.
+
+Open English WordNet 2025 (https://en-word.net/), Copyright the Open English WordNet team, is licensed under the
+Creative Commons Attribution 4.0 International License (https://creativecommons.org/licenses/by/4.0/). It is derived from
+WordNet 3.1, Copyright 2011 by Princeton University. All rights reserved. THIS SOFTWARE AND DATABASE IS PROVIDED "AS IS" AND
+PRINCETON UNIVERSITY MAKES NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED. BY WAY OF EXAMPLE, BUT NOT LIMITATION,
+PRINCETON UNIVERSITY MAKES NO REPRESENTATIONS OR WARRANTIES OF MERCHANTABILITY OR FITNESS FOR ANY PARTICULAR PURPOSE OR THAT
+THE USE OF THE LICENSED SOFTWARE, DATABASE OR DOCUMENTATION WILL NOT INFRINGE ANY THIRD PARTY PATENTS, COPYRIGHTS, TRADEMARKS
+OR OTHER RIGHTS. The name of Princeton University or Princeton may not be used in advertising or publicity pertaining to
+distribution of the software and/or database. Title to copyright in this software, database and any associated documentation
+shall at all times remain with Princeton University and LICENSEE agrees to preserve same. This list is derived from it, under
+the same licence.
+
+5372 of the 6421 words of the 5-letter English lists have a meaning; each row is the word, a tab and a short line.
+
+## `@johnmorrisdotca/kotoba/meanings-en-6`
+
+[`EN_MEANINGS_6`](#meanings-en-6-EN_MEANINGS_6)
+
+<a id="meanings-en-6-EN_MEANINGS_6"></a>
+
+### const `EN_MEANINGS_6`
+
+```ts
+EN_MEANINGS_6: { release: string; rows: string; }
+```
+
+THE ENGLISH MEANINGS OF 6-LETTER WORDS. Written by `scripts/word-meanings-en.mjs` from Open English WordNet 2025.
+Never edited by hand; run the script again instead.
+
+Open English WordNet 2025 (https://en-word.net/), Copyright the Open English WordNet team, is licensed under the
+Creative Commons Attribution 4.0 International License (https://creativecommons.org/licenses/by/4.0/). It is derived from
+WordNet 3.1, Copyright 2011 by Princeton University. All rights reserved. THIS SOFTWARE AND DATABASE IS PROVIDED "AS IS" AND
+PRINCETON UNIVERSITY MAKES NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR IMPLIED. BY WAY OF EXAMPLE, BUT NOT LIMITATION,
+PRINCETON UNIVERSITY MAKES NO REPRESENTATIONS OR WARRANTIES OF MERCHANTABILITY OR FITNESS FOR ANY PARTICULAR PURPOSE OR THAT
+THE USE OF THE LICENSED SOFTWARE, DATABASE OR DOCUMENTATION WILL NOT INFRINGE ANY THIRD PARTY PATENTS, COPYRIGHTS, TRADEMARKS
+OR OTHER RIGHTS. The name of Princeton University or Princeton may not be used in advertising or publicity pertaining to
+distribution of the software and/or database. Title to copyright in this software, database and any associated documentation
+shall at all times remain with Princeton University and LICENSEE agrees to preserve same. This list is derived from it, under
+the same licence.
+
+8834 of the 10742 words of the 6-letter English lists have a meaning; each row is the word, a tab and a short line.
+
+## `@johnmorrisdotca/kotoba/meanings-en`
+
+[`englishMeaning`](#meanings-en-englishMeaning) · [`PackedMeanings`](#meanings-en-PackedMeanings) · [`readMeanings`](#meanings-en-readMeanings)
+
+<a id="meanings-en-englishMeaning"></a>
+
+### function `englishMeaning`
+
+```ts
+englishMeaning(word: string, words?: WordListName): Promise<string | null>
+```
+
+What an English word means, in a short line, or null for a word with no meaning to show: one WordNet has no entry for, a
+word of the other languages, or one left out because it is not for children. The shape is the board's `meanings` option.
+
+<a id="meanings-en-PackedMeanings"></a>
+
+### type `PackedMeanings`
+
+```ts
+type PackedMeanings = { /** The Open English WordNet release it was made from. */ readonly release: string; /** One row to a line: the word, a tab, and a short line saying what it means. */ readonly rows: string; };
+```
+
+The meanings of one length of word as a data file holds them: the release it was made from, and a row to a line, each the word,
+a tab and the line.
+
+<a id="meanings-en-readMeanings"></a>
+
+### function `readMeanings`
+
+```ts
+readMeanings(packed: PackedMeanings): Map<string, string>
+```
+
+Reads a stored list of meanings into a map from word to line.
 
 ## `@johnmorrisdotca/kotoba/load`
 

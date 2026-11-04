@@ -53,6 +53,22 @@
       "minified": 260103,
       "gzip": 81295
     },
+    "./meanings-en-4": {
+      "minified": 146169,
+      "gzip": 56406
+    },
+    "./meanings-en-5": {
+      "minified": 314415,
+      "gzip": 116828
+    },
+    "./meanings-en-6": {
+      "minified": 528081,
+      "gzip": 193260
+    },
+    "./meanings-en": {
+      "minified": 989517,
+      "gzip": 364690
+    },
     "./cli": {
       "minified": 924468,
       "gzip": 469874

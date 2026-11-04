@@ -258,6 +258,7 @@ describe("the licences", () => {
       "kana-4",
       "kana-5",
       "idioms-ja",
+      "meanings-en-5",
       "shiritori-ja",
       "pop-answers",
     ])

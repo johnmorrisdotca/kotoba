@@ -609,6 +609,8 @@ may be guessed.
 | `@johnmorrisdotca/kotoba/kana-3`, `/kana-4`, `/kana-5` | `JA_WORDS_3`, `JA_WORDS_4`, `JA_WORDS_5` | Japanese words of three, four and five kana, packed; read with `unpack` |
 | `@johnmorrisdotca/kotoba/idioms-ja` | `JA_IDIOMS` | 2,021 Japanese set phrases: written form, reading, English meanings, and whose judgement put each there; read with `readIdioms` |
 | `@johnmorrisdotca/kotoba/shiritori-ja` | `JA_SHIRITORI` | 6,393 everyday Japanese nouns, one a reading, commonest first, for a word chain; read with `readShiritoriWords` |
+| `@johnmorrisdotca/kotoba/meanings-en` | `englishMeaning`, `readMeanings` | What an English word means, one short line, from Open English WordNet: `englishMeaning(word, words)` fetches the file for the word's length |
+| `@johnmorrisdotca/kotoba/meanings-en-4`, `/meanings-en-5`, `/meanings-en-6` | `EN_MEANINGS_4`, `EN_MEANINGS_5`, `EN_MEANINGS_6` | Those files: 2,635, 5,372 and 8,834 words, each a line; read with `readMeanings` |
 | `@johnmorrisdotca/kotoba/proverbs-ja`, `/yojijukugo-ja` | `JA_PROVERBS`, `JA_YOJIJUKUGO` | 930 proverbs and 1,831 four-character compounds, each with its reading and English meanings; read with `readSayings` |
 
 `readWordLists(data, size)` reads one length of an alphabet list; `unpack(packed,
@@ -737,8 +739,8 @@ still sends.
 
 ### What a word means
 
-Kotoba holds no dictionary: the lists say which words are words, and nothing more. A host that has one gives the
-game a `meanings` function, and the game draws what comes back without adding anything to the screen's shape:
+The lists say which words are words, and nothing more; the one dictionary Kotoba carries is for English (below). A host
+that has a dictionary gives the game a `meanings` function, and the game draws what comes back without adding anything to the screen's shape:
 
 ```ts no-check
 mountKotoba(element, {
@@ -761,14 +763,21 @@ mountKotoba(element, {
 - **The colour guide** says a guess can be tapped, only when a `meanings` function was given. Without one the game is
   exactly as it was.
 
-The meanings are the host's, and so is their licence and their credit: the package carries none.
+The meanings are the host's, and so is their licence and their credit, except the English ones below.
+
+**English meanings are in the package.** `englishMeaning(word, words)` from `@johnmorrisdotca/kotoba/meanings-en` has the
+shape of the option, so `meanings: englishMeaning` is all it takes. It answers one short line from Open English WordNet
+(CC BY 4.0, derived from Princeton WordNet 3.1; see [NOTICE.md](./NOTICE.md), which a page showing them must carry): 16,841
+of the 20,334 words of the 4, 5 and 6-letter lists and 97% of the answers, such as `crane: lifts and moves heavy objects`, and `plural of farm: …` for a regular plural or past form. A word WordNet lacks (`from`, `that`), or that is not for
+children (a rude, violent or sexual first sense), answers `null`. Only the file for the length asked about is fetched, 56 to
+193 kB gzipped; French, German and kana answer `null`.
 
 The [demo](https://johnmorrisdotca.github.io/kotoba/) shows it with [Jisho](https://github.com/johnmorrisdotca/jisho)
 (`@johnmorrisdotca/jisho`, the family's dictionary of Japanese words), a development dependency of the demo alone; Kotoba
 itself depends on nothing. A kana guess is looked up there as a reading, which fetches one small piece of the dictionary, and
 a reading several words share shows the commonest two or three with their written forms, as `紙 paper · 神 god · 髪 hair`,
 kept to about sixty characters. Jisho's default, safe mode, leaves out what JMdict marks vulgar, X-rated, sensitive or derogatory and
-never fetches the files that hold it; the demo keeps a list of its own words besides, which Jisho does not supply. English, French and German show nothing in the demo yet. The function in `demo/meanings.js` is the
+never fetches the files that hold it; the demo keeps a list of its own words besides, which Jisho does not supply. The demo shows English meanings with `englishMeaning`; French and German show nothing yet. The function in `demo/meanings.js` is the
 whole of the wiring:
 
 ```ts no-check
@@ -986,6 +995,9 @@ The code is MIT. The lists are data under their sources' terms, set out in full 
 - **Japanese**: JMdict, the property of the Electronic Dictionary Research and
   Development Group: CC BY-SA 4.0 and the Group's conditions. Refreshed from
   JMdict's newest release every month (`.github/workflows/jmdict-refresh.yml`).
+- **English meanings**: Open English WordNet (CC BY 4.0, the Open English WordNet team), derived from Princeton WordNet 3.1:
+  the WordNet licence's notice and disclaimer are in [NOTICE.md](./NOTICE.md) and in each data file; Princeton's name is not
+  used to promote this package.
 - **Japanese idioms, proverbs, compounds and shiritori words**: JMdict too, with the `elementary` flag
   from KANJIDIC2, the same Group's: CC BY-SA 4.0 and the Group's conditions, on
   the same monthly refresh. A page showing these words must say so on that screen;

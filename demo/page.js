@@ -31,6 +31,8 @@ const PAGE = {
     pageCredits: "Where the words come from",
     creditLetters:
       "The word lists were made from open dictionaries and cleaned of names, brands and subtitle noise; the package's README names each source and its licence.",
+    creditEnglish:
+      "The word lists were made from open dictionaries and cleaned of names, brands and subtitle noise; the package's README names each source and its licence. The meanings shown when a guess is tapped are from Open English WordNet, derived from Princeton WordNet 3.1 (Princeton University), used under CC BY 4.0 and the WordNet licence.",
     creditKana:
       "The Japanese words, and the meanings shown when a guess is tapped (by way of the Jisho package), are from JMdict ({release}), the Electronic Dictionary Research and Development Group's dictionary, used under its licence (CC BY-SA 4.0).",
     counts: "This list: {easy} easy answers, inside {answers} answers, inside {allowed} words that may be guessed.",
@@ -107,6 +109,8 @@ const PAGE = {
     pageCredits: "単語の出どころ",
     creditLetters:
       "単語リストは公開辞書から作り、人名・ブランド名・字幕のノイズを取り除いています。出どころとライセンスは README に書いてあります。",
+    creditEnglish:
+      "単語リストは公開辞書から作り、人名・ブランド名・字幕のノイズを取り除いています。出どころとライセンスは README に書いてあります。予想をタップしたときに出る意味は、Open English WordNet（プリンストン大学のWordNet 3.1をもとにしたもの）から。CC BY 4.0とWordNetのライセンスのもとで使っています。",
     creditKana:
       "日本語の単語と、予想をタップしたときに出る意味（Jisho パッケージ経由）は、JMdict（{release}）から。電子辞書研究開発グループの辞書で、そのライセンス（CC BY-SA 4.0）のもとで使っています。",
     counts:
@@ -201,6 +205,7 @@ const language = familyLanguage({
 const t = (key, values = {}) => kotobaSay(language.word(key), values);
 const phrases = mountPhrases({ t });
 const isKana = () => state.words === "ja";
+const creditKey = () => (isKana() ? "creditKana" : state.words === "en" ? "creditEnglish" : "creditLetters");
 
 let play = null;
 let release = "";
@@ -283,8 +288,8 @@ function draw() {
   $("easy").setAttribute("aria-pressed", String(state.easy));
   $("daily").setAttribute("aria-pressed", String(state.daily));
   $("credit").textContent = state.daily
-    ? `${t("dailyNote", { day: dayKey(Date.now()) })} ${t(isKana() ? "creditKana" : "creditLetters", { release })}`
-    : t(isKana() ? "creditKana" : "creditLetters", { release });
+    ? `${t("dailyNote", { day: dayKey(Date.now()) })} ${t(creditKey(), { release })}`
+    : t(creditKey(), { release });
   $("counts").textContent = counts === null ? "" : t("counts", counts);
   $("using-code").textContent = usingCode();
   $("cli-code").textContent = state.daily

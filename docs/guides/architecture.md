@@ -27,6 +27,7 @@ src/
 ├── keyboardRows.ts  the physical keyboard drawn under a grid, by language: QWERTY, AZERTY and QWERTZ
 ├── lists.ts         reading a word list once it is loaded; each list is its own entry point
 ├── load.ts          loading a list by its language and size, each as a module of its own
+├── meaningsEn.ts    what an English word means: one short line, each length of word in a file of its own
 ├── marks.ts         marking a guess: the rule every five-letter word game shares
 ├── phrases.ts       reading the Japanese idiom and shiritori lists once they are loaded, and searching the idioms
 ├── play.ts          the board you can put on a page, and its stylesheet
@@ -45,6 +46,9 @@ src/
     ├── kana-3.data.ts       the three-kana words
     ├── kana-4.data.ts       the four-kana words
     ├── kana-5.data.ts       the five-kana words
+    ├── meanings-en-4.data.ts the meanings of four-letter English words
+    ├── meanings-en-5.data.ts the meanings of five-letter English words
+    ├── meanings-en-6.data.ts the meanings of six-letter English words
     ├── pop-answers.data.ts  the pop-culture answers
     ├── pop-guesses.data.ts  the pop-culture guesses accepted at three and seven letters
     ├── proverbs-ja.data.ts  the Japanese proverbs

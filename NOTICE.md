@@ -12,7 +12,41 @@ written out in full.
 | `words-de` | LanguageTool's german-pos-dict, ranked by hermitdave's FrequencyWords, checked against Wiktionary | CC BY-SA 4.0 |
 | `kana-3`, `kana-4`, `kana-5` | JMdict, of the Electronic Dictionary Research and Development Group | CC BY-SA 4.0 and the Group's conditions |
 | `idioms-ja`, `shiritori-ja`, `proverbs-ja`, `yojijukugo-ja` | JMdict and KANJIDIC2, of the Electronic Dictionary Research and Development Group | CC BY-SA 4.0 and the Group's conditions |
+| `meanings-en-4`, `meanings-en-5`, `meanings-en-6`, `meanings-en` | Open English WordNet 2025, derived from Princeton WordNet 3.1 | CC BY 4.0 and the WordNet licence, below |
 | `pop-answers` | The package's own hand-kept list | MIT |
+
+## English meanings: Open English WordNet
+
+`meanings-en-4`, `-5` and `-6` are written by `scripts/word-meanings-en.mjs` from Open English WordNet 2025
+(https://en-word.net/; https://github.com/globalwordnet/english-wordnet, release 2025-edition, read 2026-11-04), which is
+Copyright the Open English WordNet team, under the Creative Commons Attribution 4.0 International License
+(https://creativecommons.org/licenses/by/4.0/). Its LICENSE.md says it "is derived from Princeton WordNet under the WordNet
+License and further developed under the Creative Commons Attribution 4.0 International License. You may share and adapt
+this resource providing attribution is given to both Princeton WordNet and the Open English Wordnet team." Each row is the
+first definition of a word's commonest entry, cut short, or a regular or irregular form of an entry shown with that entry's
+line; the choice of rows and the cutting are this package's own work. Its words that are not for children are left out
+(`scripts/word-meanings-en.mjs` says how).
+
+The Princeton WordNet licence, as the release's `WNDB_License.txt` carries it, says: "Permission to use, copy, modify and
+distribute this software and database and its documentation for any purpose and without fee or royalty is hereby granted,
+provided that you agree to comply with the following copyright notice and statements, including the disclaimer, and that the
+same appear on ALL copies of the software, database and documentation, including modifications that you make for internal use
+or for distribution." The notice, which every data file also carries:
+
+> WordNet 3.1 Copyright 2011 by Princeton University. All rights reserved.
+>
+> THIS SOFTWARE AND DATABASE IS PROVIDED "AS IS" AND PRINCETON UNIVERSITY MAKES NO REPRESENTATIONS OR WARRANTIES, EXPRESS OR
+> IMPLIED. BY WAY OF EXAMPLE, BUT NOT LIMITATION, PRINCETON UNIVERSITY MAKES NO REPRESENTATIONS OR WARRANTIES OF
+> MERCHANTABILITY OR FITNESS FOR ANY PARTICULAR PURPOSE OR THAT THE USE OF THE LICENSED SOFTWARE, DATABASE OR DOCUMENTATION WILL
+> NOT INFRINGE ANY THIRD PARTY PATENTS, COPYRIGHTS, TRADEMARKS OR OTHER RIGHTS.
+>
+> The name of Princeton University or Princeton may not be used in advertising or publicity pertaining to distribution of the
+> software and/or database. Title to copyright in this software, database and any associated documentation shall at all times
+> remain with Princeton University and LICENSEE agrees to preserve same.
+
+A page that shows these meanings must carry that notice and the credit, for example at its foot: *Meanings from Open English
+WordNet (the Open English WordNet team, CC BY 4.0), derived from Princeton WordNet 3.1 (Copyright 2011 Princeton University;
+https://wordnet.princeton.edu/license-and-commercial-use).* Nobody named here has reviewed or endorsed this package.
 
 ## English: SCOWL
 

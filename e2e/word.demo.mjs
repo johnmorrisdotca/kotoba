@@ -906,3 +906,30 @@ test("a real kana guess shows what Jisho says it means in its safe mode, from on
   await expect(page.locator('[data-kt="result"] [data-kt="meaning"]')).toContainText("完敗 utter defeat · 乾杯 cheers");
   await sound(page, errors);
 });
+
+test("a real English guess shows what WordNet says it means, from the one file for its length, and the hidden word's meaning is on the card", async ({
+  page,
+}) => {
+  const errors = await open(page, "?lang=en&words=en&size=5&seed=3");
+  const fetched = [];
+  page.on("request", (request) => {
+    const { pathname } = new URL(request.url());
+    if (/\/meanings-en/.test(pathname)) fetched.push(pathname);
+  });
+  await page.evaluate(() => window.kotobaState.play.newGame({ words: "en", size: 5, hidden: "plant" }));
+  await expect(cells(page, 0)).toHaveCount(5);
+  // Nothing of the meanings is fetched until one is asked for.
+  expect(fetched).toEqual([]);
+  await typeWord(page, "crane");
+  await tap(page, '[data-kt="keys"] [data-act="enter"]');
+  await tap(page, rowOf(page, 0));
+  await expect(status(page)).toContainText("CRANE: lifts and moves heavy objects");
+  expect(fetched.map((path) => path.split("/").pop())).toEqual(["meanings-en-5.data.js"]);
+  await tap(page, "h1");
+  await tap(page, rowOf(page, 0));
+  expect(fetched).toHaveLength(1);
+  await typeWord(page, "plant");
+  await tap(page, '[data-kt="keys"] [data-act="enter"]');
+  await expect(page.locator('[data-kt="result"] [data-kt="meaning"]')).not.toBeEmpty();
+  await sound(page, errors);
+});

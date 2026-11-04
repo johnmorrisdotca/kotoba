@@ -3,7 +3,8 @@
 // Kotoba holds no dictionary and does not depend on one: the game takes a `meanings(word, words)` function, and this is
 // the demo's. Jisho is a development dependency of the demo only, and site.mjs copies the few files this needs into site/jisho/.
 // A reading that several words share shows the commonest two or three with their written forms ("紙 paper · 神 god · 髪 hair"),
-// kept to about 60 characters. English, French and German show nothing yet: their meanings are another ticket.
+// kept to about 60 characters. English uses the package's own meanings (Open English WordNet); French and German show nothing yet.
+import { englishMeaning } from "./dist/meaningsEn.js";
 import { loadWords, wordsOf } from "./jisho/words.js";
 
 /** The longest line, in characters, and the longest each entry may be when there are several. */
@@ -46,8 +47,12 @@ export function lineOf(reading, found) {
   return parts[0] === undefined ? null : `${[...parts[0]].slice(0, LONGEST - 1).join("")}…`;
 }
 
-/** The `meanings` option of `mountKotoba`: kana words are looked up as readings; every other list says nothing. */
+/**
+ * The `meanings` option of `mountKotoba`: kana words are looked up as readings in Jisho, English words in the package's own
+ * `englishMeaning` (Open English WordNet); French and German say nothing yet.
+ */
 export async function jishoMeanings(word, words) {
+  if (words === "en") return englishMeaning(word, words);
   if (words !== "ja") return null;
   return lineOf(word, wordsOf(await loadWords(word), word));
 }
