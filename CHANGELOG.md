@@ -6,6 +6,8 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+## [1.9.0] - 2026-11-04
+
 A minor version: nothing that 1.8.0 gave is taken away, and the package's code and lists are unchanged. Kotoba adopts the family's must-have list for a package (MODULES-385): every way of using it is an example that a test runs, and the demo's "Put it in your page" is the family's panel.
 
 ### Added
