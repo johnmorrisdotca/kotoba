@@ -37,3 +37,26 @@ export function readAllowed(text, length) {
 export function keepGuessable({ before, fresh, barred }) {
   return new Set([...before, ...fresh].filter((word) => !barred.has(word)));
 }
+
+/**
+ * The tile lines Kumimoji's Japanese list holds, read back from the file the last build wrote: the lines of each length
+ * are front-coded, a hex digit of tiles shared with the line before and then the rest, one character a tile through `codes`.
+ */
+export function readTileWords(text) {
+  const field = (name) => new RegExp(`\\n  ${name}: "([^"]*)"`).exec(text)?.[1];
+  const tiles = [...field("kana")];
+  const kana = new Map([...field("codes")].map((code, at) => [code, tiles[at]]));
+  const words = new Set();
+  for (const [, length, packed] of text.matchAll(/\n {4}(\d+): ("(?:[^"\\]|\\.)*"),/g)) {
+    let before = "";
+    const coded = JSON.parse(packed).replaceAll("\n", "");
+    for (let at = 0; at < coded.length; ) {
+      const shared = Number.parseInt(coded[at], 16);
+      const word = before.slice(0, shared) + coded.slice(at + 1, at + 1 + Number(length) - shared);
+      at += 1 + Number(length) - shared;
+      words.add([...word].map((char) => kana.get(char)).join(""));
+      before = word;
+    }
+  }
+  return words;
+}

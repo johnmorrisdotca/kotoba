@@ -6,6 +6,10 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+### Changed
+
+- Kumimoji's Japanese tile words (`scripts/word-lists-ja.mjs`, written into the Kumimoji checkout) get the kana lists' children bar (MODULES-390): a tile line is out when every entry that spells it is unfit on its first sense (`children-bar.mjs`), and the words of the list before stay, as the kana lists keep theirs. 1,347 of JMdict 2026-11-04's 163,585 lines are barred (せっくす, ばいしゅん, ぽるの, えろい, おなに, ちくび ...). Kotoba's own package is unchanged; Kumimoji 1.5.0 ships the list.
+
 ## [1.9.0] - 2026-11-04
 
 A minor version: nothing that 1.8.0 gave is taken away, and the package's code and lists are unchanged. Kotoba adopts the family's must-have list for a package (MODULES-385): every way of using it is an example that a test runs, and the demo's "Put it in your page" is the family's panel.

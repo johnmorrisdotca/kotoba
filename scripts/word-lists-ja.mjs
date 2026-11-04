@@ -37,6 +37,9 @@
  * and spec2 alone mark English written in katakana (クレイジー, トレジャー,
  * ネイチャー), which may be guessed and is not yet a Japanese word to hide.
  *
+ * Kumimoji's tile words get the same bar, on the tile line (a reading folded to the 45 base kana): a line is barred when
+ * no ordinary entry spells it, and the words of the list before stay, as the kana lists keep theirs.
+ *
  * JMdict is a real dictionary, so every word here is Japanese; any language
  * Gomoji adds later takes its words from a real dictionary of that language
  * too, never from a frequency count alone (`word-lists-fr-de.mjs` says why).
@@ -48,7 +51,7 @@
 import { existsSync, readFileSync, writeFileSync } from "node:fs";
 import { gunzipSync } from "node:zlib";
 import { japaneseBar } from "./children-bar.mjs";
-import { firstSenseNotForEveryone, keepGuessable, readAllowed } from "./kana-keep.mjs";
+import { firstSenseNotForEveryone, keepGuessable, readAllowed, readTileWords } from "./kana-keep.mjs";
 import { writeWordList } from "./word-list-docs.mjs";
 
 const SOURCE = process.argv[2];
@@ -176,6 +179,9 @@ const allowed = Object.fromEntries(LENGTHS.map((length) => [length, new Set()]))
 /** Each reading fit to hide, and its best rank: lower is commoner. */
 const ranked = Object.fromEntries(LENGTHS.map((length) => [length, new Map()]));
 const tileWords = new Set();
+/** The tile lines of readings whose entry's main meaning is not for everyone, and those with an ordinary entry; barred is the first less the second. */
+const tileUnfit = new Map();
+const tileOrdinary = new Set();
 /** Readings an entry spells whose main meaning is not for everyone, and those with an ordinary entry; barred is the first less the second. */
 const unfit = Object.fromEntries(LENGTHS.map((length) => [length, new Map()]));
 const ordinary = Object.fromEntries(LENGTHS.map((length) => [length, new Set()]));
@@ -235,7 +241,11 @@ for (const entry of xml.split("<entry>").slice(1)) {
     if (!HIRAGANA.test(reading)) continue;
     // A reading with ー is a loanword spelt in katakana, and there is no ー tile.
     const tiles = tileKanaOf(reading);
-    if (tiles !== null && tiles.length >= TILE_WORD_MIN && tiles.length <= TILE_WORD_MAX) tileWords.add(tiles);
+    if (tiles !== null && tiles.length >= TILE_WORD_MIN && tiles.length <= TILE_WORD_MAX) {
+      tileWords.add(tiles);
+      if (firstSenseNotForEveryone(entry)) tileUnfit.set(tiles, tileUnfit.get(tiles) ?? reading);
+      else tileOrdinary.add(tiles);
+    }
     const length = [...reading].length;
     if (!LENGTHS.includes(length)) continue;
     allowed[length].add(reading);
@@ -339,6 +349,24 @@ export const JA_WORDS_${length} = {
 if (tileWords.size === 0) throw new Error("JMdict produced no Japanese Kumimoji words.");
 
 /*
+ * THE BAR ON KUMIMOJI'S WORDS is the kana lists' (children play it): a tile line is barred when every entry that
+ * spells it is unfit on its first sense (`children-bar.mjs`), so it has no ordinary meaning left. The words of the
+ * list before stay, as the kana lists keep theirs: a game kept or half way through was checked against them, and a
+ * word leaves only by the bar.
+ */
+const tileBarred = new Set([
+  ...[...tileUnfit.keys()].filter((tiles) => !tileOrdinary.has(tiles)),
+  ...[...NOT_GUESSABLE.keys()].map(tileKanaOf).filter((tiles) => tiles !== null && !tileOrdinary.has(tiles)),
+]);
+const tileBefore = existsSync(TILE_WORDS_OUT) ? readTileWords(readFileSync(TILE_WORDS_OUT, "utf8")) : new Set();
+const tileKept = keepGuessable({ before: tileBefore, fresh: tileWords, barred: tileBarred });
+console.log(
+  `Kumimoji Japanese bar: ${[...tileWords].filter((tiles) => tileBarred.has(tiles)).length} of JMdict's ${tileWords.size} lines barred, ${[...tileBefore].filter((tiles) => tileBarred.has(tiles)).length} of the ${tileBefore.size} before, ${[...tileBefore].filter((tiles) => !tileWords.has(tiles) && !tileBarred.has(tiles)).length} kept that JMdict no longer lists`,
+);
+tileWords.clear();
+for (const tiles of tileKept) tileWords.add(tiles);
+
+/*
  * THE MIX IT MEASURES: 144 tiles, as in English, shared among the 45 kana in proportion to
  * how often each is used in the words people know — every answer the kana
  * Gomoji hides, 3 to 5 kana, each kana read as its tile — with one tile of any
@@ -406,6 +434,7 @@ else
  * JAPANESE KUMIMOJI WORDS AND TILE MIX, written by scripts/word-lists-ja.mjs.
  * Derived from JMdict release ${created}, and under CC BY-SA 4.0 with EDRDG's
  * conditions: https://www.edrdg.org/edrdg/licence.html. Never edited by hand.
+ * Less the readings no ordinary meaning is left for (kotoba's scripts/children-bar.mjs, the bar of its kana lists).
  * ${tileWords.size} hiragana readings of ${TILE_WORD_MIN}–${TILE_WORD_MAX} kana, each spelt in the 45
  * tiles (が as か, ゃ as や, を as お), one character a kana through \`codes\`,
  * front-coded by length. The tiles are \`JAPANESE_TILE_MIX\` (tiles.constants.ts).

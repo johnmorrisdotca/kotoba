@@ -1,6 +1,6 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { firstSenseNotForEveryone, keepGuessable, readAllowed } from "../scripts/kana-keep.mjs";
+import { firstSenseNotForEveryone, keepGuessable, readAllowed, readTileWords } from "../scripts/kana-keep.mjs";
 import { loadWordList } from "./load.ts";
 
 /**
@@ -32,6 +32,11 @@ describe("the words that may be guessed stay so", () => {
   it("reads back from a list file the words it was written with", () => {
     const text = `\n  alphabet: "あいう",\n  codes: "!#$",\n  allowed: "!#$$#!",\n`;
     expect([...readAllowed(text, 3)].sort()).toEqual(["あいう", "ういあ"].sort());
+  });
+
+  it("reads back from Kumimoji's list file the tile lines it was written with, front-coded", () => {
+    const text = `\n  kana: "あいう",\n  codes: "!#$",\n  byLength: {\n    2: "0!#1$",\n    3: "0!#$1$#",\n  },\n`;
+    expect([...readTileWords(text)].sort()).toEqual(["あい", "あう", "あいう", "あうい"].sort());
   });
 
   it.each(LENGTHS)("holds at least %i-kana's floor, and every answer is a word that may be guessed", async (length) => {
