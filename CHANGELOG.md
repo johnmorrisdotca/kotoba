@@ -6,6 +6,8 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+## [1.8.0] - 2026-11-04
+
 A minor version: nothing that 1.7.0 gave is taken away except what children should not have been handed. Every list now keeps out what is not for them, by one rule.
 
 ### Changed
