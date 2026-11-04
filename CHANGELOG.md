@@ -6,6 +6,10 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+### Fixed
+
+- The demo no longer moves its "Put it in your page" panel when the shiritori, idiom and credit lines load as the reader scrolls near them: their space is kept, so a tap lands on the button the reader aimed at (MODULES-391, a flaky WebKit phone test on CI). Demo only; the package is unchanged.
+
 ### Changed
 
 - Kumimoji's Japanese tile words (`scripts/word-lists-ja.mjs`, written into the Kumimoji checkout) get the kana lists' children bar (MODULES-390): a tile line is out when every entry that spells it is unfit on its first sense (`children-bar.mjs`), and the words of the list before stay, as the kana lists keep theirs. 1,347 of JMdict 2026-11-04's 163,585 lines are barred (せっくす, ばいしゅん, ぽるの, えろい, おなに, ちくび ...). Kotoba's own package is unchanged; Kumimoji 1.5.0 ships the list.

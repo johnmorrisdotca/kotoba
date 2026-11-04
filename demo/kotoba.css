@@ -167,9 +167,11 @@
   padding: 0;
   list-style: none;
 }
-.chain:empty,
-.idioms:empty {
-  display: none;
+.chain {
+  min-height: 7rem;
+}
+.idioms {
+  min-height: 9rem;
 }
 .chain li,
 .idioms li {
@@ -193,8 +195,12 @@
   color: var(--muted);
 }
 .chain-status {
+  min-height: 3em;
   font-weight: 500;
   color: inherit;
+}
+#phrases-credit {
+  min-height: 4.2rem;
 }
 .credits p + p {
   margin-top: 6px;
