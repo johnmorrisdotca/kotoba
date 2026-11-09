@@ -2,96 +2,96 @@
   "measured": "esbuild 0.28.2, bundled, minified, ES2020, gzip level 9",
   "entries": {
     ".": {
-      "minified": 34271,
-      "gzip": 11033
+      "minified": 34270,
+      "gzip": 11085
     },
     "./children-filter": {
       "minified": 6882,
-      "gzip": 3255
+      "gzip": 3294
     },
     "./words-en": {
       "minified": 186711,
-      "gzip": 73773
+      "gzip": 74290
     },
     "./words-fr": {
       "minified": 132559,
-      "gzip": 51104
+      "gzip": 51080
     },
     "./words-de": {
       "minified": 157615,
-      "gzip": 58654
+      "gzip": 58742
     },
     "./pop-answers": {
       "minified": 17813,
-      "gzip": 9462
+      "gzip": 9428
     },
     "./pop-guesses": {
       "minified": 126294,
-      "gzip": 48938
+      "gzip": 49859
     },
     "./kana-3": {
       "minified": 58308,
-      "gzip": 40506
+      "gzip": 40273
     },
     "./kana-4": {
       "minified": 166958,
-      "gzip": 100186
+      "gzip": 112562
     },
     "./kana-5": {
       "minified": 191109,
-      "gzip": 113430
+      "gzip": 120244
     },
     "./idioms-ja": {
       "minified": 304187,
-      "gzip": 79893
+      "gzip": 79595
     },
     "./shiritori-ja": {
       "minified": 331000,
-      "gzip": 106807
+      "gzip": 106248
     },
     "./proverbs-ja": {
       "minified": 194255,
-      "gzip": 51841
+      "gzip": 51690
     },
     "./yojijukugo-ja": {
       "minified": 260223,
-      "gzip": 81598
+      "gzip": 81338
     },
     "./cli": {
-      "minified": 923047,
-      "gzip": 449857
+      "minified": 923046,
+      "gzip": 468712
     },
     "./meanings-en-4": {
       "minified": 145113,
-      "gzip": 56318
+      "gzip": 55984
     },
     "./meanings-en-5": {
       "minified": 313763,
-      "gzip": 117380
+      "gzip": 116624
     },
     "./meanings-en-6": {
       "minified": 528882,
-      "gzip": 194672
+      "gzip": 193538
     },
     "./meanings-en": {
       "minified": 988610,
-      "gzip": 366377
+      "gzip": 364319
     },
     "./load": {
       "minified": 894688,
-      "gzip": 440270
+      "gzip": 459108
     },
     "./play": {
       "minified": 944077,
-      "gzip": 456316
+      "gzip": 475342
     },
     "./element": {
       "minified": 951437,
-      "gzip": 458772
+      "gzip": 477733
     },
     "./element/define": {
       "minified": 951442,
-      "gzip": 458780
+      "gzip": 477740
     }
   }
 }

@@ -637,6 +637,19 @@ the lists):
 | かな | 4 | 900 | 2000 | 38661 |
 | かな | 5 | 900 | 2000 | 35179 |
 
+### A filter for names children type
+
+The same barred words that keep the lists clean are an entry point of their own,
+for a site where children type a name (a star they name, a nickname, a team):
+`checkText(text, { lang })` from `@johnmorrisdotca/kotoba/children-filter` says
+whether it may be shown, and why not (`blocked`, `personal` for an email, phone
+number, address or link, `shape` for an empty or overlong name). It sees through
+digits for letters, stretched and spaced letters, full-width letters and hiragana
+for katakana, and lets ordinary words through (Scunthorpe, Sussex, cocktail).
+English, French, German and Japanese; MIT, with no dictionary data. It is a floor,
+not a wall: a person still approves the names. See the
+[children's filter guide](docs/guides/children-filter.md).
+
 ## The rules
 
 | Export | What it does |

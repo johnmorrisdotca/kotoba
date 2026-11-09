@@ -21,6 +21,8 @@ src/
 ├── element-define.ts            # default tag registration
 ├── embed-day.ts                 # UTC embed date validation
 ├── index.ts         the main entry: the marking rules, scoring, keyboards, kana helpers, a round, the word of the day, the words and a reader for the lists
+├── childrenFilter.ts  checking a name a child types: barred words in four languages, typing tricks, personal details
+├── childrenWords.ts   the barred words by language, shared with the script that cleans the lists
 ├── cli.ts           the command line, as a function of its arguments
 ├── daily.ts         a word a day: days as dates, and a pack of the list dealt by day
 ├── game.ts          a round of a word game, as plain data: typing, guesses, marks and the score
