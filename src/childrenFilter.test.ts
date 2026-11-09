@@ -177,6 +177,32 @@ describe("children's text filter", () => {
       expect(checkText(value, { lang }), value).toMatchObject({ ok: false, reason: "blocked" });
     expect(checkText("Pilar", { lang: "es" })).toEqual({ ok: true });
   });
+  it("refuses a name of only numbers and marks, and reads numbers for jokes", () => {
+    for (const value of [
+      "55378008",
+      "5318008",
+      "58008",
+      "80085",
+      "8008",
+      "7734",
+      "Star 80085",
+      "Star 69",
+      "Blaze 420",
+      "BOOBIES",
+    ])
+      expect(checkText(value), value).toMatchObject({ ok: false, reason: "blocked" });
+    for (const value of ["55378008", "80085", "69", "420", "1488"])
+      expect(checkText(value, { mode: "text" }), value).toMatchObject({ ok: false, reason: "blocked" });
+    for (const value of ["007", "3.14", "88", "666"])
+      expect(checkText(value), value).toEqual({ ok: false, reason: "shape" });
+    expect(checkText("2001")).toEqual({ ok: false, reason: "personal" });
+    expect(checkText("0.7734", { mode: "text" })).toEqual({ ok: false, reason: "personal" });
+    expect(checkText("kid69@mail.com", { mode: "text" })).toEqual({ ok: false, reason: "personal" });
+    for (const value of ["Apollo 11", "Area 51", "Nova 7", "Kepler 452", "R2D2", "Agent 007"])
+      expect(checkText(value), value).toEqual({ ok: true });
+    for (const value of ["007", "88", "666", "3.14", "101"])
+      expect(checkText(value, { mode: "text" }), value).toEqual({ ok: true });
+  });
   it("refuses the prank names that read as something else aloud, spaced or run together", () => {
     for (const value of [
       "Mike Hunt",

@@ -1,7 +1,7 @@
 import { de, en, es, fr, it, ja, pt } from "./childrenWords.ts";
 
 type Language = "en" | "ja" | "fr" | "de" | "es" | "it" | "pt" | "all";
-type Options = { lang?: Language; maxLength?: number };
+type Options = { lang?: Language; maxLength?: number; mode?: "name" | "text" };
 type Result = { ok: true } | { ok: false; reason: "blocked" | "personal" | "shape"; word?: string };
 
 const lists = { en, fr, de, es, it, pt, ja };
@@ -31,6 +31,11 @@ const kana = (text: string) =>
     .normalize("NFKC")
     .replace(/[ぁ-ゖ]/g, (c) => String.fromCharCode(c.charCodeAt(0) + 96))
     .replace(/[\s　・･.,、。_\-ー~〜]/g, "");
+/** An email or a web address: checked first, so a number inside one (kid69@...) is a contact detail, not a joke. */
+const contact = (text: string) =>
+  /[^\s@]+@[^\s@]+\.[^\s@]+|https?:|www\.|\.[a-z]{2,6}(?:\/|$)|\.(?:com|net|org|jp|ca|io|co)\b/iu.test(
+    text.normalize("NFKC"),
+  );
 const personal = (text: string) =>
   /[^\s@]+@[^\s@]+\.[^\s@]+|https?:|www\.|\.[a-z]{2,6}(?:\/|$)|\.(?:com|net|org|jp|ca|io|co)\b|\d{4,}|(?:\+?\d[\s().-]*){7,}|\b\d+\s+[\p{L}][\p{L}\s.'-]*\s(?:street|st|road|rd|avenue|ave|lane|ln|drive|dr|boulevard|blvd)\b/iu.test(
     text.normalize("NFKC"),
@@ -231,10 +236,48 @@ function blocked(text: string, language: Exclude<Language, "all">): string | und
   return undefined;
 }
 
+/** Numbers that are jokes on their own: 69 and 420, and the hate code 1488. Only a whole number counts ("Apollo 11" passes). */
+/** Calculator words that are only friendly: 0.7734 is hELLO, 77345 SHELL. */
+const INNOCENT_READS = new Set(["hello", "hellos", "shell", "shells", "bells", "belles"]);
+const NUMBER_JOKES = new Set(["69", "420", "1488"]);
+/** A calculator's digits turned upside down: 5318008 reads BOOBIES, 7734 hELL. */
+const UPSIDE_DOWN: Record<string, string> = {
+  "0": "o",
+  "1": "i",
+  "2": "z",
+  "3": "e",
+  "4": "h",
+  "5": "s",
+  "6": "g",
+  "7": "l",
+  "8": "b",
+  "9": "g",
+};
+
+function numberJoke(text: string): string | undefined {
+  for (const token of text.split(/[^\p{L}\p{N}.]+/u)) {
+    const digits = token.replace(/\./g, "");
+    if (!/^\d+$/.test(digits)) continue;
+    if (NUMBER_JOKES.has(digits)) return digits;
+    if (digits.length < 4) continue;
+    const upside = [...digits]
+      .reverse()
+      .map((digit) => UPSIDE_DOWN[digit] ?? digit)
+      .join("");
+    for (const read of [upside, latin(digits)]) {
+      if (INNOCENT_READS.has(read)) continue;
+      const found = prepared.en.find(({ form }) => form.length >= 4 && (read === form || read.startsWith(form)));
+      if (found) return `${token} (${read})`;
+    }
+  }
+  return undefined;
+}
+
 /**
  * Check a name or other short text a child has typed. This is a floor; a person should still review it.
  * @param text - Text to check.
- * @param options - Language (default all) and maximum length in Unicode code points (default 40).
+ * @param options - Language (default all), maximum length in Unicode code points (default 40), and mode: "name" (the default:
+ *   a name needs letters, so only numbers and marks are refused) or "text" (numbers allowed, still read for jokes).
  * @returns Whether it is clean, or the reason it needs attention.
  * @example
  * ```ts
@@ -246,7 +289,12 @@ export function checkText(text: string, options: Options = {}): Result {
   const normal = text.normalize("NFKC").trim();
   const max = options.maxLength ?? 40;
   if (!normal || [...normal].length > max) return { ok: false, reason: "shape" };
+  if (contact(normal)) return { ok: false, reason: "personal" };
+  const joke = numberJoke(normal);
+  if (joke) return { ok: false, reason: "blocked", word: joke };
   if (personal(normal)) return { ok: false, reason: "personal" };
+  // A name has letters: only numbers and marks ("007", "3.14") are not a name. Free text may hold numbers.
+  if ((options.mode ?? "name") === "name" && !/\p{L}/u.test(normal)) return { ok: false, reason: "shape" };
   if (!/[\p{L}\p{N}]/u.test(normal) || /<[^>]*>/u.test(normal)) return { ok: false, reason: "shape" };
   const languages: Exclude<Language, "all">[] =
     options.lang && options.lang !== "all" ? [options.lang] : ["en", "ja", "fr", "de", "es", "it", "pt"];

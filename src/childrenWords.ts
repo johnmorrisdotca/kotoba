@@ -271,7 +271,9 @@ const BLOCKED_JA: readonly string[] = [
 const VULGAR = ["まんこ", "おまんこ", "うんこ", "おっぱい", "ちんこ", "ちんぽ", "れいぷ"];
 // Spellings made to slip past a list: dropped vowels, phonetic letters, slang endings.
 const VARIANTS_EN =
-  "fck fcuk fuk fukk fuq fuc phuk phuck fukin fuking biatch beyotch cnut pron noods noodz nudes sheit shiet".split(" ");
+  "boobies boobie titties fck fcuk fuk fukk fuq fuc phuk phuck fukin fuking biatch beyotch cnut pron noods noodz nudes sheit shiet".split(
+    " ",
+  );
 /** English words for checking typed text. */
 export const en = [...new Set([...WORDS.en.split(/\s+/), ...BLOCKED_EN, ...VARIANTS_EN])];
 /** French words for checking typed text. */
