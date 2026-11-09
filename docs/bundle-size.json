@@ -6,8 +6,8 @@
       "gzip": 11085
     },
     "./children-filter": {
-      "minified": 6882,
-      "gzip": 3294
+      "minified": 6923,
+      "gzip": 3316
     },
     "./words-en": {
       "minified": 186711,

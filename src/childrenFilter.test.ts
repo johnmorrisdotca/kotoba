@@ -63,8 +63,9 @@ describe("children's text filter", () => {
   });
   it("keeps ordinary names and words", () => {
     for (const value of good) expect(checkText(value), value).toEqual({ ok: true });
-    // John decides whether this whole name should pass; for now it is blocked.
-    expect(checkText("Dick")).toMatchObject({ ok: false, reason: "blocked" });
+    // A barred word that is also a given name passes (John, 2026-11-09); the insult built on it does not.
+    expect(checkText("Dick")).toEqual({ ok: true });
+    expect(checkText("dickhead")).toMatchObject({ ok: false, reason: "blocked" });
   });
   it("finds contact details", () => {
     for (const value of [

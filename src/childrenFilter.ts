@@ -34,10 +34,13 @@ const personal = (text: string) =>
   /[^\s@]+@[^\s@]+\.[^\s@]+|https?:|www\.|\.[a-z]{2,6}(?:\/|$)|\.(?:com|net|org|jp|ca|io|co)\b|\d{4,}|(?:\+?\d[\s().-]*){7,}|\b\d+\s+[\p{L}][\p{L}\s.'-]*\s(?:street|st|road|rd|avenue|ave|lane|ln|drive|dr|boulevard|blvd)\b/iu.test(
     text.normalize("NFKC"),
   );
+/** Barred words that are also ordinary given names, so a child's own name passes (John, 2026-11-09); "dickhead" stays barred. */
+const NAMES = new Set(["dick"]);
+
 const prepared = Object.fromEntries(
   Object.entries(lists).map(([language, words]) => [
     language,
-    words.map((word) => ({ word, form: language === "ja" ? kana(word) : latin(word) })),
+    words.filter((word) => !NAMES.has(word)).map((word) => ({ word, form: language === "ja" ? kana(word) : latin(word) })),
   ]),
 ) as Record<Exclude<Language, "all">, { word: string; form: string }[]>;
 
