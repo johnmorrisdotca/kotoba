@@ -616,6 +616,7 @@ may be guessed.
 | `@johnmorrisdotca/kotoba/meanings-en` | `englishMeaning`, `readMeanings` | What an English word means, one short line, from Open English WordNet: `englishMeaning(word, words)` fetches the file for the word's length |
 | `@johnmorrisdotca/kotoba/meanings-en-4`, `/meanings-en-5`, `/meanings-en-6` | `EN_MEANINGS_4`, `EN_MEANINGS_5`, `EN_MEANINGS_6` | Those files: 2,635, 5,372 and 8,834 words, each a line; read with `readMeanings` |
 | `@johnmorrisdotca/kotoba/proverbs-ja`, `/yojijukugo-ja` | `JA_PROVERBS`, `JA_YOJIJUKUGO` | 929 proverbs and 1,832 four-character compounds, each with its reading and English meanings; read with `readSayings` |
+| `@johnmorrisdotca/kotoba/children-filter` | `checkText`, `isClean` | A check for names children type ([guide](docs/guides/children-filter.md)) |
 
 `readWordLists(data, size)` reads one length of an alphabet list; `unpack(packed,
 size)` reads a kana list; `loadWordList(language, size)` (`/load`) does either by
@@ -637,18 +638,6 @@ the lists):
 | かな | 4 | 900 | 2000 | 38661 |
 | かな | 5 | 900 | 2000 | 35179 |
 
-### A filter for names children type
-
-The same barred words that keep the lists clean are an entry point of their own,
-for a site where children type a name (a star they name, a nickname, a team):
-`checkText(text, { lang })` from `@johnmorrisdotca/kotoba/children-filter` says
-whether it may be shown, and why not (`blocked`, `personal` for an email, phone
-number, address or link, `shape` for an empty or overlong name). It sees through
-digits for letters, stretched and spaced letters, full-width letters and hiragana
-for katakana, and lets ordinary words through (Scunthorpe, Sussex, cocktail).
-English, French, German and Japanese; MIT, with no dictionary data. It is a floor,
-not a wall: a person still approves the names. See the
-[children's filter guide](docs/guides/children-filter.md).
 
 ## The rules
 
@@ -992,7 +981,7 @@ is the place to start.
 
 ## Architecture
 
-The pure rules, packed dictionaries, lazy loaders and native rendering entries are explained in the [architecture guide](docs/guides/architecture.md), which preserves the complete file-by-file source tree.
+The [architecture guide](docs/guides/architecture.md) explains the rules, lists, loaders and drawing, with the source tree file by file.
 
 ## The name
 
