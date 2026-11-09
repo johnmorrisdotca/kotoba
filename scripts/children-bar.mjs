@@ -118,33 +118,7 @@ export function japaneseBar(entry, scope = "all") {
  * French and German: the same, and a French word an English reader sees as vulgar ("rape", a grater), and the words a slur
  * is most often made of.
  */
-const WORDS = {
-  en: `chink coon dago dyke fag fags faggot gook homo honky kike negro spic wop gypsy nazi queer midget retard cretin
-  moron idiot scum nitwit weirdo fatty
-  arse arsed bitch bugger crap cunt damn dick dicks fuck fucks hell piss pissy shit prick twat wank slag
-  anal anus boner boobs booby boob busty bimbo carnal condom crotch dildo erotic fart farts fetish harlot herpes hooter
-  horny incest jizz kinky lewd lust lusty molest nipple orgasm orgy penis pimp porn pubic pussy puss rape raped rapes
-  raping rapist rectal rectum sadism sadist seduce semen sexing sexual sexy skank slut sluts smut sodomy spunk sperm
-  testis tits titty turd vagina whore ballsy
-  booze bong dope heroin junkie opium vape weed brandy liquor vodka whisky whiskey`,
-  fr: `anal baise bite cocu conne cons fesse merde negre negro nique penis pute putes salop seins vagin zizi homo porno hymen
-pede pine bitte etron beuh tapin rape boche ducon clito fion caca pipi vomi fatma nazi teton chier garce sucer viol sexe idiot
-bander bordel chiant chieur encule foutre gerber gouine niquer nichon pisser putain salaud salope sperme nympho gigolo libido
-luxure sexuel suceur gammee fuhrer hetero pubien uretre uriner fesser fessee lecher violer verole herpes puceau vierge salace
-extase toxico debile cretin abruti batard tocard ignare neuneu crotte ordure soutif capote voyeur degueu rectum gyneco youpin
-ricain romano
-  juif juive eskimo
-  sexe sexy viol putain fesses
-  ivre saoul vodka whisky drogue`,
-  de: `arsch fick fickt fotze geil geile hure huren kacke kotze mist neger nutte pisse milf after lesbe porno penis vulva titte
-ficke dirne tunte puff popo zicke luder depp busen tussi idiot
-bumsen ficken vögeln muschi pimmel nippel pissen pisser kotzen furzen koitus kondom erotik libido vagina voyeur domina inzest
-geilen kiffen kiffer koksen kokain heroin psycho prolet lusche penner fatzke dussel zicken zickig fresse schwul pfaffe suizid
-tampon saufen säufer schiss pinkel poppen eunuch
-  jude arier moslem türken eskimo
-  sexy ficken
-  droge whisky`,
-};
+import { WORDS } from "../src/childrenWords.ts";
 
 const SETS = Object.fromEntries(
   Object.entries(WORDS).map(([language, words]) => [language, new Set(words.split(/\s+/).filter(Boolean))]),

@@ -1,6 +1,30 @@
 # API reference
 
-Every export of every entry point of `@johnmorrisdotca/kotoba`, with its signature and its doc comment. This file is made from the source by `pnpm docs:api`, and a test fails when it falls behind: 22 entry points, 132 exports.
+Every export of every entry point of `@johnmorrisdotca/kotoba`, with its signature and its doc comment. This file is made from the source by `pnpm docs:api`, and a test fails when it falls behind: 23 entry points, 134 exports.
+
+## `@johnmorrisdotca/kotoba/children-filter`
+
+[`checkText`](#children-filter-checkText) · [`isClean`](#children-filter-isClean)
+
+<a id="children-filter-checkText"></a>
+
+### function `checkText`
+
+```ts
+checkText(text: string, options?: Options): Result
+```
+
+Check a name or other short text a child has typed. This is a floor; a person should still review it.
+
+<a id="children-filter-isClean"></a>
+
+### function `isClean`
+
+```ts
+isClean(text: string, options?: Options): boolean
+```
+
+Say whether a name or short text passes the children's filter.
 
 ## `@johnmorrisdotca/kotoba`
 

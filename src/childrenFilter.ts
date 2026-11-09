@@ -1,0 +1,110 @@
+import { de, en, fr, ja } from "./childrenWords.ts";
+
+type Language = "en" | "ja" | "fr" | "de" | "all";
+type Options = { lang?: Language; maxLength?: number };
+type Result = { ok: true } | { ok: false; reason: "blocked" | "personal" | "shape"; word?: string };
+
+const lists = { en, fr, de, ja };
+const leet: Record<string, string> = {
+  "0": "o",
+  "1": "i",
+  "3": "e",
+  "4": "a",
+  "5": "s",
+  "7": "t",
+  "8": "b",
+  "@": "a",
+  $: "s",
+  "!": "i",
+  "|": "i",
+  "+": "t",
+};
+const latin = (text: string) =>
+  text
+    .normalize("NFKD")
+    .toLowerCase()
+    .replace(/\p{M}/gu, "")
+    .replace(/[0134578@$!|+]/g, (c) => leet[c] ?? c);
+const kana = (text: string) =>
+  text
+    .normalize("NFKC")
+    .replace(/[ぁ-ゖ]/g, (c) => String.fromCharCode(c.charCodeAt(0) + 96))
+    .replace(/[\s　・･.,、。_\-ー~〜]/g, "");
+const personal = (text: string) =>
+  /[^\s@]+@[^\s@]+\.[^\s@]+|https?:|www\.|\.[a-z]{2,6}(?:\/|$)|\.(?:com|net|org|jp|ca|io|co)\b|\d{4,}|(?:\+?\d[\s().-]*){7,}|\b\d+\s+[\p{L}][\p{L}\s.'-]*\s(?:street|st|road|rd|avenue|ave|lane|ln|drive|dr|boulevard|blvd)\b/iu.test(
+    text.normalize("NFKC"),
+  );
+const prepared = Object.fromEntries(
+  Object.entries(lists).map(([language, words]) => [
+    language,
+    words.map((word) => ({ word, form: language === "ja" ? kana(word) : latin(word) })),
+  ]),
+) as Record<Exclude<Language, "all">, { word: string; form: string }[]>;
+
+function blocked(text: string, language: Exclude<Language, "all">): string | undefined {
+  if (language === "ja") {
+    const whole = kana(text);
+    const tokens = text.split(/[\s　・･.,、。_~〜]+/u).map(kana);
+    return prepared.ja.find(({ form }) => ([...form].length > 3 ? whole.includes(form) : tokens.includes(form)))?.word;
+  }
+  const raw = latin(text);
+  const words = raw
+    .split(/[^a-z]+/)
+    .filter(Boolean)
+    .map((part) => part.replace(/(.)\1{2,}/g, "$1$1"));
+  const compact = words.join("");
+  const stretched = words.map((part) => part.replace(/(.)\1+/g, "$1"));
+  for (const { word, form } of prepared[language]) {
+    const single = form.replace(/(.)\1+/g, "$1");
+    if (
+      words.some((part) => part === form || part === `${form}s` || part === `${form}es`) ||
+      stretched.some((part, i) => words[i] !== part && part === single)
+    )
+      return word;
+    if (words.length > 1 && compact === form) return word;
+    // This common profession is not an embedded assault term.
+    if (form.length >= 5 && compact.includes(form) && !(form === "rapist" && compact === "therapist")) return word;
+  }
+  return undefined;
+}
+
+/**
+ * Check a name or other short text a child has typed. This is a floor; a person should still review it.
+ * @param text - Text to check.
+ * @param options - Language (default all) and maximum length in Unicode code points (default 40).
+ * @returns Whether it is clean, or the reason it needs attention.
+ * @example
+ * ```ts
+ * import { checkText } from "@johnmorrisdotca/kotoba/children-filter";
+ * console.log(checkText("Luna").ok); // true
+ * ```
+ */
+export function checkText(text: string, options: Options = {}): Result {
+  const normal = text.normalize("NFKC").trim();
+  const max = options.maxLength ?? 40;
+  if (!normal || [...normal].length > max) return { ok: false, reason: "shape" };
+  if (personal(normal)) return { ok: false, reason: "personal" };
+  if (!/[\p{L}\p{N}]/u.test(normal) || /<[^>]*>/u.test(normal)) return { ok: false, reason: "shape" };
+  const languages: Exclude<Language, "all">[] =
+    options.lang && options.lang !== "all" ? [options.lang] : ["en", "ja", "fr", "de"];
+  for (const language of languages) {
+    const word = blocked(normal, language);
+    if (word) return { ok: false, reason: "blocked", word };
+  }
+  return { ok: true };
+}
+
+/**
+ * Say whether a name or short text passes the children's filter.
+ * @param text - Text to check.
+ * @param options - Language and maximum length, as for checkText.
+ * @returns True if the text passes.
+ * @example
+ * ```ts
+ * import { isClean } from "@johnmorrisdotca/kotoba/children-filter";
+ * console.log(isClean("Luna")); // true
+ * ```
+ */
+export function isClean(text: string, options?: Options): boolean {
+  return checkText(text, options).ok;
+}
