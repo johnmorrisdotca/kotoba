@@ -2,30 +2,6 @@
 
 Every export of every entry point of `@johnmorrisdotca/kotoba`, with its signature and its doc comment. This file is made from the source by `pnpm docs:api`, and a test fails when it falls behind: 23 entry points, 134 exports.
 
-## `@johnmorrisdotca/kotoba/children-filter`
-
-[`checkText`](#children-filter-checkText) · [`isClean`](#children-filter-isClean)
-
-<a id="children-filter-checkText"></a>
-
-### function `checkText`
-
-```ts
-checkText(text: string, options?: Options): Result
-```
-
-Check a name or other short text a child has typed. This is a floor; a person should still review it.
-
-<a id="children-filter-isClean"></a>
-
-### function `isClean`
-
-```ts
-isClean(text: string, options?: Options): boolean
-```
-
-Say whether a name or short text passes the children's filter.
-
 ## `@johnmorrisdotca/kotoba`
 
 [`ALPHABETS`](#main-ALPHABETS) · [`changeWordGame`](#main-changeWordGame) · [`cycleMark`](#main-cycleMark) · [`dailyIndex`](#main-dailyIndex) · [`DailyOptions`](#main-DailyOptions) · [`dailyWord`](#main-dailyWord) · [`dayKey`](#main-dayKey) · [`DayKey`](#main-DayKey) · [`dayNumber`](#main-dayNumber) · [`decodeGuesses`](#main-decodeGuesses) · [`decodeHidden`](#main-decodeHidden) · [`encodeHidden`](#main-encodeHidden) · [`eraseWordGame`](#main-eraseWordGame) · [`finishRomaji`](#main-finishRomaji) · [`foundBonus`](#main-foundBonus) · [`GomojiLanguage`](#main-GomojiLanguage) · [`guessMarks`](#main-guessMarks) · [`Idiom`](#main-Idiom) · [`IdiomKind`](#main-IdiomKind) · [`isDayKey`](#main-isDayKey) · [`isKanaGame`](#main-isKanaGame) · [`isSmall`](#main-isSmall) · [`KANA_COLUMN`](#main-KANA_COLUMN) · [`KANA_SIZES`](#main-KANA_SIZES) · [`kanaBase`](#main-kanaBase) · [`kanaFamily`](#main-kanaFamily) · [`kanaFound`](#main-kanaFound) · [`KanaMark`](#main-KanaMark) · [`KanaMarked`](#main-KanaMarked) · [`kanaScore`](#main-kanaScore) · [`KanaScore`](#main-KanaScore) · [`kanaTone`](#main-kanaTone) · [`KanaWords`](#main-KanaWords) · [`KEYBOARD_ROWS`](#main-KEYBOARD_ROWS) · [`keyMarks`](#main-keyMarks) · [`KOTOBA_STRINGS`](#main-KOTOBA_STRINGS) · [`kotobaLanguage`](#main-kotobaLanguage) · [`kotobaSay`](#main-kotobaSay) · [`KotobaStrings`](#main-KotobaStrings) · [`Language`](#main-Language) · [`LetterMark`](#main-LetterMark) · [`LONG_BAR`](#main-LONG_BAR) · [`markGuess`](#main-markGuess) · [`markKanaGuess`](#main-markKanaGuess) · [`normalizeShiritoriReading`](#main-normalizeShiritoriReading) · [`Packed`](#main-Packed) · [`PackedIdioms`](#main-PackedIdioms) · [`PackedSayings`](#main-PackedSayings) · [`PlaceMark`](#main-PlaceMark) · [`playShiritori`](#main-playShiritori) · [`readIdioms`](#main-readIdioms) · [`readRomaji`](#main-readRomaji) · [`readSayings`](#main-readSayings) · [`readShiritoriWords`](#main-readShiritoriWords) · [`readWordLists`](#main-readWordLists) · [`Saying`](#main-Saying) · [`searchIdioms`](#main-searchIdioms) · [`searchSayings`](#main-searchSayings) · [`shiritoriChoices`](#main-shiritoriChoices) · [`shiritoriDistractorScore`](#main-shiritoriDistractorScore) · [`shiritoriHeadKey`](#main-shiritoriHeadKey) · [`ShiritoriPlay`](#main-ShiritoriPlay) · [`shiritoriReadingContinues`](#main-shiritoriReadingContinues) · [`shiritoriReadingIsPlayable`](#main-shiritoriReadingIsPlayable) · [`ShiritoriRefusal`](#main-ShiritoriRefusal) · [`ShiritoriRules`](#main-ShiritoriRules) · [`shiritoriTailKey`](#main-shiritoriTailKey) · [`ShiritoriWord`](#main-ShiritoriWord) · [`startWordGame`](#main-startWordGame) · [`submitWordGame`](#main-submitWordGame) · [`toggleSize`](#main-toggleSize) · [`typeWordGame`](#main-typeWordGame) · [`unpack`](#main-unpack) · [`VERSION`](#main-VERSION) · [`WORD_GAME_ROWS`](#main-WORD_GAME_ROWS) · [`WORD_SCORE`](#main-WORD_SCORE) · [`WordData`](#main-WordData) · [`WordGame`](#main-WordGame) · [`wordGameKeys`](#main-wordGameKeys) · [`WordGameLanguage`](#main-WordGameLanguage) · [`WordGameRefusal`](#main-WordGameRefusal) · [`WordGameStatus`](#main-WordGameStatus) · [`WordGameSubmit`](#main-WordGameSubmit) · [`WordGameWords`](#main-WordGameWords) · [`WordListLanguage`](#main-WordListLanguage) · [`WordLists`](#main-WordLists) · [`wordScore`](#main-wordScore) · [`WordScore`](#main-WordScore)
@@ -988,6 +964,30 @@ type WordScore = { placed: number; elsewhere: number; found: number; speed: numb
 ```
 
 The placed-letter, elsewhere-letter, found-word and speed components and their total.
+
+## `@johnmorrisdotca/kotoba/children-filter`
+
+[`checkText`](#children-filter-checkText) · [`isClean`](#children-filter-isClean)
+
+<a id="children-filter-checkText"></a>
+
+### function `checkText`
+
+```ts
+checkText(text: string, options?: Options): Result
+```
+
+Check a name or other short text a child has typed. This is a floor; a person should still review it.
+
+<a id="children-filter-isClean"></a>
+
+### function `isClean`
+
+```ts
+isClean(text: string, options?: Options): boolean
+```
+
+Say whether a name or short text passes the children's filter.
 
 ## `@johnmorrisdotca/kotoba/words-en`
 

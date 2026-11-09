@@ -1,13 +1,13 @@
 {
   "measured": "esbuild 0.28.2, bundled, minified, ES2020, gzip level 9",
   "entries": {
-    "./children-filter": {
-      "minified": 6882,
-      "gzip": 3255
-    },
     ".": {
       "minified": 34271,
       "gzip": 11033
+    },
+    "./children-filter": {
+      "minified": 6882,
+      "gzip": 3255
     },
     "./words-en": {
       "minified": 186711,

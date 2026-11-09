@@ -74,15 +74,15 @@
   "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
-    "./children-filter": {
-      "types": "./dist/childrenFilter.d.ts",
-      "import": "./dist/childrenFilter.js",
-      "default": "./dist/childrenFilter.js"
-    },
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "default": "./dist/index.js"
+    },
+    "./children-filter": {
+      "types": "./dist/childrenFilter.d.ts",
+      "import": "./dist/childrenFilter.js",
+      "default": "./dist/childrenFilter.js"
     },
     "./words-en": {
       "types": "./dist/lists/words-en.data.d.ts",
