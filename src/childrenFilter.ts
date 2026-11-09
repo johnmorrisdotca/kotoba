@@ -40,6 +40,11 @@ const NAMES = new Set(["dick"]);
 /** Names that are also slang for a body part: they pass alone ("Dick Smith"), never beside a word that makes the joke ("Big Dick"). */
 const NAME_WORDS = new Set([
   "dick",
+  "dik",
+  "dic",
+  "dyck",
+  "dck",
+  "diq",
   "willy",
   "willie",
   "johnson",
@@ -54,6 +59,10 @@ const SUGGESTIVE = new Set(
   "big bigger biggest huge giant massive hard harder stiff long longer small tiny little fat hairy wet suck sucks sucked sucking sucker lick licks licking eat eats eating grab grabs touch touches rub rubs stroke strokes smell smells my your his hot sexy".split(
     " ",
   ),
+);
+const NAME_ONCE = new Set([...NAME_WORDS].map((name) => name.replace(/(.)\1+/g, "$1")));
+const SUGGESTIVE_ONCE = new Set(
+  [...SUGGESTIVE].filter((word) => word.length >= 2).map((word) => word.replace(/(.)\1+/g, "$1")),
 );
 /** Prank names that read as something else when said aloud, as whole words in a row, or run together ("MikeHunt"). */
 const PRANKS = [
@@ -116,12 +125,41 @@ function blocked(text: string, language: Exclude<Language, "all">): string | und
   const compact = words.join("");
   const stretched = words.map((part) => part.replace(/(.)\1+/g, "$1"));
   if (language === "en") {
-    const spaced = ` ${words.join(" ")} `;
+    // Letters typed one at a time ("d i c k", "D.i.c.k") are read as one word.
+    const tokens: string[] = [];
+    let run = "";
+    for (const part of words) {
+      if (part.length === 1) run += part;
+      else {
+        if (run) tokens.push(run);
+        run = "";
+        tokens.push(part);
+      }
+    }
+    if (run) tokens.push(run);
+    const spaced = ` ${tokens.join(" ")} `;
     const prank = PRANKS.find((name) => spaced.includes(` ${name} `) || compact === name.replaceAll(" ", ""));
     if (prank) return prank;
-    const name = words.find((part) => NAME_WORDS.has(part) || NAME_WORDS.has(part.replace(/e?s$/, "")));
-    const joke = name && words.find((part) => part !== name && SUGGESTIVE.has(part));
+    // A doubled or stretched letter is read once ("Diiick", "Dikk"), so the names are compared that way too.
+    const once = (part: string) => part.replace(/(.)\1+/g, "$1");
+    const isName = (part: string) =>
+      [part, part.replace(/e?s$/, "")].some((form) => NAME_WORDS.has(form) || NAME_ONCE.has(once(form)));
+    const isJoke = (part: string) => SUGGESTIVE.has(part) || SUGGESTIVE.has(once(part));
+    const name = tokens.find(isName);
+    const joke = name && tokens.find((part) => part !== name && isJoke(part));
     if (name && joke) return `${joke} ${name}`;
+    // One word run together ("DickHard", "Bigdick"): a name and a joke word with little else.
+    if (tokens.length === 1) {
+      const word = once(tokens[0] ?? "");
+      for (const nameForm of NAME_ONCE)
+        for (const jokeForm of SUGGESTIVE_ONCE)
+          if (
+            word.includes(nameForm) &&
+            word.includes(jokeForm) &&
+            word.length <= nameForm.length + jokeForm.length + 3
+          )
+            return `${jokeForm} ${nameForm}`;
+    }
   }
   for (const { word, form } of prepared[language]) {
     const single = form.replace(/(.)\1+/g, "$1");

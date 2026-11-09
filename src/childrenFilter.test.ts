@@ -97,6 +97,23 @@ describe("children's text filter", () => {
     ])
       expect(checkText(value), value).toMatchObject({ ok: false, reason: "blocked" });
   });
+  it("sees the joke through digits, stretched, spaced and misspelt names, and run together", () => {
+    for (const value of [
+      "D1ck hard",
+      "d!ck hard",
+      "Diiick hard",
+      "D.i.c.k hard",
+      "Dikk Hard",
+      "Dic Hard",
+      "Dyck hard",
+      "dickhard",
+      "DickHard",
+      "Bigdick",
+      "B1g D1ck",
+    ])
+      expect(checkText(value), value).toMatchObject({ ok: false, reason: "blocked" });
+    for (const value of ["D1ck", "Dick Hardy", "Dick Hardwick"]) expect(checkText(value), value).toEqual({ ok: true });
+  });
   it("refuses the prank names that read as something else aloud, spaced or run together", () => {
     for (const value of [
       "Mike Hunt",
