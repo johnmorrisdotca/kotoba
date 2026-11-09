@@ -981,7 +981,7 @@ is the place to start.
 
 ## Architecture
 
-The [architecture guide](docs/guides/architecture.md) explains the rules, lists, loaders and drawing, with the source tree file by file.
+The [architecture guide](docs/guides/architecture.md) explains the parts, with the source tree file by file.
 
 ## The name
 
