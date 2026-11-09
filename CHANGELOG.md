@@ -6,6 +6,8 @@ All notable changes to this project are written here. The format follows
 
 ## [Unreleased]
 
+- **`/children-filter`: names that are also slang, and prank names.** "Dick" passes as a name on its own (and "Dick Smith" no longer trips on "dicks" run together), but a name that is also slang (Dick, Willy, Johnson, Cox, Wang) is refused beside a word that makes the joke ("Big Dick", "Dick is hard", "Long Johnson"). Well-known prank names ("Mike Hunt", "Ben Dover", "Hugh Jass") are refused as whole words or run together, while real names that contain them pass ("Mike Hunter").
+
 - **`/children-filter`: a check for names that children type** (MODULES-704). `checkText(text, { lang })` says whether a star name, nickname or label is fit for a children's site, and why not (`blocked`, `personal` or `shape`); `isClean` is the yes or no. Barred words in English, French, German and Japanese (199, 110, 83 and 87), the same lists that keep the word games clean (`src/childrenWords.ts`, which `scripts/children-bar.mjs` now reads), and the typing tricks: digits for letters, stretched and spaced letters, full-width letters, hiragana and katakana as one, a long word inside run-together text. Ordinary words pass (Scunthorpe, Sussex, cocktail, Hancock, analysis). Emails, phone numbers, addresses and links are refused as personal. Hand-made lists only, no JMdict data, so this entry point is MIT. EN/JA guide `docs/guides/children-filter.md`. CI can be run by hand on a branch.
 
 ## [1.10.0] - 2026-11-04

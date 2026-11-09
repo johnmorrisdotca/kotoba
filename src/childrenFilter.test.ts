@@ -67,6 +67,51 @@ describe("children's text filter", () => {
     expect(checkText("Dick")).toEqual({ ok: true });
     expect(checkText("dickhead")).toMatchObject({ ok: false, reason: "blocked" });
   });
+  it("lets a name that is also slang pass alone, never beside the word that makes the joke", () => {
+    for (const value of [
+      "Dick",
+      "Dick Smith",
+      "Moby Dick",
+      "Willy Wonka",
+      "Long Island",
+      "Peter Long",
+      "Johnson Family",
+      "Hard Rock",
+      "Big Bear",
+      "Mike Hunter",
+      "Hugh Grant",
+      "Ben Smith",
+    ])
+      expect(checkText(value), value).toEqual({ ok: true });
+    for (const value of [
+      "Big Dick",
+      "Dick Is Big",
+      "dick is hard",
+      "Hard Dick",
+      "Dick Long",
+      "Sucks Dick",
+      "Big Willy",
+      "Long Johnson",
+      "Big Cox",
+      "MY D1CK",
+    ])
+      expect(checkText(value), value).toMatchObject({ ok: false, reason: "blocked" });
+  });
+  it("refuses the prank names that read as something else aloud, spaced or run together", () => {
+    for (const value of [
+      "Mike Hunt",
+      "MikeHunt",
+      "M1ke Hunt",
+      "Hugh Jass",
+      "Ben Dover",
+      "Seymour Butts",
+      "Hugh G Rection",
+      "Dixie Normous",
+      "Anita Bath",
+      "Phil McCracken",
+    ])
+      expect(checkText(value), value).toMatchObject({ ok: false, reason: "blocked" });
+  });
   it("finds contact details", () => {
     for (const value of [
       "mia@example.com",

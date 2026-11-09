@@ -37,10 +37,68 @@ const personal = (text: string) =>
 /** Barred words that are also ordinary given names, so a child's own name passes (John, 2026-11-09); "dickhead" stays barred. */
 const NAMES = new Set(["dick"]);
 
+/** Names that are also slang for a body part: they pass alone ("Dick Smith"), never beside a word that makes the joke ("Big Dick"). */
+const NAME_WORDS = new Set([
+  "dick",
+  "willy",
+  "willie",
+  "johnson",
+  "cox",
+  "wang",
+  "weiner",
+  "wiener",
+  "schlong",
+  "peen",
+]);
+const SUGGESTIVE = new Set(
+  "big bigger biggest huge giant massive hard harder stiff long longer small tiny little fat hairy wet suck sucks sucked sucking sucker lick licks licking eat eats eating grab grabs touch touches rub rubs stroke strokes smell smells my your his hot sexy".split(
+    " ",
+  ),
+);
+/** Prank names that read as something else when said aloud, as whole words in a row, or run together ("MikeHunt"). */
+const PRANKS = [
+  "mike hunt",
+  "mike hawk",
+  "mike ox long",
+  "mike ox mall",
+  "mike litoris",
+  "hugh jass",
+  "hugh jazz",
+  "hugh janus",
+  "hugh g rection",
+  "hugh rection",
+  "hugh mungus",
+  "ben dover",
+  "benjamin dover",
+  "seymour butts",
+  "seymore butts",
+  "dixie normous",
+  "anita bath",
+  "phil mccracken",
+  "phil mcracken",
+  "jack mehoff",
+  "jack meoff",
+  "heywood jablowme",
+  "oliver clothesoff",
+  "amanda hugginkiss",
+  "ivana tinkle",
+  "ivanna tinkle",
+  "harry bahls",
+  "harry balls",
+  "dick hertz",
+  "dick hurts",
+  "mary juana",
+  "eileen dover",
+  "ollie clothesoff",
+  "tess tickle",
+];
+
 const prepared = Object.fromEntries(
   Object.entries(lists).map(([language, words]) => [
     language,
-    words.filter((word) => !NAMES.has(word)).map((word) => ({ word, form: language === "ja" ? kana(word) : latin(word) })),
+    words
+      .filter((word) => !NAMES.has(word))
+      .map((word) => ({ word, form: language === "ja" ? kana(word) : latin(word) })),
   ]),
 ) as Record<Exclude<Language, "all">, { word: string; form: string }[]>;
 
@@ -57,6 +115,14 @@ function blocked(text: string, language: Exclude<Language, "all">): string | und
     .map((part) => part.replace(/(.)\1{2,}/g, "$1$1"));
   const compact = words.join("");
   const stretched = words.map((part) => part.replace(/(.)\1+/g, "$1"));
+  if (language === "en") {
+    const spaced = ` ${words.join(" ")} `;
+    const prank = PRANKS.find((name) => spaced.includes(` ${name} `) || compact === name.replaceAll(" ", ""));
+    if (prank) return prank;
+    const name = words.find((part) => NAME_WORDS.has(part) || NAME_WORDS.has(part.replace(/e?s$/, "")));
+    const joke = name && words.find((part) => part !== name && SUGGESTIVE.has(part));
+    if (name && joke) return `${joke} ${name}`;
+  }
   for (const { word, form } of prepared[language]) {
     const single = form.replace(/(.)\1+/g, "$1");
     if (
@@ -66,7 +132,13 @@ function blocked(text: string, language: Exclude<Language, "all">): string | und
       return word;
     if (words.length > 1 && compact === form) return word;
     // This common profession is not an embedded assault term.
-    if (form.length >= 5 && compact.includes(form) && !(form === "rapist" && compact === "therapist")) return word;
+    if (
+      form.length >= 5 &&
+      compact.includes(form) &&
+      !NAMES.has(form.replace(/s$/, "")) &&
+      !(form === "rapist" && compact === "therapist")
+    )
+      return word;
   }
   return undefined;
 }
