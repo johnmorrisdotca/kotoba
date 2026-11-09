@@ -1,10 +1,10 @@
-import { de, en, fr, ja } from "./childrenWords.ts";
+import { de, en, es, fr, it, ja, pt } from "./childrenWords.ts";
 
-type Language = "en" | "ja" | "fr" | "de" | "all";
+type Language = "en" | "ja" | "fr" | "de" | "es" | "it" | "pt" | "all";
 type Options = { lang?: Language; maxLength?: number };
 type Result = { ok: true } | { ok: false; reason: "blocked" | "personal" | "shape"; word?: string };
 
-const lists = { en, fr, de, ja };
+const lists = { en, fr, de, es, it, pt, ja };
 const leet: Record<string, string> = {
   "0": "o",
   "1": "i",
@@ -13,6 +13,7 @@ const leet: Record<string, string> = {
   "5": "s",
   "7": "t",
   "8": "b",
+  "2": "z",
   "@": "a",
   $: "s",
   "!": "i",
@@ -24,7 +25,7 @@ const latin = (text: string) =>
     .normalize("NFKD")
     .toLowerCase()
     .replace(/\p{M}/gu, "")
-    .replace(/[0134578@$!|+]/g, (c) => leet[c] ?? c);
+    .replace(/[01234578@$!|+]/g, (c) => leet[c] ?? c);
 const kana = (text: string) =>
   text
     .normalize("NFKC")
@@ -34,8 +35,8 @@ const personal = (text: string) =>
   /[^\s@]+@[^\s@]+\.[^\s@]+|https?:|www\.|\.[a-z]{2,6}(?:\/|$)|\.(?:com|net|org|jp|ca|io|co)\b|\d{4,}|(?:\+?\d[\s().-]*){7,}|\b\d+\s+[\p{L}][\p{L}\s.'-]*\s(?:street|st|road|rd|avenue|ave|lane|ln|drive|dr|boulevard|blvd)\b/iu.test(
     text.normalize("NFKC"),
   );
-/** Barred words that are also ordinary given names, so a child's own name passes (John, 2026-11-09); "dickhead" stays barred. */
-const NAMES = new Set(["dick"]);
+/** Barred words that are also ordinary given names, so a child's own name or a story's (Puss in Boots) passes (John, 2026-11-09); "dickhead" stays barred. */
+const NAMES = new Set(["dick", "puss"]);
 
 /** Names that are also slang for a body part: they pass alone ("Dick Smith"), never beside a word that makes the joke ("Big Dick"). */
 const NAME_WORDS = new Set([
@@ -99,6 +100,12 @@ const PRANKS = [
   "mary juana",
   "eileen dover",
   "ollie clothesoff",
+  "mike rotch",
+  "dyl doe",
+  "dil doe",
+  "moe lester",
+  "hugh jorgan",
+  "ivana humpalot",
   "tess tickle",
 ];
 
@@ -110,6 +117,27 @@ const prepared = Object.fromEntries(
       .map((word) => ({ word, form: language === "ja" ? kana(word) : latin(word) })),
   ]),
 ) as Record<Exclude<Language, "all">, { word: string; form: string }[]>;
+
+/**
+ * A word as it sounds, so a respelling matches: ph as f, c, ck and q as k, v as u, z as s, a doubled letter once, and the
+ * endings y, i, ie, ee and ey as one ("puzzy", "pussee", "phuck", "fvck"). Compared whole word to whole word, in English only: respelling is how a child gets past an English list, and other languages spell these sounds their own way (Italian "cazzi" would catch "Cassie").
+ */
+const loose = (word: string) =>
+  word
+    .replace(/ph/g, "f")
+    .replace(/ck|c|q/g, "k")
+    .replace(/v/g, "u")
+    .replace(/z/g, "s")
+    .replace(/(?:ie|ee|ey|y)$/, "i")
+    .replace(/(.)\1+/g, "$1");
+const sounds = Object.fromEntries(
+  Object.entries(prepared)
+    .filter(([language]) => language === "en")
+    .map(([language, entries]) => [
+      language,
+      new Map(entries.filter(({ form }) => form.length >= 4).map(({ word, form }) => [loose(form), word])),
+    ]),
+) as Record<string, Map<string, string>>;
 
 function blocked(text: string, language: Exclude<Language, "all">): string | undefined {
   if (language === "ja") {
@@ -161,6 +189,21 @@ function blocked(text: string, language: Exclude<Language, "all">): string | und
             return `${jokeForm} ${nameForm}`;
     }
   }
+  // A letter hidden by a star or a hash ("sh*t", "p*ssy", "f**k") may be any letter.
+  for (const token of text.normalize("NFKD").toLowerCase().replace(/\p{M}/gu, "").split(/\s+/)) {
+    if (!/[*#]/.test(token)) continue;
+    const pattern = latin(token)
+      .replace(/[^a-z*#]/g, "")
+      .replace(/[*#]/g, ".");
+    if (pattern.replace(/\./g, "").length < 2) continue;
+    const found = prepared[language].find(({ form }) => new RegExp(`^${pattern}$`).test(form));
+    if (found) return found.word;
+  }
+  for (const part of words) {
+    if (part.length < 4) continue;
+    const found = sounds[language]?.get(loose(part));
+    if (found && !NAMES.has(found)) return found;
+  }
   for (const { word, form } of prepared[language]) {
     const single = form.replace(/(.)\1+/g, "$1");
     if (
@@ -169,12 +212,19 @@ function blocked(text: string, language: Exclude<Language, "all">): string | und
     )
       return word;
     if (words.length > 1 && compact === form) return word;
-    // This common profession is not an embedded assault term.
+    // A word glued to another ("shitface", "dumbfucker") starts or ends with it, and a long one (7 letters or more,
+    // "xxmotherfuckeryy") is found anywhere; a short one in the middle is usually an
+    // ordinary word ("Charlotte" holds "harlot", "Scunthorpe" a slur). English only: other languages' words collide
+    // with names ("Merdani", "Foderaro"). This common profession is not an embedded assault term.
     if (
+      language === "en" &&
       form.length >= 5 &&
-      compact.includes(form) &&
+      words.some(
+        (part) =>
+          part !== form && (part.startsWith(form) || part.endsWith(form) || (form.length >= 7 && part.includes(form))),
+      ) &&
       !NAMES.has(form.replace(/s$/, "")) &&
-      !(form === "rapist" && compact === "therapist")
+      !(form === "rapist" && words.includes("therapist"))
     )
       return word;
   }
@@ -199,7 +249,7 @@ export function checkText(text: string, options: Options = {}): Result {
   if (personal(normal)) return { ok: false, reason: "personal" };
   if (!/[\p{L}\p{N}]/u.test(normal) || /<[^>]*>/u.test(normal)) return { ok: false, reason: "shape" };
   const languages: Exclude<Language, "all">[] =
-    options.lang && options.lang !== "all" ? [options.lang] : ["en", "ja", "fr", "de"];
+    options.lang && options.lang !== "all" ? [options.lang] : ["en", "ja", "fr", "de", "es", "it", "pt"];
   for (const language of languages) {
     const word = blocked(normal, language);
     if (word) return { ok: false, reason: "blocked", word };

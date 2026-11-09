@@ -20,3 +20,5 @@ Set `lang` to `en`, `ja`, `fr`, `de`, or `all`; it defaults to `all` so a child 
 The filter and its hand-made word lists are MIT licensed. They contain no JMdict-derived data.
 
 A name that is also slang (Dick, Willy, Johnson) passes on its own and is refused beside a word that makes the joke ("Big Dick"); well-known prank names ("Mike Hunt", "Ben Dover") are refused, spaced or run together. They are a floor too: the teacher still sees every name.
+
+Spanish, Italian and Portuguese have their own lists too (`lang: "es"`, `"it"`, `"pt"`; the default checks all seven). Respellings are seen as well: digits and symbols ("pu$$y", "pu22y"), a hidden letter ("sh*t"), and English sound-alikes ("puzzy", "phuck", "fvck"), compared whole word to whole word so names like Cassie and Charlotte pass.

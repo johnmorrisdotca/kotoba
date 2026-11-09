@@ -269,11 +269,32 @@ const BLOCKED_JA: readonly string[] = [
 
 // The readings are rude by themselves, including when an ordinary word has the same spelling.
 const VULGAR = ["まんこ", "おまんこ", "うんこ", "おっぱい", "ちんこ", "ちんぽ", "れいぷ"];
+// Spellings made to slip past a list: dropped vowels, phonetic letters, slang endings.
+const VARIANTS_EN =
+  "fck fcuk fuk fukk fuq fuc phuk phuck fukin fuking biatch beyotch cnut pron noods noodz nudes sheit shiet".split(" ");
 /** English words for checking typed text. */
-export const en = [...new Set([...WORDS.en.split(/\s+/), ...BLOCKED_EN])];
+export const en = [...new Set([...WORDS.en.split(/\s+/), ...BLOCKED_EN, ...VARIANTS_EN])];
 /** French words for checking typed text. */
 export const fr = [...new Set(WORDS.fr.split(/\s+/))];
 /** German words for checking typed text. */
 export const de = [...new Set(WORDS.de.split(/\s+/))];
+/**
+ * Spanish, Italian and Portuguese, for typed text only (the word games do not use them). Common swearing, sexual words
+ * and slurs; words that are also ordinary (Spanish "zorra" a vixen, "concha" a shell, "pinche" a kitchen hand, Portuguese "fica" stays, "pica" and "rola" names) are left out.
+ */
+export const es =
+  "puta puto putas putos mierda joder jodido jodida coño pendejo pendeja cabron cabrona verga polla chingar chinga chingada chingado culero culera maricon marica follar cojones carajo gilipollas mamon mamona hijoputa hdp malparido malparida ojete pajero pajera picha tetas zorron".split(
+    " ",
+  );
+/** Italian words for checking typed text. */
+export const it =
+  "cazzo cazzi cazzone merda stronzo stronza vaffanculo fanculo puttana puttane troia troie figa minchia coglione coglioni frocio froci bastardo bastarda culattone mignotta zoccola pompino scopare sborra porcodio".split(
+    " ",
+  );
+/** Portuguese words for checking typed text. */
+export const pt =
+  "caralho porra merda puta puto putas foda foder fodase fodido buceta boceta cuzao viado veado piroca arrombado arrombada vadia xoxota punheta corno babaca otario otaria".split(
+    " ",
+  );
 /** Japanese words for checking typed text. */
 export const ja = [...new Set([...BLOCKED_JA, ...VULGAR])];

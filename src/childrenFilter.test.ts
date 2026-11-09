@@ -114,6 +114,69 @@ describe("children's text filter", () => {
       expect(checkText(value), value).toMatchObject({ ok: false, reason: "blocked" });
     for (const value of ["D1ck", "Dick Hardy", "Dick Hardwick"]) expect(checkText(value), value).toEqual({ ok: true });
   });
+  it("sees respelt and masked words: sound-alikes, digits, stars", () => {
+    for (const value of [
+      "pu$$y",
+      "pu$$(y)",
+      "puzzy",
+      "pu22y",
+      "pussee",
+      "pussi",
+      "p*ssy",
+      "sh*t",
+      "c*nt",
+      "f**k",
+      "sl*t",
+      "fvck",
+      "phuck",
+      "fuk",
+      "fuq",
+      "fck",
+      "biatch",
+      "cnut",
+      "pr0n",
+      "n00dz",
+      "boobz",
+      "sheeit",
+    ])
+      expect(checkText(value), value).toMatchObject({ ok: false, reason: "blocked" });
+  });
+  it("does not refuse ordinary names that hold a barred word or sound like one", () => {
+    for (const value of [
+      "Charlotte",
+      "Cassie",
+      "Kass",
+      "Bass",
+      "Grass",
+      "Glasshouse",
+      "Moon Pie",
+      "Puss in Boots",
+      "Fuchsia",
+      "Shitake",
+      "Phuket",
+      "Fukuoka",
+      "Woodcock",
+      "Merdani",
+      "Foderaro",
+      "Porrata",
+      "Concha",
+      "Fica",
+    ])
+      expect(checkText(value), value).toEqual({ ok: true });
+  });
+  it("knows Spanish, Italian and Portuguese swearing", () => {
+    for (const [value, lang] of [
+      ["puta", "es"],
+      ["mierda", "es"],
+      ["gilipollas", "es"],
+      ["cazzo", "it"],
+      ["vaffanculo", "it"],
+      ["caralho", "pt"],
+      ["porra", "pt"],
+    ] as const)
+      expect(checkText(value, { lang }), value).toMatchObject({ ok: false, reason: "blocked" });
+    expect(checkText("Pilar", { lang: "es" })).toEqual({ ok: true });
+  });
   it("refuses the prank names that read as something else aloud, spaced or run together", () => {
     for (const value of [
       "Mike Hunt",
