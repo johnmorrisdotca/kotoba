@@ -745,56 +745,7 @@ still sends.
 
 ### What a word means
 
-The lists say which words are words, and nothing more; the one dictionary Kotoba carries is for English (below). A host
-that has a dictionary gives the game a `meanings` function, and the game draws what comes back without adding anything to the screen's shape:
-
-```ts no-check
-mountKotoba(element, {
-  words: "en",
-  // Called with the word and the list's language; resolve one short plain line, or null for "nothing to say".
-  meanings: async (word, words) => (await myDictionary(words)).firstSense(word),
-});
-```
-
-- **A guess already made.** Tapping, hovering or focusing its row (it can be tabbed to) puts the word's meaning in the
-  status line, which already kept its height, as `CRANE: a tall bird…` (`meaningFor` in `KOTOBA_STRINGS`). The line goes
-  back when the pointer leaves, when you tap anywhere else, when you press Escape on the row, or when you type. Nothing
-  is added to the board: no icon, no popover, no new row, and no height or width changes at any size. A press on a row
-  never moves the focus, so the device's keyboard goes on typing, and the status line is a live region, so a screen
-  reader hears it.
-- **The hidden word.** Its meaning is asked for, and drawn as one small line on the end card under the tiles, only after
-  the round is over. Before then the function is never called with it.
-- **Quiet.** The function is called once for a word; the first answer may take a moment and nothing is drawn until it
-  arrives. A `null`, an empty line or a rejection draws nothing at all: no placeholder, no error.
-- **The colour guide** says a guess can be tapped, only when a `meanings` function was given. Without one the game is
-  exactly as it was.
-
-The meanings are the host's, and so is their licence and their credit, except the English ones below.
-
-**English meanings are in the package.** `englishMeaning(word, words)` from `@johnmorrisdotca/kotoba/meanings-en` has the
-shape of the option, so `meanings: englishMeaning` is all it takes. It answers one short line from Open English WordNet
-(CC BY 4.0, derived from Princeton WordNet 3.1; see [NOTICE.md](./NOTICE.md), which a page showing them must carry): 16,822
-of the 20,331 words of the 4, 5 and 6-letter lists and 97% of the answers, such as `crane: lifts and moves heavy objects`, and `plural of farm: …` for a regular plural or past form. A word WordNet lacks (`from`, `that`), or that is not for
-children (a rude, sexual, drug or strong-drink word or first sense), answers `null`. Only the file for the length asked about is fetched, 54 to
-187 kB gzipped; French, German and kana answer `null`.
-
-The [demo](https://johnmorrisdotca.github.io/kotoba/) shows it with [Jisho](https://github.com/johnmorrisdotca/jisho)
-(`@johnmorrisdotca/jisho`, the family's dictionary of Japanese words), a development dependency of the demo alone; Kotoba
-itself depends on nothing. A kana guess is looked up there as a reading, which fetches one small piece of the dictionary, and
-a reading several words share shows the commonest two or three with their written forms, as `紙 paper · 神 god · 髪 hair`,
-kept to about sixty characters. Jisho's default, safe mode, leaves out what JMdict marks vulgar, X-rated, sensitive or derogatory and
-never fetches the files that hold it; the demo keeps a list of its own words besides, which Jisho does not supply. The demo shows English meanings with `englishMeaning`; French and German show nothing yet. The function in `demo/meanings.js` is the
-whole of the wiring:
-
-```ts no-check
-import { loadWords, wordsOf } from "@johnmorrisdotca/jisho/words";
-
-mountKotoba(element, {
-  words: "ja",
-  // A line of the words Jisho has for the reading, or null for another list.
-  meanings: async (word, words) => (words === "ja" ? lineOf(word, wordsOf(await loadWords(word), word)) : null),
-});
-```
+The lists say which words are words, and nothing more. A host that has a dictionary gives the game a `meanings` function (`mountKotoba(element, { words: "en", meanings: async (word, words) => … })`), and the game draws the line it returns in the status line when a guess is tapped, hovered or focused, and under the tiles once the round is over; a `null`, an empty line or a rejection draws nothing. `englishMeaning` from `@johnmorrisdotca/kotoba/meanings-en` is the English one, from Open English WordNet (CC BY 4.0, see [NOTICE.md](./NOTICE.md), which a page showing them must carry), and `meanings: englishMeaning` is all it takes; French, German and kana answer `null`. How each line behaves, the English file sizes and the demo's Jisho wiring are in [What a word means](docs/MEANINGS.md).
 
 ## The command line
 
@@ -933,15 +884,8 @@ mountKotoba(element, { theme: { "--kt-board": "transparent", "--kt-ink": "#222",
 
 ## Accessibility
 
-A word game is played by sight and by keyboard, so the board carries each of them in words and in shapes.
+A mark is never told by colour alone (each cell carries a shape: ● right place, ◐ elsewhere, ○ not in the word), a screen reader hears every row and cell and the status line, the device's own keyboard types and the keys on the screen never take the focus, every key is at least 48 pixels high, and the board has no animation. The Japanese words have not been read by a native reader, and the colour defaults have not been measured against a contrast standard. Each point, and what is known to fall short, is in [Accessibility](docs/ACCESSIBILITY.md).
 
-- **A mark is never told by colour alone.** Each cell carries a shape in its corner: ● right place, ◐ elsewhere in the word, ≈ the same row of the kana table, ○ not in the word, and an arrow when a kana's size (↓) or its mark (↑) is wrong. A person who cannot tell green from orange reads the shape.
-- **A screen reader hears every place.** Each row is labelled with its number and each cell with its letter and what it earned (right place, elsewhere, not in the word), built from the same words as the legend, in English or Japanese by `locale`. The status line (`aria-live="polite"`) says what a guess did, and why a word was not taken.
-- **The keyboard is a keyboard.** The device's own keys type, Backspace erases and Enter sends. The keys on the screen never take the focus, so a person using a physical keyboard is never moved off the page by tapping one.
-- **Touch targets are large.** Each key on the screen is at least 48 pixels high, and the demo's browser test checks that everything to press on its page is at least 44 pixels in each direction, at phone width, with touch.
-- **Motion.** The board has no animation, so a request for reduced motion changes nothing and nothing needs to be turned off.
-- **Colour and contrast.** The board carries its own background and so looks the same in light and dark; the colours are the variables under [Theming](#theming). The defaults have not been measured against a contrast standard, and a page that changes them keeps the shapes, which do not depend on them.
-- **Known to fall short.** The Japanese words of the board have not been read by a native reader ([Languages](#languages)), and a kana board's romaji typing is unfamiliar to anyone who types kana another way.
 
 ## Browser and runtime support
 
